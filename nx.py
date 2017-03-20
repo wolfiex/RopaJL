@@ -8,6 +8,9 @@ global G
 G=DiGraph()
 
 
+def edges():
+    print list(G.edges_iter(data='weight', default=-999))
+
 def newGraph():
     global G
     G=DiGraph()
@@ -24,3 +27,6 @@ def savejson():
 def p ():
     global G
     print G.graph, G.nodes()
+
+def eigenvector(w='weight'):
+    return nx.eigenvector_centrality(G,weight=w)

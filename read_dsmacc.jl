@@ -18,7 +18,6 @@ println(ARGS);
 
 
 
-S = Symbol
 len = length
 
 
@@ -32,11 +31,11 @@ specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 
 
-rates = rates[:,[S(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
-specs = specs[:,[S(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["sc"])]]
+rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
+specs = specs[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["sc"])]]
 
 rates = rates[7:len(rates)]
-rates = rates[:,[S(i) for i in filter(x->sum(rates[x])>0,names(rates))]]
+rates = rates[:,[Symbol(i) for i in filter(x->sum(rates[x])>0,names(rates))]]
 
 # reading in data and cleaning
 joint = "\n"*(join(names(rates),"\n"))*"\n"
@@ -64,7 +63,7 @@ for i in 1:length(reactants)
   println(i)
   for j in reactants[i]
     coeff = match( r"([\d\s\.]*)(\D[\d\D]*)", j)
-    dummy = specs[S(coeff[2])]
+    dummy = specs[Symbol(coeff[2])]
     try
       push!(rcol,parse(Float32,coeff[1]))
     catch
@@ -92,25 +91,76 @@ end
 
 ##################FOR EACH TIMESTEP##################
 @pyimport nx
-t=1
+t=144
+using Plots
+unicodeplots();
 
-nx.newGraph()
+test = false
 
-links = filter(i -> flux[i][t]>0 , 1:len(flux))
-tflux = [log10(flux[i][t]) for i in links]
-weight = 1+normalize(tflux)
 
-c= 0
-for i in links
-    nx.addedge(edges[i][1],edges[i][2],weight[c+=1])
+
+
+
+for t in [144,180,216]#[36,72,144,180,216,288]
+  nx.newGraph()
+  normalise(x) = x/norm(x)
+
+
+  links = filter(i -> flux[i][t]>0 , 1:len(flux))
+  tflux = [log10(flux[i][t]) for i in links]
+  weight = 1+normalise(tflux)
+
+  c= 0
+  for i in links
+      nx.addedge(edges[i][1],edges[i][2],weight[c+=1])
+      println(c)
+  end
+
+  nx.p()
+
+
+  a = nx.eigenvector("none")
+  b = [try a[i] catch 0.0f0 end for i in nodes]
+
+  a1 = nx.eigenvector()
+  b1 = [try a1[i] catch 0.0f0 end for i in nodes]
+
+  difference = [abs(i) for i in (b-b1)]
+  difference= [difference[i]/(b[i]+1e-9) for i in 1:len(b)]
+
+if test
+  plot!(
+      difference,
+
+      label  = "$t",
+      ylabel = "Eigenvector Centrality",
+      xlabel = "Species Index",
+
+      title  = "Unicode plots: Eigen-centrality Comparison",
+      xrotation = rad2deg(pi/3),
+      )
+
+
+else
+    plot(
+        difference,
+
+        label  = "$t",
+        ylabel = "Eigenvector Centrality",
+        xlabel = "Species Index",
+
+        title  = "Unicode plots: Eigen-centrality Comparison",
+        xrotation = rad2deg(pi/3),
+        )
+
 end
 
-nx.p()
 
-#nx.eigenvector_centrality(nx.G,weight="none")
-#nx.newnx.eigenvector_centrality(nx.G,weight="weight")
+  test=true
 
+end
 
+plot!()
 
 
 
