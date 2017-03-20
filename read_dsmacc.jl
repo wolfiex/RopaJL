@@ -13,6 +13,12 @@ Pkg.add("DataFrames")
 
 SymPy.jl
 
+using blink
+w = Blink.AtomShell.Window()
+
+loadurl(w, string("file://" ,pwd(),"/scatter3d/index.html"))
+@js w console.log("You have succesfully loaded index.html from Julia")
+@js w window.nodes = $nodes
 =#
 println(ARGS);
 
@@ -29,7 +35,6 @@ data = ncdata.get(filename)
 
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
-
 
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
 specs = specs[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["sc"])]]
@@ -60,7 +65,7 @@ flux = []
 edges = []
 for i in 1:length(reactants)
   rcol=[]
-  println(i)
+  #println(i)
   for j in reactants[i]
     coeff = match( r"([\d\s\.]*)(\D[\d\D]*)", j)
     dummy = specs[Symbol(coeff[2])]
@@ -91,79 +96,73 @@ end
 
 ##################FOR EACH TIMESTEP##################
 @pyimport nx
+using Blink
+w = Blink.Window()
+sleep(10)
+
+
+
 t=144
 using Plots
-unicodeplots();
-
-test = false
+#unicodeplots();
 
 
+for t in 1:10:288
+
+    nx.newGraph()
+    normalise(x) = x/norm(x)
+
+
+    links = filter(i -> flux[i][t]>0 , 1:len(flux))
+    tflux = [log10(flux[i][t]) for i in links]
+    weight = 1+normalise(tflux)
+
+    c= 0
+    for i in links
+        nx.addedge(edges[i][1],edges[i][2],weight[c+=1])
+    end
 
 
 
-for t in [144,180,216]#[36,72,144,180,216,288]
-  nx.newGraph()
-  normalise(x) = x/norm(x)
+    # initialize the attractor
+    a =  a = nx.betweenness("weight")
+    x = [try a[i] catch 0.0f0 end for i in nodes]
+    a =  a = nx.eigenvector("weight")
+    y = [try a[i] catch 0.0f0 end for i in nodes]
+    a =  a = nx.closeness("weight")
+    z = [try a[i] catch 0.0f0 end for i in nodes]
 
 
-  links = filter(i -> flux[i][t]>0 , 1:len(flux))
-  tflux = [log10(flux[i][t]) for i in links]
-  weight = 1+normalise(tflux)
+    #=
+    # initialize a 3D plot with 1 empty series
+    plt = path3d(1, xlim=(0,1), ylim=(0,1), zlim=(0,1),
+                    xlab = "eigenvector", ylab = "betweenness", zlab = "closeness",
+                    title = "Centrality ", marker = 1)
 
-  c= 0
-  for i in links
-      nx.addedge(edges[i][1],edges[i][2],weight[c+=1])
-      println(c)
-  end
-
-  nx.p()
-
-
-  a = nx.eigenvector("none")
-  b = [try a[i] catch 0.0f0 end for i in nodes]
-
-  a1 = nx.eigenvector()
-  b1 = [try a1[i] catch 0.0f0 end for i in nodes]
-
-  difference = [abs(i) for i in (b-b1)]
-  difference= [difference[i]/(b[i]+1e-9) for i in 1:len(b)]
-
-if test
-  plot!(
-      difference,
-
-      label  = "$t",
-      ylabel = "Eigenvector Centrality",
-      xlabel = "Species Index",
-
-      title  = "Unicode plots: Eigen-centrality Comparison",
-      xrotation = rad2deg(pi/3),
-      )
+    # build an animated gif, saving every 10th frame
+    @gif for i=1:length(z)
+        push!(plt, x[i], y[i], z[i])
+    end #every 1
+    =#
 
 
-else
-    plot(
-        difference,
 
-        label  = "$t",
-        ylabel = "Eigenvector Centrality",
-        xlabel = "Species Index",
 
-        title  = "Unicode plots: Eigen-centrality Comparison",
-        xrotation = rad2deg(pi/3),
-        )
+
+    loadurl(w, string("file://" ,pwd(),"/scatter3d/index.html"))
+    @js w console.log("You have succesfully loaded index.html from Julia")
+    sleep(1)
+    @js w window.nodes = $nodes
+    @js w window.x = $x
+    @js w window.y = $y
+    @js w window.z = $z
+    @js w run()
+    sleep(1)
+    t2 = "centrality_" * lpad(t,4,0)
+    @js w save($t2)
 
 end
-
-
-  test=true
-
-end
-
-plot!()
-
-
-
 
 
 #http://dataframesjl.readthedocs.io/en/latest/getting_started.html
+#https://gist.github.com/gizmaa/7214002

@@ -6,7 +6,7 @@ def get(filename):
     print nc.date, '\n', nc.description,'\n'
     print 'Select Simulation: \n\n'
     for i,g in enumerate(nc.groups): print i , ' - ', g
-    group = tuple(nc.groups)[int(input('Enter Number \n'))]
+    group = tuple(nc.groups)[0]#[int(input('Enter Number \n'))]
     print group, 'took', nc.groups[group].WALL_time, 'seconds to compute.'
 
 

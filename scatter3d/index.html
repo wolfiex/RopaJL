@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>3D scatter Labeled</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+</head>
+<body>
+
+
+<script src="Three.js"></script>
+<script src="Detector.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="THREEx.KeyboardState.js"></script>
+<script src="THREEx.FullScreen.js"></script>
+<script src="THREEx.WindowResize.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="./colours.js"></script>
+<div id="ThreeJS" style="position: absolute; left:0px; top:0px"></div>
+
+
+<script>
+// standard global variables
+var container, scene, camera, renderer, controls, stats;
+
+// custom global variables
+var cube;
+var projector, mouse = { x: 0, y: 0 }, INTERSECTED;
+var sprite1;
+var canvas1, context1, texture1;
+
+init();
+animate();
+
+function run(data) {
+  max = d3.max([x, y, z].map(d => d3.max(d)));
+  //max = ~~(max * 10);
+  //max = 0.8;
+
+  window.size = window.innerWidth * 0.9;
+  //axis(max);
+  axis(max);
+  textlabels();
+}
+//
+//
+//
+
+function textlabels(max) {
+  var color = ColourScheme(
+    [visual_cinnamon[0], visual_cinnamon[1], "red"],
+    inverse = false,
+    test = false
+  );
+  var scalar = window.size;
+
+  mx = d3.max(x);
+  my = d3.max(y);
+  mz = d3.max(z);
+
+  var colours = d3.range(nodes.length).map(i => {
+    return Math.sqrt(x[i] * x[i] + y[i] * y[i] + z[i] * z[i]);
+  });
+  var maxcol = d3.max(colours);
+
+  d3.range(nodes.length).forEach(i => {
+    var spritey = makeTextSprite(" " + nodes[i] + " ", {
+      fontsize: 10 + window.size / 5 * (colours[i] / maxcol), //32,
+      colour: color(colours[i] / maxcol)
+    });
+    spritey.position = new THREE.Vector3(
+      scalar * (x[i] / mx - 0.5),
+      scalar * (y[i] / my - 0.5),
+      scalar * (z[i] / mz - 0.5)
+    );
+    scene.add(spritey);
+  });
+
+  var spritey = makeTextSprite(" Origin ", {
+    fontsize: 42, //32,
+    colour: "White"
+  });
+  spritey.position = new THREE.Vector3(
+    (-0.5) * scalar,
+    (-0.5) * scalar,
+    (-0.5) * scalar
+  );
+  scene.add(spritey);
+}
+//
+///
+//
+//
+//
+//
+function axis(max) {
+  var min = ~~(max * 10) + 1;
+  var newsize = window.size - window.size / 2;
+  var geometry = new THREE.PlaneGeometry(
+    window.size * 1.1,
+    window.size * 1.1,
+    min,
+    min
+  );
+  var material = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0.09,
+    side: THREE.DoubleSide,
+    wireframe: true,
+    color: 0xfffff
+  });
+  var plane = new THREE.Mesh(geometry, material);
+  plane.position = new THREE.Vector3(0, 0, (-window.size) * 1.1 / 2);
+  scene.add(plane);
+
+  material.color;
+  var plane = new THREE.Mesh(geometry, material);
+  plane.position = new THREE.Vector3(0, (-window.size) * 1.1 / 2, 0);
+  plane.rotateX(90 * Math.PI / 180);
+  scene.add(plane);
+
+  var plane = new THREE.Mesh(geometry, material);
+  plane.position = new THREE.Vector3((-window.size) * 1.1 / 2, 0, 0);
+  plane.rotateY(90 * Math.PI / 180);
+  scene.add(plane);
+
+  var spritey = makeTextSprite(" betweenness ", {
+    fontsize: 100, //32,
+    colour: "white"
+  });
+  spritey.position = new THREE.Vector3((-window.size) * 1.2 / 2, 0, 0);
+  scene.add(spritey);
+
+  var spritey = makeTextSprite(" closeness ", {
+    fontsize: 100, //32,
+    colour: "white"
+  });
+  spritey.position = new THREE.Vector3(0, 0, (-window.size) * 1.2 / 2);
+  scene.add(spritey);
+
+  var spritey = makeTextSprite(" eigenvector ", {
+    fontsize: 100, //32,
+    colour: "white"
+  });
+  spritey.position = new THREE.Vector3(0, (-window.size) * 1.2 / 2, 0);
+  scene.add(spritey);
+}
+
+// FUNCTIONS
+function init() {
+  // SCENE
+  scene = new THREE.Scene();
+  // CAMERA
+  var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+  var VIEW_ANGLE = 35,
+    ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
+    NEAR = 0.1,
+    FAR = 20000;
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  scene.add(camera);
+  camera.position.set(1000, 1000, 1000); //0,    // 1500 / 2, 4000 / 2);
+  camera.lookAt(scene.position);
+  // RENDERER
+  if (Detector.webgl)
+    renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      preserveDrawingBuffer: true
+    });
+  else
+    renderer = new THREE.CanvasRenderer();
+  document.body.appendChild(renderer.domElement);
+
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+  renderer.setClearColor("#fffff", 0.9);
+
+  container = document.getElementById("ThreeJS");
+  container.appendChild(renderer.domElement);
+  // EVENTS
+  THREEx.WindowResize(renderer, camera);
+
+  //bind f to mean fullscreen
+  THREEx.FullScreen.bindKey({ charCode: "f".charCodeAt(0) });
+
+  // CONTROLS
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  // LIGHT
+  /*
+  var light = new THREE.PointLight(0xffffff);
+  light.position.set(0, 250, 0);
+  scene.add(light);
+*/
+  /*
+  var lights = [];
+  lights[0] = new THREE.PointLight(0xffffff, 1, 0);
+  lights[1] = new THREE.PointLight(0xffffff, 1, 0);
+  lights[2] = new THREE.PointLight(0xffffff, 1, 0);
+
+  lights[0].position.set(0, 200, 0);
+  lights[1].position.set(100, 200, 100);
+  lights[2].position.set(-100, -200, -100);
+
+  scene.add(lights[0]);
+  scene.add(lights[1]);
+  scene.add(lights[2]);
+*/
+  ////////////
+  // CUSTOM //
+  ////////////
+
+  var material = new THREE.MeshNormalMaterial();
+  mesh = new THREE.Mesh(material);
+  mesh.position.set(0, 0, 0);
+  scene.add(mesh);
+}
+
+function makeTextSprite(message, parameters) {
+  if (parameters === undefined) parameters = {};
+
+  var fontface = parameters.hasOwnProperty("fontface")
+    ? parameters["fontface"]
+    : "Helvetica";
+
+  var fontsize = parameters.hasOwnProperty("fontsize")
+    ? parameters["fontsize"]
+    : 18;
+
+  var borderThickness = parameters.hasOwnProperty("borderThickness")
+    ? parameters["borderThickness"]
+    : 4;
+
+  var colour = parameters.hasOwnProperty("colour")
+    ? parameters["colour"]
+    : "black";
+
+  var canvas = document.createElement("canvas");
+  var context = canvas.getContext("2d");
+  context.font = "Bold " + fontsize + "px " + fontface;
+
+  // get size data (height depends only on font size)
+  var metrics = context.measureText(message);
+  var textWidth = metrics.width;
+
+  context.lineWidth = borderThickness;
+
+  // text color
+
+  context.strokeStyle = "blue";
+
+  context.fillStyle = colour;
+
+  context.fillText(message, borderThickness, fontsize + borderThickness);
+
+  // canvas contents will be used for a texture
+  var texture = new THREE.Texture(canvas);
+  texture.needsUpdate = true;
+
+  var spriteMaterial = new THREE.SpriteMaterial({
+    map: texture,
+    useScreenCoordinates: false,
+    alignment: THREE.SpriteAlignment.center
+  });
+
+  var sprite = new THREE.Sprite(spriteMaterial);
+  sprite.scale.set(100, 50, 1.0);
+  return sprite;
+}
+
+// function for drawing rounded rectangles
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+  controls.update();
+}
+
+function save(time) {
+  imgData = renderer.domElement.toDataURL();
+  var link = document.createElement("a");
+  link.download = time + ".png";
+  link.href = imgData;
+  link.click();
+  //close();
+}
+</script>
+
+</body>
+</html>
