@@ -101,13 +101,13 @@ end
 
 ##################FOR EACH TIMESTEP##################
 @pyimport nx
-using Blink
+#using Blink
 #w = Blink.Window()
 sleep(10)
 
 
 t=144
-using Plots
+#using Plots
 #unicodeplots();
 
 
@@ -134,9 +134,11 @@ for t in 1:100:288
     x = [try a[i] catch 0.0f0 end for i in nodes]
     a =  a = nx.eigenvector("weight")
     y = [try a[i] catch 0.0f0 end for i in nodes]
-    a =  a = nx.closeness("weight")
+    a = nx.closeness("weight")
     z = [try a[i] catch 0.0f0 end for i in nodes]
 
+    a = nx.betweenness("weight")
+    k = [try a[i] catch 0.0f0 end for i in nodes]
 
     #=
     # initialize a 3D plot with 1 empty series
@@ -152,14 +154,19 @@ for t in 1:100:288
 
 
 #=
+using Blink
+w = Blink.Window()
 
 
     loadurl(w, string("file://" ,pwd(),"/scatter3d/index.html"))
+        sleep(1)
     @js w console.log("You have succesfully loaded index.html from Julia")
     sleep(1)
     @js w window.nodes = $nodes
     @js w window.x = $x
-    @js w window.y = $y
+
+    @js w window.y = $k
+
     @js w window.z = $z
     @js w run()
     sleep(1)
