@@ -19,7 +19,12 @@ w = Blink.AtomShell.Window()
 loadurl(w, string("file://" ,pwd(),"/scatter3d/index.html"))
 @js w console.log("You have succesfully loaded index.html from Julia")
 @js w window.nodes = $nodes
+
+Pkg.clone("Pandas")
+using Pandas
+
 =#
+
 println(ARGS);
 
 
@@ -97,9 +102,8 @@ end
 ##################FOR EACH TIMESTEP##################
 @pyimport nx
 using Blink
-w = Blink.Window()
+#w = Blink.Window()
 sleep(10)
-
 
 
 t=144
@@ -107,8 +111,9 @@ using Plots
 #unicodeplots();
 
 
-for t in 1:10:288
+for t in 1:100:288
 
+    println(t)
     nx.newGraph()
     normalise(x) = x/norm(x)
 
@@ -146,7 +151,7 @@ for t in 1:10:288
     =#
 
 
-
+#=
 
 
     loadurl(w, string("file://" ,pwd(),"/scatter3d/index.html"))
@@ -160,6 +165,45 @@ for t in 1:10:288
     sleep(1)
     t2 = "centrality_" * lpad(t,4,0)
     @js w save($t2)
+=#
+
+
+a = nx.triads()
+#b = names!(DataFrame(transpose(a["data"])),[Symbol(i) for i in a["nodes"]])
+
+#Set([i[1:3] for i in a["key"]])
+
+b = names!(DataFrame(a["data"]),[Symbol(i) for i in a["key"]])
+maxnet = [Symbol(i) for i in filter(k->k[3]=='1', a["key"])]
+
+mn = b[maxnet]
+
+sum =[]
+for i in 1:size(mn)[1]
+  dummy = 0
+  for j in 1:len(mn)
+      dummy+= mn[i,j]
+  end
+  push!(sum,dummy)
+end
+
+
+d = sort(collect(Dict(a["nodes"],sum)),by=x->x[2])
+
+for i in len(d)-10:len(d)
+  println( " Species: $(d[i][1]) - Count: $(d[i][2]) ")
+end
+
+#=
+
+unicodeplots();
+plot(sum, label="$t", xlabel="Species Index", ylabel="Open Count")
+
+a["nodes"][filter(x->b[Symbol("030C")][x]>0, 1:len(b))]
+
+
+
+=#
 
 end
 

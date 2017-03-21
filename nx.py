@@ -1,19 +1,19 @@
-from networkx import *
 import json
-import networkx as nx
+import networkx as nwx
 from networkx.readwrite import json_graph
 
 
 global G
-G=DiGraph()
+G=nwx.DiGraph()
 
+global dummy
 
 def edges():
     print list(G.edges_iter(data='weight', default=-999))
 
 def newGraph():
     global G
-    G=DiGraph()
+    G=nwx.DiGraph()
 
 def addedge(s,t,w):
     global G
@@ -29,13 +29,13 @@ def p ():
     print G.graph, G.nodes()
 
 def eigenvector(w='weight'):
-    return nx.eigenvector_centrality(G,weight=w)
+    return nwx.eigenvector_centrality(G,weight=w)
 
 def betweenness(w='weight'):
-    return nx.betweenness_centrality(G,weight=w)
+    return nwx.betweenness_centrality(G,weight=w)
 
 def closeness(w='weight'):
-    return nx.closeness_centrality(G)
+    return nwx.closeness_centrality(G)
 
 def highest_centrality(centrality_function):
      """Returns a tuple (node,value) with the node
@@ -48,16 +48,21 @@ def highest_centrality(centrality_function):
      return tuple(reversed(cent_items[0]))
 
 def triads():
-    #import tradic
-    census, node_census = nx.triadic_census(G)
+    import triadic as tr
+    #census,
+    global dummy
+    census,node_census = tr.triadic_census(G)
     keys = node_census.values()[1].keys()
     ## Generate a table header
     print '| Node |', ' | '.join(keys)
     ## Generate table contents
     ## A little magic is required to convert ints to strings
+    data = []
     for k in node_census.keys():
-        print '|', k, '|',' | '.join([str(v) for v in node_census[k].values()])
+        #print '|', k ,'|',' | '.join([str(v) for v in node_census[k].values() ])
+        data.append([k,[i for i in node_census[k].values()]])
 
+    return {"key":keys,"data":[i[1] for i in data],"nodes":[i[0] for i in data]}
 
 #https://networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.triads.triadic_census.html
 
@@ -65,4 +70,4 @@ def triads():
 
 def test():
     global G
-    G = nx.connected_component_subgraphs(G.to_undirected())
+    G = nwx.connected_component_subgraphs(G.to_undirected())
