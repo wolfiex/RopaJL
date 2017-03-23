@@ -80,7 +80,8 @@ t=144
 
 #f4(x)=log(e,x),
 
-fns=[f(x)=x,f1(x)=x*x, f2(x)=x*x*x, f3(x)=e^x, f5(x)=1/x,f6(x)=1/x^2,f7(x)=1/x^e]
+fns=[f(x)=x,f1(x)=x*x, f2(x)=x*x*x, f3(x)=e^x, f5(x)=x^(1/2),f6(x)=x^(1/3),f7(x)=x^(1/e)]
+dcrpt = ["x","x^2","x^3", "exp^x", "x^{1/2}","x^{1/3}", "x^{1/exp}"]
 
 forward = []
 for fn in 1:len(fns)
@@ -92,7 +93,7 @@ for fn in 1:len(fns)
       weight = (tflux+abs(minimum(tflux)))
       weight = (weight/maximum(weight))*.98 +0.01
 
-      weight = [fns[fn](q) for q in weight]
+      weight = [ if q >0 fns[fn](q) else 0 end for q in weight]
 
       a = fit(Histogram, weight+0.1, nbins = 10, closed = :left)
 
@@ -104,8 +105,9 @@ for fn in 1:len(fns)
 end
 
 
+
 open("data.json", "w") do f
-        write(f, "bardata="*JSON.json(forward)*"; timestamp ="*JSON.json(specs[1][2:len(specs[1])]))
+        write(f, "bardata="*JSON.json(forward)*"; timestamp ="*JSON.json(specs[1][2:len(specs[1])])*";description = "*JSON.json(dcrpt))
      end
 
 

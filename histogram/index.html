@@ -9,100 +9,253 @@ button {
   top: 10px;
 }
 
-
-
 .axis { font: 14px sans-serif; }
 </style>
-<button onclick="transition()">Update</button>
+<!--button onclick="transition()">Update</button-->
 <svg ></svg>
 <script src="data.json"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="save.js"></script>
 <script>
+width = window.innerWidth;
+height = window.innerHeight;
 
-width  = window.innerWidth*.9
-height = window.innerHeight
-// set the ranges
-var x = d3.scaleLinear().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
+window.counter = 0;
+
+function currentdata() {
+  var now = window.counter;
+  var later = window.counter = window.counter === bardata.length - 1
+    ? 0
+    : window.counter + 1;
+
+  layers0 = layerval(later);
+
+  layers1 = layerval(now);
+
+  d3
+    .selectAll("path")
+    .data((layers1, layers0))
+    .transition()
+    .duration(2500)
+    .attr("d", area);
+
+  window.counter = later;
+  document.title = description[window.counter];
+  d3.select("#formula").text(description[window.counter]);
+}
+
+function layerval(count) {
+  return stack(
+    bardata[count].map(d => {
+      var s = d3.sum(d);
+      return d.map(e => s > 0.001 && e > 0 ? e / s : 0);
+    })
+  );
+}
+
+/*
 
 
-//l1 = l1.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
-l1=bardata[3]
-l1 = l1.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
 
-l2=bardata[1]
-l2 = l2.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
-
-
-
-
- var n = l1[1].length, // number of layers
-     m = l1.length, // number of samples per layer
-     k = 100; // number of bumps per layer
-
+*/
 
 //l1 = JSON.parse("[[11.812828015907034,31.57345943267648,12.378177457048295],[13.293414783301804,14.022295470353422,9.630974381905954]]")
-var stack = d3.stack().keys(d3.range(n)).offset(d3.stackOffsetExpand),
-    layers0 = stack(l1),
-    //layers1 = stack(d3.transpose(d3.range(n).map(function() { return bumps(m, k); }))),
-    layers1 = stack(l2)
-    layers = layers0.concat(layers1);
+var stack = d3
+  .stack()
+  .keys(d3.range(bardata[0][0].length))
+  .offset(d3.stackOffsetExpand),
+  layers0 = layerval(0),
+  layers = layers0;
 
 var svg = d3.select("svg");
-    svg.attr("width",width);
-    svg.attr("height",height);
+svg.attr("width", width);
+svg.attr("height", height);
 
-var x = d3.scaleLinear()
-    .domain([0, m - 1])
-    .range([0, width]);
+var x = d3
+  .scaleLinear()
+  .domain([0, layers0[0].length - 1])
+  .range([0, width - 0.03 * width - 75]);
 
-var y = d3.scaleLinear()
-    .domain([d3.min(layers, stackMin), d3.max(layers, stackMax)])
-    .range([height, 0]);
+var y = d3
+  .scaleLinear()
+  .domain([d3.min(layers, stackMin), d3.max(layers, stackMax)])
+  .range([height * 0.88, 0]);
 
 var z = d3.interpolateCool;
 
-var area = d3.area()
-    .x(function(d, i) { return x(i); })
-    .y0(function(d) { return y(d[0]); })
-    .y1(function(d) { return y(d[1]); })
-    .curve(d3.curveBasis);
+var area = d3
+  .area()
+  .x(function(d, i) {
+    return x(i);
+  })
+  .y0(function(d) {
+    return y(d[0]);
+  })
+  .y1(function(d) {
+    return y(d[1]);
+  })
+  .curve(d3.curveBasis);
 
-svg.selectAll("path")
+svg
+  .selectAll("path")
   .data(layers0)
-  .enter().append("path")
-
-    .attr("d", area)
-    .attr("opacity",0.8)
-    .attr("fill", function(d,i) { return z(i/10.); });
+  .enter()
+  .append("path")
+  .attr("d", area)
+  .attr("opacity", 0.8)
+  .attr("transform", "translate(" + 0.03 * width + "," + 0.01 * height + ")")
+  .attr("fill", function(d, i) {
+    return z(i / 10);
+  });
 
 function stackMax(layer) {
-  return d3.max(layer, function(d) { return d[1]; });
+  return d3.max(layer, function(d) {
+    return d[1];
+  });
 }
 
 function stackMin(layer) {
-  return d3.min(layer, function(d) { return d[0]; });
+  return d3.min(layer, function(d) {
+    return d[0];
+  });
 }
 
 function transition() {
   var t;
-  d3.selectAll("path")
+  d3
+    .selectAll("path")
     .data((t = layers1, layers1 = layers0, layers0 = t))
     .transition()
-      .duration(2500)
-      .attr("d", area);
+    .duration(2500)
+    .attr("d", area);
 }
 
-var parseTime = d3.timeFormat("%d-%b %H:%M")
+///
+
+///
+
+///axis
+var parseTime = d3.timeFormat("%d-%b %H:%M");
 // Add the x Axis
- svg.append("g")
-     .attr("transform", "translate(0," + 0 + ")")
+svg
+  .append("g")
+  .attr("transform", "translate(" + 0.03 * width + "," + 0.90 * height + ")")
+  .call(
+    d3
+      .axisBottom(x)
+      .tickFormat(d => {
+        var e = new Date(timestamp[7 * d] * 1000);
+        return parseTime(e);
+      })
+      .ticks(~~(width / 100))
+    //.tickSizeOuter(0)
+  )
+  .selectAll(".tick text")
+  .attr("text-align", "center")
+  .call(wrap, 15)
+  .attr("transform", "translate(" + (-0.02) * width + "," + 0 + ")");
 
-     .call(d3.axisBottom(x)
-     .tickFormat(d=> {var e=new Date(timestamp[7*d]*1000); return parseTime(e) })
-     .ticks((~~width/100))
-   );
+function wrap(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+      words = text.text().split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      y = text.attr("y"),
+      dy = parseFloat(text.attr("dy")),
+      lineHeight = 1.1, // ems
+      tspan = text
+        .text(null)
+        .append("tspan")
+        .attr("x", function(d) {
+          return d.children || d._children ? -10 : 10;
+        })
+        .attr("y", y)
+        .attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      var textWidth = tspan.node().getComputedTextLength();
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        ++lineNumber;
+        tspan = text
+          .append("tspan")
+          .attr("x", function(d) {
+            return d.children || d._children ? -10 : 10;
+          })
+          .attr("y", 0)
+          .attr("dy", lineNumber * lineHeight + dy + "em")
+          .text(word);
+      }
+    }
+  });
+}
 
+//legend
 
+dp1 = d3.format(".1f");
 
+var legend = svg
+  .append("g")
+  .attr("font-family", "sans-serif")
+  .attr("font-size", 10)
+  .attr("text-anchor", "end")
+  .selectAll("g")
+  .data(d3.range(1, 0, -0.1).map(d => dp1(d - 0.1) + " - " + dp1(d))) //keys.slice().reverse())
+  .enter()
+  .append("g")
+  .attr("transform", function(d, i) {
+    return "translate(0," + i * 20 + ")";
+  });
+
+legend
+  .append("text")
+  .attr("x", width - 24)
+  .attr("y", 9.5)
+  .attr("dy", "0.32em")
+  .text(function(d) {
+    return d;
+  });
+
+legend
+  .append("rect")
+  .attr("x", width - 19)
+  .attr("width", 15)
+  .attr("height", 18)
+  .attr("fill", (e, i) => z((10 - i) / 10));
+
+var formula = svg
+  .append("g")
+  .attr("font-family", "sans-serif")
+  .attr("font-size", 10)
+  .attr("text-anchor", "center");
+
+formula
+  .append("text")
+  .attr("x", width - 70)
+  .attr("y", 20 * 11)
+  .attr("dy", "0.32em")
+  .text("Function:")
+  .attr("transform", function(d, i) {
+    return "translate(0," + i * 20 + ")";
+  });
+
+formula
+  .append("text")
+  .attr("id", "formula")
+  .attr("x", width - 65)
+  .attr("y", 20 * 11.7) //width / 2)
+  .attr("dy", "0.32em")
+  .text(description[6])
+  .attr("transform", function(d, i) {
+    return "translate(0," + i * 20 + ")";
+  });
+//
+//
+
+var myVar = setInterval(currentdata, 3000);
 </script>
