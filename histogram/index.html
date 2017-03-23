@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Streamgraph</title>
+<style>
+
+button {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+
+
+.axis { font: 14px sans-serif; }
+</style>
+<button onclick="transition()">Update</button>
+<svg ></svg>
+<script src="data.json"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+width  = window.innerWidth*.9
+height = window.innerHeight
+// set the ranges
+var x = d3.scaleLinear().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+
+//l1 = l1.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
+l1=bardata[3]
+l1 = l1.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
+
+l2=bardata[1]
+l2 = l2.map(d=> { var s = d3.sum(d); return d.map(e=>e/s)})
+
+
+
+
+ var n = l1[1].length, // number of layers
+     m = l1.length, // number of samples per layer
+     k = 100; // number of bumps per layer
+
+
+//l1 = JSON.parse("[[11.812828015907034,31.57345943267648,12.378177457048295],[13.293414783301804,14.022295470353422,9.630974381905954]]")
+var stack = d3.stack().keys(d3.range(n)).offset(d3.stackOffsetExpand),
+    layers0 = stack(l1),
+    //layers1 = stack(d3.transpose(d3.range(n).map(function() { return bumps(m, k); }))),
+    layers1 = stack(l2)
+    layers = layers0.concat(layers1);
+
+var svg = d3.select("svg");
+    svg.attr("width",width);
+    svg.attr("height",height);
+
+var x = d3.scaleLinear()
+    .domain([0, m - 1])
+    .range([0, width]);
+
+var y = d3.scaleLinear()
+    .domain([d3.min(layers, stackMin), d3.max(layers, stackMax)])
+    .range([height, 0]);
+
+var z = d3.interpolateCool;
+
+var area = d3.area()
+    .x(function(d, i) { return x(i); })
+    .y0(function(d) { return y(d[0]); })
+    .y1(function(d) { return y(d[1]); })
+    .curve(d3.curveBasis);
+
+svg.selectAll("path")
+  .data(layers0)
+  .enter().append("path")
+
+    .attr("d", area)
+    .attr("opacity",0.8)
+    .attr("fill", function(d,i) { return z(i/10.); });
+
+function stackMax(layer) {
+  return d3.max(layer, function(d) { return d[1]; });
+}
+
+function stackMin(layer) {
+  return d3.min(layer, function(d) { return d[0]; });
+}
+
+function transition() {
+  var t;
+  d3.selectAll("path")
+    .data((t = layers1, layers1 = layers0, layers0 = t))
+    .transition()
+      .duration(2500)
+      .attr("d", area);
+}
+
+var parseTime = d3.timeFormat("%d-%b %H:%M")
+// Add the x Axis
+ svg.append("g")
+     .attr("transform", "translate(0," + 0 + ")")
+
+     .call(d3.axisBottom(x)
+     .tickFormat(d=> {var e=new Date(timestamp[7*d]*1000); return parseTime(e) })
+     .ticks((~~width/100))
+   );
+
+
+
+</script>
