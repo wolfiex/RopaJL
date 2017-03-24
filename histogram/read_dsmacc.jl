@@ -80,8 +80,8 @@ t=144
 
 #f4(x)=log(e,x),
 
-fns=[f(x)=x,f1(x)=x*x, f2(x)=x*x*x, f3(x)=e^x, f5(x)=x^(1/2),f6(x)=x^(1/3),f7(x)=x^(1/e)]
-dcrpt = ["x","x^2","x^3", "exp^x", "x^{1/2}","x^{1/3}", "x^{1/exp}"]
+fns=[f(x)=x,f1(x)=x*x, f2(x)=x*x*x, f3(x)=e^x, f5(x)=x^(1/2),f6(x)=x^(1/3),f7(x)=x^(1/e),f8(x)=abs(log(e,x)),f9(x)=abs(log(2,x))]
+dcrpt = ["x","x^2","x^3", "exp^x", "x^{1/2}","x^{1/3}", "x^{1/exp}","|ln(x)|","|log_2(x)|"]
 
 forward = []
 for fn in 1:len(fns)

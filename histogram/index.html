@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Streamgraph</title>
+<title>x</title>
 <style>
 
 button {
@@ -22,7 +22,7 @@ height = window.innerHeight;
 
 window.counter = 0;
 
-function currentdata() {
+function next() {
   var now = window.counter;
   var later = window.counter = window.counter === bardata.length - 1
     ? 0
@@ -103,6 +103,8 @@ svg
   .append("path")
   .attr("d", area)
   .attr("opacity", 0.8)
+  .attr("stroke", "white")
+  .attr("stroke-width", 0.3)
   .attr("transform", "translate(" + 0.03 * width + "," + 0.01 * height + ")")
   .attr("fill", function(d, i) {
     return z(i / 10);
@@ -135,25 +137,78 @@ function transition() {
 ///
 
 ///axis
-var parseTime = d3.timeFormat("%d-%b %H:%M");
+var parseTime = d3.timeFormat("%d-%b");
+var parseTime1 = d3.timeFormat("%H:%M");
 // Add the x Axis
+var axis = d3
+  .axisBottom(x)
+  // .tickFormat(d => {    var e = new Date(timestamp[7 * d] * 1000);    return parseTime(e);  })
+  .tickFormat(d => "")
+  .ticks(~~(width / 100));
+//.tickSizeOuter(0)
+
+function getTranslation(transform) {
+  // Create a dummy g for calculation purposes only. This will never  // be appended to the DOM and will be discarded once this function  // returns.
+  var g = document.createElementNS("http://www.w3.org/2000/svg", "g"); // Set the transform attribute to the provided string value.
+  g.setAttributeNS(null, "transform", transform); // consolidate the SVGTransformList containing all transformations  // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get  // its SVGMatrix.
+  var matrix = g.transform.baseVal.consolidate().matrix; // As per definition values e and f are the ones for the translation.
+  return [matrix.e, matrix.f];
+}
+
 svg
   .append("g")
   .attr("transform", "translate(" + 0.03 * width + "," + 0.90 * height + ")")
-  .call(
-    d3
-      .axisBottom(x)
-      .tickFormat(d => {
-        var e = new Date(timestamp[7 * d] * 1000);
-        return parseTime(e);
-      })
-      .ticks(~~(width / 100))
-    //.tickSizeOuter(0)
-  )
+  .call(axis)
+  .selectAll(".tick")
+  .each(function(data) {
+    //
+    //
+
+    var tick = d3.select(this);
+    var transform = getTranslation(tick.attr("transform"));
+    console.log("each tick", data, transform);
+
+    var dummy = svg
+      .append("g")
+      .attr(
+        "transform",
+        "translate(" + 0.03 * width + "," + height * 0.93 + ")"
+      );
+    dummy
+      .append("text")
+      .attr("x", transform[0])
+      .attr("y", 0) //width / 2)
+      .attr("dy", "0.32em")
+      .text(parseTime(new Date(timestamp[7 * data] * 1000)))
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "middle");
+
+    dummy
+      .append("text")
+      .attr("x", transform[0])
+      .attr("y", 13) //width / 2)
+      .attr("dy", "0.32em")
+      .text(parseTime1(new Date(timestamp[7 * data] * 1000)))
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "middle");
+    //
+    //
+  })
   .selectAll(".tick text")
-  .attr("text-align", "center")
-  .call(wrap, 15)
+  //.attr("text-align", "center")
+  //.call(wrap, 15)
+
   .attr("transform", "translate(" + (-0.02) * width + "," + 0 + ")");
+
+/*
+
+
+
+
+
+*/
 
 function wrap(text, width) {
   text.each(function() {
@@ -250,12 +305,15 @@ formula
   .attr("x", width - 65)
   .attr("y", 20 * 11.7) //width / 2)
   .attr("dy", "0.32em")
-  .text(description[6])
+  .text(description[0])
   .attr("transform", function(d, i) {
     return "translate(0," + i * 20 + ")";
   });
 //
 //
+var myVar = setInterval(next, 3000);
 
-var myVar = setInterval(currentdata, 3000);
+function stop() {
+  clearInterval(myVar);
+}
 </script>
