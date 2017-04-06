@@ -5,6 +5,7 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 filename = "dsmacc_out.nc"
+filename = "methane.nc"
 data = ncdata.get(filename)
 
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
@@ -57,7 +58,7 @@ for i in 1:length(reactants)
     push!(flux, prod*rates[i])
     # make edges array
     for l in products[i]
-        push!(edges,[j,l,i])
+        push!(edges,[match( r"([\d\s\.]*)(\D[\d\D]*)", j)[2],match( r"([\d\s\.]*)(\D[\d\D]*)", l)[2],i])
     end
 
   end
@@ -88,12 +89,13 @@ R"el <- structure(list(V1 = source, V2 = target, weight = weighted), .Names = c(
 
 R"g <- graph.data.frame(el)"
 
-ec = R"eigen_centrality(g, directed=TRUE, weights=E(g)$weight)$vector"
-
 R"net = g"
+
 
 density = R"ecount(net)/(vcount(net)*(vcount(net)-1))"#edge_density(net, loops=F)"
 
+
+ec = R"eigen_centrality(g, directed=TRUE, weights=E(g)$weight)$vector"
 
 #liklyhood of returned pairs. reciprocity
 reciprocity = R"reciprocity(net)"
@@ -153,16 +155,64 @@ cliques_largest=R"largest_cliques(net.sym)"
 #make membership a function
 
 edge_betweenness =R"cluster_edge_betweenness(net)"#dendPlot(ceb, mode="hclust")
-edge_betweenness_classification = R"membership($(edge_betweenness))"
+#edge_betweenness_classification = R"membership($(edge_betweenness))"
 #modularity(ceb)
 #crossing(ceb, net) # boolean vector: TRUE for edges across communities
 
-cluster_label_prop=R"cluster_label_prop(net)"
-#greedy = R"cluster_fast_greedy(as.undirected(net))"
-
 kcore = R"coreness(net, mode="all")"
 
-assortativity_degree = R"assortativity_degree(net, directed=F)"
+assortativity_degree = R"assortativity_degree(net, directed=T)"
+
+pagerank= R"page_rank(g, algo = c('prpack', 'arpack', 'power'), vids = V(g),
+     directed = TRUE, damping = 0.85, personalized = NULL, weights = NULL,
+     options = NULL)$vector"
+
+####clustering below:
+
+
+label = R"a = cluster_label_prop(net)"
+label = R"a = cluster_walktrap(g,step= 20000 )"
+label = R"a = cluster_spinglass(g, spins=200)"
+label = R"a = cluster_optimal(g)"
+
+#label = R"a = cluster_louvain(as.undirected(net, mode= "collapse",edge.attr.comb=list(weight="mean", "ignore")))"
+#label = R"a = cluster_leading_eigen(g, steps = -1, weights = NULL, start = NULL,  options = arpack_defaults, callback = NULL, extra = NULL,  env = parent.frame())"
+
+label = R"a = cluster_edge_betweenness(g, weights = E(g)$weight, directed = TRUE,
+  edge.betweenness = TRUE, merges = TRUE, bridges = TRUE,
+  modularity = TRUE, membership = TRUE)"
+
+
+
+f = open("julia.out","w")
+for i in 1:length(label)
+R"str = paste(unlist(a[$i]),collapse='\t')"
+@rget str
+if str != ""
+write(f,str)
+write(f,"\n")
+end
+end
+close(f)
+
+
+
+
+function cent(x)
+
+  f = open("centrality.out","w")
+  write(f,[string(i)*" " for i in names(x)])
+  write(f,"\n")
+  write(f,[string(x[i])*" " for i in 1:length(x)])
+  close(f)
+
+end
+
+
+
+
+
+
 
 #=
 
