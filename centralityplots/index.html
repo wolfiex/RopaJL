@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+body { font: 12px Arial;}
+
+</style>
+<body>
+
+<!-- load the d3.js library -->    	
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+// set the dimensions and margins of the graph
+var margin = { top: 20, right: 150, bottom: 30, left: 50 },
+  width = window.innerWidth - margin.left - margin.right,
+  height = window.innerHeight - margin.top - margin.bottom;
+
+// array of curve functions and tites
+var curveArray = [
+  { d3Curve: d3.curveLinear, curveTitle: "curveLinear" },
+  { d3Curve: d3.curveStep, curveTitle: "curveStep" },
+  { d3Curve: d3.curveStepBefore, curveTitle: "curveStepBefore" },
+  { d3Curve: d3.curveStepAfter, curveTitle: "curveStepAfter" },
+  { d3Curve: d3.curveBasis, curveTitle: "curveBasis" },
+  { d3Curve: d3.curveCardinal, curveTitle: "curveCardinal" },
+  { d3Curve: d3.curveMonotoneX, curveTitle: "curveMonotoneX" },
+  { d3Curve: d3.curveCatmullRom, curveTitle: "curveCatmullRom" }
+];
+
+var file = "out.mcl";
+
+var mcl;
+
+var groups = [];
+
+d3.text(file, function(text) {
+  mcl = text.split("\n");
+  mcl.pop();
+  mcl = mcl.map(d => d.split("\t"));
+
+  var toplot = {
+    name: file,
+    children: mcl.map((d, i) => {
+      return {
+        name: i,
+        children: d.map(e => {
+          return { name: e, size: 1, parent: i };
+        })
+      };
+    })
+  };
+  mcl.forEach((d, i) => {
+    d.forEach(e => groups.push([e, i]));
+  });
+  groups = new Map(groups);
+});
+
+// parse the date / time
+var parseTime = d3.timeParse("%d-%b-%y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3
+  .select("body")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var data;
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+// Get the data
+d3.csv("centrality.out", function(error, d) {
+  if (error) throw error;
+
+  data = d;
+  nodes = Object.keys(data[0]);
+
+  //nodes = ["CH4", "CO"];
+
+  var dummy = [];
+  var allvalues = data.forEach(d => {
+    nodes.forEach(e => {
+      dummy.push(parseFloat(d[e]));
+    });
+  });
+
+  x.domain([0, data.length]);
+  y.domain(d3.extent(dummy, d => d));
+
+  console.log(y.domain());
+  nodes.forEach(function(spec, i) {
+    console.log(spec, groups.get(spec));
+    if (groups.get(spec) === undefined) return 1;
+    svg
+      .append("path")
+      .datum(data)
+      .attr("class", "line")
+      .style("stroke", color(groups.get(spec) + 1))
+      .attr("id", "tag" + i) // assign ID
+      .attr(
+        "d",
+        d3
+          .line()
+          .curve(d3.curveMonotoneX)
+          .x(function(d, i) {
+            return x(i);
+          })
+          .y(function(d) {
+            return y(d[spec]);
+          })
+      );
+
+    svg
+      .append("text")
+      .attr("dx", function(d) {
+        return width + 10;
+      })
+      .attr("dy", function(d) {
+        return y(data[data.length - 1][spec]);
+      })
+      .style("fill", color(groups.get(spec) + 1))
+      .text(function(d) {
+        return spec;
+      })
+      .call(drag_behavior);
+  });
+  /* // Add the scatterplot
+  svg
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("r", 5)
+    .attr("cx", function(d) {
+      return x(d.date);
+    })
+    .attr("cy", function(d) {
+      return y(d.close);
+    });
+*/
+});
+
+// Add the X Axis
+svg
+  .append("g")
+  .attr("class", "axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x));
+
+// Add the Y Axis
+svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
+
+var drag_behavior = d3.drag().on("start", dragstarted).on("drag", dragged);
+
+function dragstarted() {
+  d3.select(this).raise();
+}
+
+function dragged(shape) {
+  var dx = d3.event.x, dy = d3.event.y;
+
+  d3
+    .select(this)
+    .attr(
+      "transform",
+      "translate(" + 0 + "," + (d3.select(this).attr("x") + 5) + ")"
+    );
+}
+</script>
+</body>
