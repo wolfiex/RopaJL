@@ -126,19 +126,6 @@ pagerank= R"page_rank(g, algo = c('prpack', 'arpack', 'power'), vids = V(g),
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 f = open("centrality.out","w")
 
 
@@ -167,8 +154,9 @@ for t in 1:length(flux[1])
     R"net = g"
     
     
-    centrality = R"eigen_centrality(net, directed=TRUE, weights=E(net)$weight)$vector"
-
+    #centrality = R"eigen_centrality(net, directed=TRUE, weights=E(net)$weight)$vector"
+    centrality = R"betweenness(net, directed=T)"
+    
 
 write(f,join(centrality,","))
 write(f,"\n")
