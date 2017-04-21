@@ -1,3 +1,10 @@
+'''
+conda create -n py2711xr python=2.7
+conda config --add channels conda-forge
+source activate py2711xr
+conda install xarray dask netCDF4 bottleneck
+'''
+
 import netCDF4,re
 from netCDF4 import Dataset
 

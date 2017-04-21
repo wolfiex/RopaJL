@@ -76,9 +76,22 @@ links = filter(i -> flux[i][t]>0 , 1:len(flux))
 tflux = [log10(flux[i][t]) for i in links]
 weight = 1+normalise(tflux)
 
-source = [i[1] for i in edges]
-target=[i[2] for i in edges]
-weighted = [weight[i[3]] for i in edges]
+newflux = [flux[i][t] for i in 1:len(flux)]
+counter = 0
+for i in links
+  newflux[i] = weight[counter+=1]
+end
+
+
+edge = filter(i -> newflux[i[3]]>0 , edges)
+source = [i[1] for i in edge]
+target=[i[2] for i in edge]
+weighted = [newflux[i[3]]+0.0001 for i in edge]
+
+
+
+
+
 
 @rput source
 @rput target
@@ -87,14 +100,14 @@ weighted = [weight[i[3]] for i in edges]
 R"library(igraph)"
 
 R"el <- structure(list(V1 = source, V2 = target, weight = weighted), .Names = c('V1',
-'V2', 'weight'), class = 'data.frame', row.names = c(1:$(length(edges))
+'V2', 'weight'), class = 'data.frame', row.names = c(1:$(length(edge))
 ))"
 
 R"g <- graph.data.frame(el)"
 
 R"net = g"
 
-# get node names !!!! 
+# get node names !!!!
 R"nodes = V(g)$name"
 @rget nodes
 
@@ -133,35 +146,40 @@ write(f,join(nodes,","))
 write(f,"\n")
 
 for t in 1:length(flux[1])
-    
 
-    links = filter(i -> flux[i][t]>0 , 1:len(flux))
-    tflux = [log10(flux[i][t]) for i in links]
-    weight = 1+normalise(tflux)
 
-    source = [i[1] for i in edges]
-    target=[i[2] for i in edges]
-    weighted = [weight[i[3]] for i in edges]
+  links = filter(i -> flux[i][t]>0 , 1:len(flux))
+  tflux = [log10(flux[i][t]) for i in links]
+  weight = 1+normalise(tflux)
+
+  newflux = [flux[i][t] for i in 1:len(flux)]
+  counter = 0
+  for i in links
+    newflux[i] = weight[counter+=1]
+  end
+
+  edge = filter(i -> newflux[i[3]]>0 , edges)
+  source = [i[1] for i in edge]
+  target=[i[2] for i in edge]
+  weighted = [newflux[i[3]]+0.0001 for i in edge]
 
     @rput source
     @rput target
     @rput weighted
 
     R"el <- structure(list(V1 = source, V2 = target, weight = weighted), .Names = c('V1',
-    'V2', 'weight'), class = 'data.frame', row.names = c(1:$(length(edges))
+    'V2', 'weight'), class = 'data.frame', row.names = c(1:$(length(edge))
     ))"
     R"g <- graph.data.frame(el)"
     R"net = g"
-    
-    
+
+
     #centrality = R"eigen_centrality(net, directed=TRUE, weights=E(net)$weight)$vector"
-    centrality = R"betweenness(net, directed=T)"
-    
+    centrality =R"betweenness(net, directed=T)"
+
 
 write(f,join(centrality,","))
 write(f,"\n")
 end
 
 close(f)
-
-
