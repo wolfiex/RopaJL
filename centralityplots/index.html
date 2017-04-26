@@ -13,7 +13,7 @@
 </style>
 <body>
 
-<!-- load the d3.js library -->    	
+<!-- load the d3.js library -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../histogram/save.js"></script>
 <script>
@@ -35,7 +35,7 @@ var curveArray = [
 ];
 
 var file = "out.mcl";
-var thresh = 0.04;
+var thresh = 0.01;
 var mcl;
 
 var dates;
@@ -172,8 +172,9 @@ function labels(data) {
   graph.links = [];
 
   nodes.map(d => {
-      
-    if (y(data[data.length - 1][d]) < height*(1-thresh)) {
+
+    if (y(data[data.length - 1][d]) < height*(1-thresh)& groups.get(d)!= undefined) {
+
       graph.nodes.push({
         id: d,
         cy: y(data[data.length - 1][d]),
@@ -295,7 +296,7 @@ function labels(data) {
     //.force("x", d3.forceX(width + 100).strength(0))
     .force(
       "collide",
-      d3.forceCollide().radius(10).iterations(9).strength(0.003)
+      d3.forceCollide().radius(15).iterations(9).strength(0.003)
     );
 }
 </script>
