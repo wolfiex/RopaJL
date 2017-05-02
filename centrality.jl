@@ -73,9 +73,17 @@ links = filter(i -> flux[i][t]>0 , 1:len(flux))
 tflux = [log10(flux[i][t]) for i in links]
 weight = 1+normalise(tflux)
 
-source = [i[1] for i in edges]
-target=[i[2] for i in edges]
-weighted = [weight[i[3]] for i in edges]
+newflux = [flux[i][t] for i in 1:len(flux)]
+counter = 0
+for i in links
+  newflux[i] = weight[counter+=1]
+end
+
+
+edge = filter(i -> newflux[i[3]]>0 , edges)
+source = [i[1] for i in edge]
+target=[i[2] for i in edge]
+weighted = [newflux[i[3]]+0.0001 for i in edge]
 
 @rput source
 @rput target

@@ -1,0 +1,10 @@
+[
+  {"name":"a.b","size":3938,"imports":[]}, 
+    {"name":"a.c","size":3938,"imports":["a.b"]},
+     
+     {"name":"c","size":3938,"imports":["a.b","c"]},
+  
+  {"name":"d","size":3812,"imports":[]},
+  {"name":"a.e","size":6714,"imports":[]},
+  {"name":"f","size":743,"imports":[]}
+  ]

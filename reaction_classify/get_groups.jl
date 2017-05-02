@@ -22,31 +22,42 @@ for i in 1:length(groups)
         
         for aloc in allocations
             if (ismatch( aloc[1] , rxn))
-                groups[i] = aloc[1]
-                continue
+                groups[i] = aloc[2]
+                @goto skip
             end
         end
+
         
         for j in split(rxn,"+")
             try
                 if (ismatch(r"(\[O\-\]\[O\+\]\=C|\[C\]O\[O\]|\[O\]O\[C\])",mcm3[mcm3[:name].==j,:][:smiles][1]) )
                     groups[i] = "CRI"
-                    continue
+                    @goto skip
                 end
             catch 
                 groups[i] = "INORGANIC"
-                continue
+                @goto skip
             end
         end
-        groups[i]="DISSOCIATION"
-        print(reactions[i][1],groups[i],"\n")
         
+        
+        print(reactions[i][1],groups[i],"\n")        
+        groups[i]="DISSOCIATION"
 
+        
+        @label skip
         
     end
 end
 
-groups = [try i.match catch err: i end for i in groups] #remove RegexMatch objects
+function rmrx(i)
+    try
+        return i.match
+    end 
+    return i 
+end
+
+groups = [rmrx(i) for i in groups] #remove RegexMatch objects
 
 
 #
