@@ -1,0 +1,67 @@
+#graphdiv {
+  position: absolute;
+  left: 0px;
+}
+
+.modal {
+  position: absolute;
+  left: 30%;
+  top: 25%;
+}
+
+body {overflow: scroll;}
+
+      .axisText {
+	  		fill: #C4C4C4;
+	  		font-size: 11px;
+	  		font-weight: 300;
+	  		text-anchor: middle;
+	  		text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+	  	}
+
+.sidenav {
+    height:100%;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    ;
+}
+
+.sidenav a {
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+#header, #footer {
+  z-index: 1;
+  display: block;
+  font-size: 26px;
+  font-weight: 300;
+  text-shadow: 0 1px 0 #fff;
+}
+
+#header {
+  top: 80px;
+  left: 140px;
+  width: 1000px;
+}
+
+#footer {
+  top: 89%;
+  right: 5%;
+  text-align: right;
+
+
+canvas{ position:'absolute'; }
+svg{ position:'absolute'; }

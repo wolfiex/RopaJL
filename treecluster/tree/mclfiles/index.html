@@ -1,0 +1,126 @@
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="../netcdfjs.min.js"></script>
+<script src='grabncdata.js'> </script>
+<button type="button" onclick="e=make(e)">Click Me!</button>
+<script>
+newfile()
+
+  var fs = require("fs");
+
+
+function wait(ms){
+   var start = new Date().getTime();
+   var end = start;
+   while(end < start + ms) {
+     end = new Date().getTime();
+  }
+}
+
+
+/*
+
+for (t = 0; t > data.length; t++){
+  mcl(run(t),t);
+  console.log(t)
+  wait(1000)
+}
+*/
+
+
+function run(t) {
+  var graph = window.data[t];
+  var nds = new Set(
+    flatten(
+      graph.links.map(d => {
+        return [d.source, d.target];
+      })
+    )
+  );
+  graph.nodes = window.nodes.filter(d => {
+    if (nds.has(d.id)) return 1;
+  });
+
+  var simulation = d3
+      .forceSimulation()
+      .force(
+        "link",
+        d3
+          .forceLink()
+          .iterations(9)
+          .id(d => parseInt(d.id)
+        ))
+    simulation.nodes(graph.nodes);
+    simulation.force("link").links( graph.links);
+
+return graph
+}
+
+
+
+
+
+
+
+function mcl(graph,t) {
+  console.log(t)
+
+  var file = "mcl"+d3.format('03d')(t)+".input";
+  var fileloc = __dirname+'/inputs/'+file
+  fs.writeFile(fileloc, "---8<------8<------8<------8<------8<---\n", function(
+    err
+  ) {
+    if (err) throw err;
+    console.log("It's saved!");
+  });
+
+  graph.links.forEach(d => {
+    fs.appendFile(
+      fileloc,
+      d.source.names + "\t" + d.target.names + "\t" + d.v + "\n",
+      function(err) {
+        if (err) throw err;
+        console.log("Saved!");
+      }
+    );
+  });
+
+  fs.appendFile(fileloc, "--->8------>8------>8------>8------>8---", function(
+    err
+  ) {
+    if (err) throw err;
+    console.log("Saved!");
+  });
+  return t
+
+
+
+}
+
+
+
+
+
+
+
+t =0
+
+
+function make (t)
+{var n = t+12
+while (t < n){
+wait(1000)
+var x = mcl(run(t),t)
+t=x+2
+//(x==='hello')? t+=1 : wait(1000)
+
+}
+return t
+}
+
+
+e = 0
+
+
+
+
+</script>

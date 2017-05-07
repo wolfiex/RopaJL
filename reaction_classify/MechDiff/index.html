@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+@import url(./src/style.css);
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+
+svg1,svg0,svgtop,svg,canvas{ position:absolute}
+</style>
+
+<script src="./src//d3.v4.min.js"></script>
+<script src="./graphfunctions.js"></script>
+<script src="./postfunctions.js"></script>
+
+<link src='./src/fonts/fonts'  rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" href="./src/photon.min.css">
+<!-- href='https://fonts.googleapis.com/css?family=Open+Sans|Lato|Vidaloka|Fira+Sans|Fredericka+the+Great|Ubuntu'
+-->
+
+
+
+<body>
+
+
+
+<svg id='svgtop' style="background:black; width: 100%;height:100% ; opacity:0">  </svg>
+<canvas id='canvas'></canvas>
+<svg id='svg1'>  </svg>
+<svg id='svg0' onclick="closesidebar">  </svg>
+
+
+<div>
+<h1 id='mouseover' style='position:absolute;text-anchor:top;text-align:right;font-size:68px;float:right;'></h1>
+</div>
+
+
+//sidebar
+
+
+<div class="pane-mini sidebar" id='sidebar' style="overflow:scroll;position:absolute;opacity:0.89;" >
+<div>
+<p style='text-anchor:top;text-align:right;float:right;pointer-events: all;' onclick="document.getElementById('sidebar').style.display='none'"> Exit[x]</p>
+
+<h1 id='species' style='text-anchor:top;text-align:left;font-size:68px;'>Not yet selected</h1>
+</div>
+<div>
+
+<div style='width:50%;float:left;'>
+<h3  style='text-anchor:top;text-align:middle;'> Old Scheme </h3>
+<h4 id='oldrxn'> </h4>
+</div>
+
+<div style='width:50%;float:right;'>
+<h3  style='text-anchor:top;text-align:middle;'> New Scheme </h3>
+<h4 id='newrxn'> </h4>
+</div>
+
+</div>
+</div>
+<div id="footer">
+ MCM 3.2 .vs. CRI v.2 <br>
+
+ <div class="hint"><span id='normal'>normal</span> | <span id='eb'>edge-bundled</span><span style='color:transparent;opacity:0;'>.............</span>      daniel.ellis@york.ac.uk      </div>
+</div>
+
+
+
+
+
+</body>
+
+<!--script src='mechcomp.json'>console.log(data)</script-->
+
+<script>
+
+window.blue = '#3864EB';
+window.pink = '#E30B5D';
+
+
+// flatten using reduce
+const flatten = arr => arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+
+var data = {}
+
+
+ var nodes
+
+d3.text("organic_cri21_nhept.kpp",function(error,data1)
+{
+if(error) return console.error(error);
+data1=data1.split('\n')
+var list = data1.filter(d=>{ if (/\{[\d\.]+\}/.test(d)) return d});
+list = list.map(d=>d.replace(/\s/g,''))
+data.old=list
+});
+
+
+d3.text("organic_nhept32.kpp",function(error,data1)
+{
+if(error) return console.error(error);
+data1=data1.split('\n')
+var list = data1.filter(d=>{ if (/\{[\d\.]+\}/.test(d)) return d});
+list = list.map(d=>d.replace(/\s/g,''))
+data.new=list
+});
+
+
+function start(){
+  console.log(data)
+data.new = data.new.map(d=>d.split(':')[0]);
+data.old = data.old.map(d=>d.split(':')[0]);
+
+data.new = data.new.map(d=>d.split('}')[1]);
+data.old = data.old.map(d=>d.split('}')[1]);
+
+data.new.rct = data.new.map(d=>d.split('=')[0].split('+'));
+data.new.prd = data.new.map(d=>d.split('=')[1].split('+'));
+
+data.old.rct = data.old.map(d=>d.split('=')[0].split('+'));
+data.old.prd = data.old.map(d=>d.split('=')[1].split('+'));
+
+
+data.old.species = new Set(flatten([flatten(data.old.rct),flatten(data.old.prd)]));
+data.new.species = new Set(flatten([flatten(data.new.rct),flatten(data.new.prd)]));
+//size
+
+both = new Set([...data.old.species].filter(x => data.new.species.has(x)));
+
+difference = new Set([...data.old.species].filter(x => !data.new.species.has(x)));
+
+species = new Set([...data.old.species,...data.new.species]);
+window.nodes=[]
+
+//sort specs
+species=new Set( Array.from(species).sort()) ;
+
+species.forEach(function(d){nodes.push({'id':d,'name':d,'x':1e1*Math.random()+width/2-50,'y':1*Math.random()+height/2,
+                'old': getreact(data.old,d) ,
+                'new':getreact(data.new,d),})});
+window.nodes=nodes.map(function(d){d.s=d.old.length+d.new.length; return d })
+
+// create links object
+window.graphlinks1 =[]
+for (i = 0; i < data.new.length; i++) {
+    for (j = 0; j < data.new.rct[i].length; j++) {
+      for (k = 0; k < data.new.prd[i].length; k++) {
+        graphlinks1.push({"source":data.new.rct[i][j],"target":data.new.prd[i][k],'new':true}) };
+}};
+
+window.graphlinks2=[]
+for (i = 0; i < data.old.length; i++) {
+    for (j = 0; j < data.old.rct[i].length; j++) {
+      for (k = 0; k < data.old.prd[i].length; k++) {
+        graphlinks2.push({"source":data.old.rct[i][j],"target":data.old.prd[i][k],'new':false}) };
+}};
+
+
+window.graphlinks = graphlinks2.concat(graphlinks1);
+}
+
+
+
+d3.csv("./src/fullmcmspecs.csv", function(error, csv) {this.csvdata=csv});     //get list of all species etc
+
+var width= window.innerWidth, height = window.innerHeight;
+
+var svg = d3.select("#svg0");
+svg.style('width', width);
+svg.style('height', height);
+svg.style("transform", "translate("+window.innerWidth/2.+","+window.innerHeight/2.+")")
+
+
+var colour = d3.scaleOrdinal(d3.schemeCategory20);
+
+window.onresize = function(event) {location.reload()};
+window.scrollTo(window.innerWidth/2, window.innerHeight/2);
+
+
+
+d3.select('body').style('background-color', '#222'); // bg colour
+
+
+window.color = d3.interpolate("#F6089E", "#3864EB");    //https://github.com/d3/d3-scale
+window.color1 = d3.interpolate('#222','blue') ///'blue',"#F6089E");
+
+d3.select('#oldrxn').style('color',window.pink); d3.select('#newrxn').style('color',window.blue);
+
+document.getElementById('sidebar').style.display='none'
+
+</script>
+
+
+
+  <script src ="./forcegraph.js"></script>
+
+  <script type="text/javascript" src="./src/d3-ForceEdgeBundling.js"></script>

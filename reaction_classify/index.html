@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body onload=>
+    <div id="viz"></div>
+    <script type="text/javascript">
+
+
+/// mech 1 laods button. disabled
+//mech 2 if button loaded enables
+//or true, if laoded runs function to compare
+
+
+
+
+
+var newline = new RegExp(  "(.+)(\n)", "g");
+var spe = new RegExp(  "([A-Z0-9]+)=IGNORE;\n", "g");
+//{5301.}EOX2OLAOOH=EOX2EOLAO+OH:J(41);
+var eqn = new RegExp(  "{.*}([\\+A-Z0-9]+)=([\\+A-Z0-9]+):(.*);\n", "g");
+
+
+
+function mechanism(file){
+
+var specs=[];
+var react=[];
+var rate =[];
+
+d3.text(file+'.kpp', function(error, data){
+
+  //sepecies
+  var result;
+  while ((result = spe.exec(data)) !== null) {
+    var LinkText = result[1];//what we want
+    var Match = result[0];//total match
+    //console.log(Match)
+    specs.push(LinkText);
+ }
+ //equations
+ while ((result = eqn.exec(data)) !== null) {
+   // reorder and write again
+   react.push(result[1].split('+').sort().join('+')+'>'+result[2].split('+').sort().join('+'));
+   rate .push(result[3]);
+   //info.push(LinkText)
+  }
+console.log('finished')
+    })
+return [specs,react,rate]
+
+}
+
+
+
+
+function conversions(){
+
+//species differences
+var spA = new Set(A[0])
+var spB = new Set(B[0])
+
+var inA = new Set([...spA].filter(x => !spB.has(x))); //a\b => a not b
+var inB = new Set([...spB].filter(x => !spA.has(x))); //b\a => b not a
+var both  = new Set([...spA].filter(x =>  spB.has(x)));  //a∩b => both b and a
+
+console.log('get match');
+
+
+var rA = new Set(A[1])
+var rB = new Set(B[1])
+var rinA = new Set([...rA].filter(x => !rB.has(x))); //a\b => a not b
+var rinB = new Set([...rB].filter(x => !rA.has(x))); //b\a => b not a
+var rboth  = new Set([...rA].filter(x =>  rB.has(x)));  //a∩b => both b and a
+
+console.log(rboth.size, rinB.size, rinA.size, rboth.size+rinB.size+rinA.size , A[1].length,B[1].length)
+
+}
+
+
+
+
+//less typing and more univeral
+const A = mechanism('mcm331')
+const B = mechanism('mcm320')
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

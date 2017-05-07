@@ -3,7 +3,7 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./nhept33out.nc"
+filename = "./mcm32_nhept.nc"
 
 data = ncdata.get(filename)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
@@ -113,6 +113,3 @@ open("reactionedges.json", "w") do f
 
 
 print("fini")
-
-
-

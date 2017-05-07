@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style scr='index.css'>
+@import url(~/VisACC/revamp/src/style.css);
+
+</style>
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="./src/colours.js"></script>
+
+
+<link src='~/VisACC/revamp/src/fonts'  rel='stylesheet' type='text/css'>
+
+<!-- href='https://fonts.googleapis.com/css?family=Open+Sans|Lato|Vidaloka|Fira+Sans|Fredericka+the+Great|Ubuntu'
+-->
+
+<body>
+  <div>
+    <canvas id='canvas' style="position:absolute;"></canvas>
+    <svg style="position:absolute;">
+    </svg>
+  </div>
+
+</div>
+
+
+
+
+</body>
+
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;
+</span>
+
+
+<script>
+let inter = function(a,b) {var s = new Set([...a].filter(x => b.has(x))); return s.size};
+function h(x) {return '#' + x.match(/\d+/g).map(y = z => ((+z < 16)?'0':'') + (+z).toString(16)).join('')}
+
+
+window.colour = ColourScheme(viridis, false);
+//window.colour = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+window.data=[];
+
+d3.range(0,286,2).forEach(x=>{  d3.text("../tree/mclfiles/inputs/out."+d3.format('03d')(x),
+function(error, csv) {
+  window.csv= csv
+  csv = csv.split('\n').map(d=> {var r = d.split(',');return r });
+  csv = csv.map(z=> {var n = z.map(y=> new Set(y.split('\t'))); return n.sort((a, b) => a.size - b.size)})
+
+
+
+  window.data.push(csv) })})
+
+
+  var counter = 0
+  var sel
+
+  function run (){
+
+    window.data = window.data.map(x=>x.map(y=>y[0])).slice([1,data.length])
+
+    window.cat = window.data.map(x=>x.map(y=>undefined))
+
+
+    window.row=0
+
+    while (window.row < data.length){
+      var iof = window.cat[row].indexOf(undefined)
+      var old = window.cat[row];
+
+      //console.log(window.cat[row],row,counter)
+      if ( iof > -1 ) {
+
+        sel = data[window.row][iof]
+        counter += 1
+
+        window.data.forEach((i,n)=>{
+          var matches = i.map(d=>inter(sel,d))
+          if (d3.max(matches) > matches.length/2){
+            var index = matches.indexOf(d3.max(matches))
+            //d3.max(matches) == 0 ? console.log(row,iof, "\n",sel,"\n",i,d3.max(matches),index,counter):null
+            window.cat[n][index] = counter
+          }
+
+        })
+        if (window.cat[row]== old) window.row+=1
+
+
+      }else{window.row+=1}
+
+    }
+
+
+    window.groups = []
+    window.cat.forEach(x=>x.forEach(y=>{window.groups.push(y)}))
+    window.groups = [...new Set(window.groups)]
+    window.groups = window.groups.filter(d=>{if(d!=undefined){return 1} })
+    window.groups = window.groups.map((a,i)=>{return [a,window.colour(i/window.groups.length)]})
+    window.groups.push([undefined,'rgb(25,25,25)'])
+    window.groups = new Map( window.groups)
+
+
+  }
+
+  function makeimage (){
+
+    height = width = d3.min([window.innerWidth,window.innerHeight])
+    console.log(width)
+    var svg = d3.select("svg");
+    svg.selectAll("*").remove();
+
+    svg.style("width", width);
+    svg.style("height", height);
+    svg.style(
+      "transform",
+      "translate(" + window.innerWidth / 2 + "," + window.innerHeight / 2 + ")"
+    );
+
+    d3
+    .select("svg")
+    .append("path") //.attr("d", '')
+    .attr("id", "arc")
+    .attr("fill", "transparent") //.attr('fill-opacity',0.1)
+    .attr("stroke-width", 2.3)
+    .attr("stroke", "black")
+    .attr("opacity", 1)
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+    //for in labels , draw arc, rotate
+    var can = document.getElementById("canvas");
+    can.width = width;
+    can.height = height;
+    var ctx = can.getContext("2d");
+    ctx.clearRect(0, 0, width, height); //legend(colour, svg); //add a legend
+
+
+    var row = window.data.length; //select last row for ordering
+    var max_radius = (Math.min(width, height) / 2 - 20) * 0.70;
+    var px = 8;
+
+    var arc1 = d3.arc().innerRadius(0).outerRadius(max_radius * 1.1); /// load arc
+
+    var foreground = svg
+    .append("path")
+    .datum({
+      endAngle: (-2.0) * Math.PI,
+      startAngle: 0.0
+    })
+    .style("fill", "white")
+    .attr("d", arc1)
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    foreground
+    .transition()
+    .duration(5050)
+    .ease(d3.easeCubic)
+    .call(arcTween, 0, 0);
+
+    function arcTween(transition, newStartAngle, newFinishAngle) {
+      transition.attrTween("d", function(d) {
+        var interpolateStart = d3.interpolate(d.startAngle, newStartAngle);
+        var interpolateEnd = d3.interpolate(d.endAngle, newFinishAngle);
+        return function(t) {
+          d.startAngle = interpolateStart(t);
+          d.endAngle = interpolateEnd(t);
+          return arc1(d);
+        };
+      });
+    }
+
+
+
+    window.labels = []
+
+
+
+
+    var mapping = get_cols(data.length-1)
+
+
+    data[data.length-1].forEach(x=>x.forEach(y=>{window.labels.push(y)}))
+
+    var theta = 2.0 * Math.PI / parseFloat(labels.length);
+
+    window.labels = window.labels.map(function(e, i) {
+      var d={}
+      d.angle = i * theta;
+      d.col /= labels.length;
+      d.x = 1.1 * max_radius * Math.cos((i + 0.5) * theta);
+      d.y = 1.1 * max_radius * Math.sin((i + 0.5) * theta);
+      d.name = e
+      return d;
+    });
+
+    // drawing
+    svg
+    .selectAll(".node")
+    .data(labels)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .attr("transform", function(d) {
+      return "translate(" + (d.x + width / 2) + " " + (d.y + height / 2) + ")";
+    })
+    //
+
+    .append("text")
+    .attr("transform", function(d) {
+      return d.angle > Math.PI / 2 & d.angle < Math.PI / 2 * 3
+      ? "rotate(" +
+      (360 - 180 + 180 * d.angle / Math.PI) +
+      " 0 -" +
+      px / 2 +
+      ")"
+      : "rotate(" + 180 * d.angle / Math.PI + " 0 -" + px / 2 + ")";
+    })
+    .style("text-anchor", function(d) {
+      return d.angle > Math.PI / 2 & d.angle < Math.PI / 2 * 3
+      ? "end"
+      : "start";
+    })
+    .style("font-size", px + "px")
+    .style("fill", function(d, i) {
+      v = mapping.get(d.name);
+      return h(v)
+    })
+    .text(function(d) {
+      return d.name;
+    })
+
+
+    var max_radius = width/3
+
+    var degree = 2.0 * Math.PI / labels.length;
+
+
+
+
+    var order = d3.range(data.length)
+    order.reverse()
+
+order.forEach( index =>
+{
+      //console.log('ee',index)
+
+      var mapping = get_cols(index)
+
+
+      window.labels.forEach(function(d, i) {
+        var angle = 0;
+
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+
+        ctx.beginPath();
+        //ctx.rotate(+(Math.PI / 2));
+        ctx.moveTo(0,0);
+        ctx.arc(0,0,max_radius/data.length *index ,d.angle-degree,d.angle+degree);
+        ctx.lineTo(0,0);
+        ctx.lineWidth = 3;
+        try{c = h(mapping.get(d.name))}catch (err){c = 'white'}
+        ctx.strokeStyle = c
+        //console.log(d,mapping.get(d.name),h(mapping.get(d.name)))
+        ctx.fillStyle = c
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.restore();
+      });
+
+    })
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+  /*
+  d3.text("../spin.out", function(error, csv) {
+  window.data = csv.split('\n').map(d=> {var r = d.split(','); r.pop(); return r });
+  window.data = window.data.map(x=> {var n = x.map(y=> new Set(y.split('\t'))); return n.sort((a, b) => a.size - b.size)})
+
+  window.cat = window.data.map(x=>x.map(y=>true))
+
+
+
+  var sel
+  var counter = 0
+  window.row=0
+
+  while (window.row < data.length){
+  var iof = window.cat[row].indexOf(true)
+
+  if ( iof > -1 ) {
+
+  sel = data[window.row][iof]
+  counter += 1
+
+  window.data.forEach((i,n)=>{
+  var matches = i.map(d=>inter(sel,d))
+  var index = matches.indexOf(d3.max(matches))
+  d3.max(matches) == 0 ? console.log(sel,i,d3.max(matches),index,counter):null
+  window.cat[n][index] = counter -1
+
+}
+)
+
+
+
+}else{window.row+=1}
+
+}
+
+
+
+})
+
+
+*/
+
+function get_cols (loc){
+  var cols = []
+  //var loc = data.length-1
+
+  data[loc].forEach((q,i)=>{
+    q.forEach(z => {
+      cols.push([z,groups.get(cat[loc][i])])
+    })
+  })
+  var mapping  = new Map(cols)
+  return mapping }
+
+
+  </script>

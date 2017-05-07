@@ -1,0 +1,20 @@
+body { margin: 0; }
+#svg0,#svg1,svg,#svgtop,container,canvas,heatmapiframe{
+    position: absolute;
+    width:100%;
+    height:100%;
+    margin: 0;
+    border:0 ;
+    overflow:scroll;
+
+}
+
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
