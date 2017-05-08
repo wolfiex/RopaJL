@@ -3,7 +3,7 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./mcm32_nhept.nc"
+filename = "./cri2_nhept.nc"
 
 data = ncdata.get(filename)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
@@ -54,6 +54,17 @@ end
 normalise(x) = x/norm(x)
 
 
+
+function sorteqn(x,delim)
+    r,p = split(string(x),delim)
+    r = join(sort(split(r,'+')),'+')
+    p = join(sort(split(p,'+')),'+')
+    return join([r,p],delim)
+end
+
+rateeqn = [Symbol(sorteqn(i,"-->")) for i in names(rates)]
+
+
 ################READ CATEGORIES##################
 dict = Dict()
 open("edgecat.json", "r") do f
@@ -62,10 +73,9 @@ open("edgecat.json", "r") do f
 end
 
 
-dict = Dict(Symbol(replace(key,"=","-->")) => value for (key, value) in dict)
-reactiontypes= [try dict[i]; catch err; "missing" end  for i in names(rates)]
 
-
+dict = Dict(Symbol( sorteqn( replace(key,"=","-->") , "-->" )) => value for (key, value) in dict)
+reactiontypes= [try dict[i]; catch err; "missing" end  for i in rateeqn]
 
 
 

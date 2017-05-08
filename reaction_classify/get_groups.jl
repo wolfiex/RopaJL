@@ -1,6 +1,6 @@
 using DataFrames, JSON
 
-f = open("./organic.kpp")
+f = open("./organic_cri21_nhept.kpp")
 string = replace(readstring(f),r"\h","")
 close(f)
 
@@ -10,7 +10,7 @@ mcm3 = DataFrame(readtable("mcm32_species.csv",separator=',',header=true))
 
 reactions =[vcat(split(i[1],":")) for i in eachmatch(r"\}(.*);",string)]
 groups  =  [match(r"RO2NO\d?|RO2HO2|RO2|NO\d?|HO2|PAN|J",i[2]) for i in reactions]
-allocations = [(r"\b(OH)\b","J"),(r"\b(CH3O|HOCH2CH2O)\b","ALKOXYL"),(r"\b(HCOCO)\b","GLYOXL"),(r"\b(PPN)\b","PAN")]#[[regex,group]]
+allocations = [(r"\b(OH)\b","OH"),(r"\b(CH3O|HOCH2CH2O)\b","ALKOXYL"),(r"\b(HCOCO)\b","GLYOXL"),(r"\b(PPN)\b","PAN")]#[[regex,group]]
 
 
 for i in 1:length(groups)
