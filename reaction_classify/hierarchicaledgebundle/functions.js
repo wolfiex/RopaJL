@@ -85,6 +85,10 @@ function mouseouted(d) {
   node.classed("node--target", false).classed("node--source", false);
 }
 
+
+
+
+
 d3.select(self.frameElement).style("height", diameter + "px");
 
 // Lazily construct the package hierarchy from class names.
@@ -136,6 +140,7 @@ function packageImports(nodes) {
 }
 
 
+
 var diameter = d3.min([window.innerWidth, window.innerHeight]),
   radius = diameter / 2,
   innerRadius = radius - 120;
@@ -152,7 +157,8 @@ const line = d3
   })
   .curve(d3.curveBundle.beta(tension));//0.95
 
-var svg = d3
+function makesvg(){
+svg = d3
   .select("body")
   .append("svg")
   .attr("width", diameter)
@@ -160,8 +166,6 @@ var svg = d3
   .append("g")
   .attr("transform", "translate(" + radius + "," + radius + ")");
 
-var link = svg.append("g").selectAll(".link"),
+ link = svg.append("g").selectAll(".link"),
   node = svg.append("g").selectAll(".node");
-
-
-
+}

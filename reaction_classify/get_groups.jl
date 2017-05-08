@@ -1,6 +1,6 @@
 using DataFrames, JSON
 
-f = open("./organic_cri21_nhept.kpp")
+f = open("./organic_nhept32.kpp")
 string = replace(readstring(f),r"\h","")
 close(f)
 

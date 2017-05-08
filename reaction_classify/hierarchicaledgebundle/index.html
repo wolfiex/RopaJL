@@ -10,7 +10,7 @@
         fill: #000;
     }
 
-    
+
     path.arc {
       cursor: move;
       fill: #fff;
@@ -58,7 +58,7 @@
 
 window.tension = 0.9; //.95
 thresh = 1;
-</script>    
+</script>
     <script src='functions.js'></script>
     <script src='save.js'></script>
     <script>
@@ -70,7 +70,8 @@ window.cat = d3.scaleOrdinal(d3.schemeCategory20);
 window.cat = d3.schemeCategory20;
 window.cat = d3.schemeCategory20;
 window.defaultcolour = "#222"; //window.cat[selection]
-
+window.prefix=''
+window.location.hash=-1
 /*
 
 
@@ -109,17 +110,23 @@ d3.text("../nheptmcl2p5.out", function(text) {
     window.map = new Map(maparray);
 });
 
+var svg,link,node
+
+makesvg()
 markers()
 /*
-          
-          
-          
-          
-          
-          
+
+
+
+
+
+
           */
 
 function draw(selection, save = false) {
+  d3.select('svg').remove()
+  makesvg()
+  markers()
     window.data = {};
     window.names = {};
     window.groups = [];
@@ -133,7 +140,7 @@ function draw(selection, save = false) {
 
         window.groups = [...new Set(classes.map(d => d[3]))];
         console.log(groups, groups[selection]);
-        
+
         var remove = window.groups[selection].replace(/RO2/,'')
         var classes = classes.map(d => {
             if (d[3] != remove) d[1] = undefined;
@@ -150,7 +157,7 @@ function draw(selection, save = false) {
                 var imp = v.map(d => d[1]);
 
                 var filterimport = imp.filter(d => {
-                    if (d != undefined & d!= remove) { /// ignore production of oh too! 
+                    if (d != undefined & d!= remove) { /// ignore production of oh too!
                         window.species.push(d);
                         return 1;
                     }
@@ -166,7 +173,7 @@ function draw(selection, save = false) {
         //clear origin species
         names = names.map(d => {
             if (remove === d.key) {
-                
+
                 d.value.imports = [];
                 console.log(d)
             } else if (d.value.imports.length > 0) {
@@ -174,9 +181,9 @@ function draw(selection, save = false) {
             }
             return d;
         });
-        
-        
-        
+
+
+
         console.log(groups[selection]);
 
         window.data = names.map(e => {
@@ -343,8 +350,13 @@ function draw(selection, save = false) {
             .style("fill-opacity", 0.5);
     });
 
-    if (save) setTimeout(savesvg, 2000);
+    if (save) setTimeout(d=>{savesvg(window.prefix+'_'+window.groups[selection]+'.svg')}, 2000);
 }
+
+
+function saveall(p){
+  window.prefix=p
+  draw(parseInt(window.location.hash.replace('#',''))+1,true)}
 
 //
 
@@ -352,5 +364,5 @@ function draw(selection, save = false) {
 
 ///
 </script>
-    
+
 </body>

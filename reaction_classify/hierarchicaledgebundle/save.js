@@ -318,7 +318,7 @@ function savesvgelements() {
 // svg crowbar
 ////////////////////////////////////
 
-function savesvg() {
+function savesvg(name='untitled.svg') {
   (function() {
     var doctype = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
 
@@ -506,7 +506,7 @@ function savesvg() {
     }
 
     function download(source) {
-      var filename = "untitled";
+      var filename = name;
 
       if (source.id) {
         filename = source.id;
