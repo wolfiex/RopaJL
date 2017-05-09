@@ -82,7 +82,7 @@ window.location.hash=-1
 
 var maparray = [];
 
-d3.text("../nheptmcl2p5.out", function(text) {
+d3.text("../mcl.out", function(text) {
     mcl = text.split("\n");
     mcl.pop();
     mcl = mcl.map(d => d.split("\t"));
