@@ -198,9 +198,8 @@ function draw(selection, save = false) {
         var root = d3.hierarchy(packageHierarchy(window.data), d => d.children);
 
         var links = packageImports(root.descendants());
-
         console.dir(links);
-
+        console.log(links)
         cluster(root);
 
         //console.log(links);
@@ -227,11 +226,19 @@ function draw(selection, save = false) {
             .style("fill", "none")
             .style("opacity", d => Math.pow(1 - d.weight, 1))
             .style("stroke-width", d => 3 * Math.pow(1 - d.weight, 2))
-            .style("stroke", d => {
+            .style("stroke",
+            d => {
+                //console.log(d)
+                try{
                 var z = d.source.data.name.split(".")[0] ===
                     d.target.data.name.split(".")[0]
                     ? window.cat[d.source.data.name.split(".")[0]]
                     : defaultcolour; //d => window.color(d.weight));
+                }
+                catch (e){
+                    console.log(d.source.data.name);
+                    z='red'
+                }
 
                 return z;
             });
@@ -256,7 +263,7 @@ function draw(selection, save = false) {
                     (d.x < 180 ? "" : "rotate(180)")
                 );
             })
-            .style("font", "9px Helvetica Neue, Helvetica, Arial, sans-serif")
+            .style("font", "7px Helvetica Neue, Helvetica, Arial, sans-serif")//9
             .style("opacity", d => {
                 return window.species.has(d.data.name) | (d.data.size > 0)
                     ? 1
@@ -283,12 +290,12 @@ function draw(selection, save = false) {
             .attr("dy", ".35em")
             .attr("text-anchor", "end")
             .style("font-weight", "medium") // "bold" )
-            .style("font-size", "10px")
+            //.style("font-size", "6px")//10
             .style("fill", defaultcolour)
             .style("dominant-baseline", "middle")
             //.style("alignment-baseline", "central")
             .style("font-family", "ubuntu")
-            .style("font", "30px Helvetica Neue, Helvetica, Arial, sans-serif")
+            .style("font", "30px Helvetica Neue, Helvetica, Arial, sans-serif")//30
             .text("" + window.groups[selection]);
 
 

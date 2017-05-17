@@ -1,3 +1,6 @@
+##### run in console, interactive does not work for some reason 
+
+
 
 using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
@@ -75,6 +78,7 @@ end
 
 
 dict = Dict(Symbol( sorteqn( replace(key,"=","-->") , "-->" )) => value for (key, value) in dict)
+
 reactiontypes= [try dict[i]; catch err; "missing" end  for i in rateeqn]
 
 
