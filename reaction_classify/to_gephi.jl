@@ -3,9 +3,9 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./dun.nc"
+filename = "./methaneco2.nc"
 
-data = ncdata.get(filename,grp=1)
+data = ncdata.get(filename,grp=0)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
@@ -55,13 +55,13 @@ end
 smiles =readtable("carbons.csv")
 smiles = Set(smiles[:species])
 
-t = 144
+t = 430
 
 
 
 links = filter(i -> flux[i][t]>0 , 1:len(flux))
 tflux = [log10(flux[i][t]) for i in links]
-weight =  tflux# - minimum(tflux)
+weight =  tflux - minimum(tflux)
 #weight = 1 - weight/maximum(weight)
 
 #1+normalise(tflux)
@@ -81,6 +81,10 @@ weighted = [newflux[i[3]]+0.0001 for i in edge]
 
 
 
+novalues = [i>0. for i in Array(specs[t,:])]
+novalues = Set([string(i) for i in names(specs)[novalues]])
+
+
 
      @rput source
      @rput target
@@ -96,15 +100,20 @@ weighted = [newflux[i[3]]+0.0001 for i in edge]
      R"g <- graph.data.frame(el)"
      
      
-     '''
+
 #c only 
      R"v = V(g)$name"
      @rget v
      v=Set(v)
+     
+     # to remove carbons comment below
+     smiles = Set()
+     
+     smiles = union(novalues,smiles)
+     
      diff = [i for i in setdiff(v,smiles)]
      @rput diff
      R"g = delete.vertices(g,diff)"
-'''
 
      
      
