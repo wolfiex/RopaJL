@@ -3,7 +3,7 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./methaneco2.nc"
+filename = "./meth.nc"
 
 data = ncdata.get(filename,grp=0)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
@@ -55,7 +55,7 @@ end
 smiles =readtable("carbons.csv")
 smiles = Set(smiles[:species])
 
-t = 430
+t = 170
 
 
 
@@ -107,9 +107,10 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
      v=Set(v)
      
      # to remove carbons comment below
-     smiles = Set()
+     #smiles = Set()
      
-     smiles = union(novalues,smiles)
+     smiles = intersect
+     (smiles,novalues)
      
      diff = [i for i in setdiff(v,smiles)]
      @rput diff

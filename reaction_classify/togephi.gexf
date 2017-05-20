@@ -10,125 +10,71 @@
       <attribute id="att1" title="name" type="string"/>
     </attributes>
     <nodes>
-      <node id="1" label="CH3NO3">
-        <attvalues>
-          <attvalue for="att1" value="CH3NO3"/>
-        </attvalues>
-      </node>
-      <node id="2" label="CH3O">
+      <node id="1" label="CH3O">
         <attvalues>
           <attvalue for="att1" value="CH3O"/>
         </attvalues>
       </node>
-      <node id="3" label="CH3O2">
+      <node id="2" label="CH3O2">
         <attvalues>
           <attvalue for="att1" value="CH3O2"/>
         </attvalues>
       </node>
-      <node id="4" label="CH3O2NO2">
+      <node id="3" label="CH3O2NO2">
         <attvalues>
           <attvalue for="att1" value="CH3O2NO2"/>
         </attvalues>
       </node>
-      <node id="5" label="CH3OH">
+      <node id="4" label="CH3OH">
         <attvalues>
           <attvalue for="att1" value="CH3OH"/>
         </attvalues>
       </node>
-      <node id="6" label="CH3OOH">
+      <node id="5" label="CH3OOH">
         <attvalues>
           <attvalue for="att1" value="CH3OOH"/>
         </attvalues>
       </node>
-      <node id="7" label="CH4">
+      <node id="6" label="CH4">
         <attvalues>
           <attvalue for="att1" value="CH4"/>
         </attvalues>
       </node>
-      <node id="8" label="CO">
+      <node id="7" label="CO">
         <attvalues>
           <attvalue for="att1" value="CO"/>
         </attvalues>
       </node>
-      <node id="9" label="CO2">
+      <node id="8" label="CO2">
         <attvalues>
           <attvalue for="att1" value="CO2"/>
         </attvalues>
       </node>
-      <node id="10" label="HCHO">
+      <node id="9" label="HCHO">
         <attvalues>
           <attvalue for="att1" value="HCHO"/>
         </attvalues>
       </node>
-      <node id="11" label="HNO3">
-        <attvalues>
-          <attvalue for="att1" value="HNO3"/>
-        </attvalues>
-      </node>
-      <node id="12" label="HONO">
-        <attvalues>
-          <attvalue for="att1" value="HONO"/>
-        </attvalues>
-      </node>
-      <node id="13" label="NO">
-        <attvalues>
-          <attvalue for="att1" value="NO"/>
-        </attvalues>
-      </node>
-      <node id="14" label="NO2">
-        <attvalues>
-          <attvalue for="att1" value="NO2"/>
-        </attvalues>
-      </node>
-      <node id="15" label="O">
-        <attvalues>
-          <attvalue for="att1" value="O"/>
-        </attvalues>
-      </node>
-      <node id="16" label="O3">
-        <attvalues>
-          <attvalue for="att1" value="O3"/>
-        </attvalues>
-      </node>
     </nodes>
     <edges>
-      <edge id="0" source="7" target="3" weight="52.58177"/>
-      <edge id="1" source="3" target="6" weight="52.58177"/>
-      <edge id="2" source="3" target="10" weight="55.45273"/>
-      <edge id="3" source="3" target="2" weight="55.45273"/>
-      <edge id="4" source="3" target="14" weight="55.45273"/>
-      <edge id="5" source="13" target="2" weight="55.45273"/>
-      <edge id="6" source="13" target="14" weight="55.45273"/>
-      <edge id="7" source="3" target="4" weight="54.44659"/>
-      <edge id="8" source="14" target="4" weight="54.44659"/>
-      <edge id="9" source="3" target="2" weight="54.44659"/>
-      <edge id="10" source="3" target="5" weight="55.66392"/>
-      <edge id="11" source="3" target="10" weight="55.66392"/>
-      <edge id="12" source="6" target="2" weight="55.54757"/>
-      <edge id="13" source="6" target="3" weight="55.54757"/>
-      <edge id="14" source="6" target="10" weight="0.06827515"/>
-      <edge id="15" source="1" target="2" weight="55.55687"/>
-      <edge id="16" source="1" target="14" weight="55.55687"/>
-      <edge id="17" source="1" target="10" weight="55.55687"/>
-      <edge id="18" source="1" target="14" weight="55.55687"/>
-      <edge id="19" source="2" target="10" weight="55.38078"/>
-      <edge id="20" source="4" target="3" weight="55.38078"/>
-      <edge id="21" source="4" target="14" weight="55.38078"/>
-      <edge id="22" source="15" target="13" weight="55.70668"/>
-      <edge id="23" source="14" target="13" weight="55.70668"/>
-      <edge id="24" source="13" target="14" weight="53.14813"/>
-      <edge id="25" source="14" target="14" weight="70.77343"/>
-      <edge id="26" source="14" target="13" weight="70.77343"/>
-      <edge id="27" source="8" target="9" weight="55.79189"/>
-      <edge id="28" source="13" target="12" weight="55.79189"/>
-      <edge id="29" source="14" target="11" weight="55.09829"/>
-      <edge id="30" source="13" target="14" weight="55.09829"/>
-      <edge id="31" source="12" target="14" weight="50.32398"/>
-      <edge id="32" source="16" target="15" weight="51.59448"/>
-      <edge id="33" source="14" target="15" weight="54.87122"/>
-      <edge id="34" source="14" target="13" weight="54.87122"/>
-      <edge id="35" source="12" target="13" weight="74.49928"/>
-      <edge id="36" source="11" target="14" weight="53.63807"/>
+      <edge id="0" source="7" target="8" weight="43.11988"/>
+      <edge id="1" source="4" target="9" weight="41.57943"/>
+      <edge id="2" source="9" target="7" weight="52.35336"/>
+      <edge id="3" source="9" target="7" weight="52.49655"/>
+      <edge id="4" source="9" target="7" weight="41.65636"/>
+      <edge id="5" source="6" target="2" weight="41.68025"/>
+      <edge id="6" source="2" target="5" weight="42.64214"/>
+      <edge id="7" source="2" target="9" weight="41.2731"/>
+      <edge id="8" source="2" target="1" weight="41.2731"/>
+      <edge id="9" source="2" target="3" weight="42.06603"/>
+      <edge id="10" source="2" target="1" weight="42.06603"/>
+      <edge id="11" source="2" target="4" weight="1.849296"/>
+      <edge id="12" source="2" target="9" weight="1.372175"/>
+      <edge id="13" source="5" target="1" weight="0.8256324"/>
+      <edge id="14" source="5" target="2" weight="42.91157"/>
+      <edge id="15" source="5" target="9" weight="42.91157"/>
+      <edge id="16" source="1" target="9" weight="42.06603"/>
+      <edge id="17" source="3" target="2" weight="42.06603"/>
     </edges>
   </graph>
 </gexf>
