@@ -5,7 +5,7 @@ unshift!(PyVector(pyimport("sys")["path"]), "")
 len = length
 filename = "./meth.nc"
 
-data = ncdata.get(filename,grp=0)
+data = ncdata.get(filename,grp=2)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
@@ -109,8 +109,7 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
      # to remove carbons comment below
      #smiles = Set()
      
-     smiles = intersect
-     (smiles,novalues)
+     smiles = intersect(smiles,novalues)
      
      diff = [i for i in setdiff(v,smiles)]
      @rput diff

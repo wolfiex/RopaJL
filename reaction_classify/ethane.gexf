@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3" version="1.3" xmlns:viz="http://www.gexf.net/1.3/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd">
+  <meta lastmodifieddate="2017-05-21">
+    <creator>Gephi 0.9</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="att1" title="name" type="string"></attribute>
+    </attributes>
+    <nodes>
+      <node id="1" label="ACETOL">
+        <attvalues>
+          <attvalue for="att1" value="ACETOL"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="143.34589" y="36.620975"></viz:position>
+      </node>
+      <node id="2" label="C3H6">
+        <attvalues>
+          <attvalue for="att1" value="C3H6"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1970.4333" y="1989.7134"></viz:position>
+      </node>
+      <node id="3" label="CH3CHO">
+        <attvalues>
+          <attvalue for="att1" value="CH3CHO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="279.47662" y="-859.27954"></viz:position>
+      </node>
+      <node id="4" label="CH3CHOHCHO">
+        <attvalues>
+          <attvalue for="att1" value="CH3CHOHCHO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="604.83435" y="-615.20404"></viz:position>
+      </node>
+      <node id="5" label="CH3CHOHCO3">
+        <attvalues>
+          <attvalue for="att1" value="CH3CHOHCO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="317.10898" y="-907.92645"></viz:position>
+      </node>
+      <node id="6" label="CH3CO2H">
+        <attvalues>
+          <attvalue for="att1" value="CH3CO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-12.596394" y="24.180408"></viz:position>
+      </node>
+      <node id="7" label="CH3CO3">
+        <attvalues>
+          <attvalue for="att1" value="CH3CO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-45.148354" y="-17.008905"></viz:position>
+      </node>
+      <node id="8" label="CH3CO3H">
+        <attvalues>
+          <attvalue for="att1" value="CH3CO3H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-177.02895" y="-50.057457"></viz:position>
+      </node>
+      <node id="9" label="CH3COCH2O">
+        <attvalues>
+          <attvalue for="att1" value="CH3COCH2O"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="55.452633" y="776.66296"></viz:position>
+      </node>
+      <node id="10" label="CH3O">
+        <attvalues>
+          <attvalue for="att1" value="CH3O"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-353.76486" y="-120.67532"></viz:position>
+      </node>
+      <node id="11" label="CH3O2">
+        <attvalues>
+          <attvalue for="att1" value="CH3O2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-288.85974" y="-40.663113"></viz:position>
+      </node>
+      <node id="12" label="CH3O2NO2">
+        <attvalues>
+          <attvalue for="att1" value="CH3O2NO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-344.81778" y="58.76175"></viz:position>
+      </node>
+      <node id="13" label="CH3OH">
+        <attvalues>
+          <attvalue for="att1" value="CH3OH"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-247.29292" y="-190.71545"></viz:position>
+      </node>
+      <node id="14" label="CH3OOH">
+        <attvalues>
+          <attvalue for="att1" value="CH3OOH"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-395.9031" y="-68.66015"></viz:position>
+      </node>
+      <node id="15" label="CH4">
+        <attvalues>
+          <attvalue for="att1" value="CH4"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-2045.0952" y="1611.2156"></viz:position>
+      </node>
+      <node id="16" label="CHOPRNO3">
+        <attvalues>
+          <attvalue for="att1" value="CHOPRNO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1443.2987" y="1007.7987"></viz:position>
+      </node>
+      <node id="17" label="CO">
+        <attvalues>
+          <attvalue for="att1" value="CO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="52.700012" y="-408.0036"></viz:position>
+      </node>
+      <node id="18" label="CO2">
+        <attvalues>
+          <attvalue for="att1" value="CO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="112.872185" y="-973.1472"></viz:position>
+      </node>
+      <node id="19" label="GLYOX">
+        <attvalues>
+          <attvalue for="att1" value="GLYOX"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="17.82206" y="-528.61676"></viz:position>
+      </node>
+      <node id="20" label="HCHO">
+        <attvalues>
+          <attvalue for="att1" value="HCHO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-100.91627" y="-350.2243"></viz:position>
+      </node>
+      <node id="21" label="HCOCH2O">
+        <attvalues>
+          <attvalue for="att1" value="HCOCH2O"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-120.827934" y="-442.49033"></viz:position>
+      </node>
+      <node id="22" label="HCOCH2O2">
+        <attvalues>
+          <attvalue for="att1" value="HCOCH2O2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-177.09369" y="-527.16833"></viz:position>
+      </node>
+      <node id="23" label="HCOCH2OOH">
+        <attvalues>
+          <attvalue for="att1" value="HCOCH2OOH"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-254.3541" y="-491.64407"></viz:position>
+      </node>
+      <node id="24" label="HCOCO">
+        <attvalues>
+          <attvalue for="att1" value="HCOCO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="77.852615" y="-551.4523"></viz:position>
+      </node>
+      <node id="25" label="HCOCO2H">
+        <attvalues>
+          <attvalue for="att1" value="HCOCO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="115.270004" y="-368.2517"></viz:position>
+      </node>
+      <node id="26" label="HCOCO3">
+        <attvalues>
+          <attvalue for="att1" value="HCOCO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="90.86091" y="-398.2533"></viz:position>
+      </node>
+      <node id="27" label="HCOCO3H">
+        <attvalues>
+          <attvalue for="att1" value="HCOCO3H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="174.44698" y="-385.17526"></viz:position>
+      </node>
+      <node id="28" label="HOCH2CHO">
+        <attvalues>
+          <attvalue for="att1" value="HOCH2CHO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-167.38313" y="-608.0805"></viz:position>
+      </node>
+      <node id="29" label="HOCH2CO2H">
+        <attvalues>
+          <attvalue for="att1" value="HOCH2CO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-108.259575" y="-831.873"></viz:position>
+      </node>
+      <node id="30" label="HOCH2CO3">
+        <attvalues>
+          <attvalue for="att1" value="HOCH2CO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-60.062584" y="-828.3566"></viz:position>
+      </node>
+      <node id="31" label="HOCH2CO3H">
+        <attvalues>
+          <attvalue for="att1" value="HOCH2CO3H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1.6975094" y="-923.7568"></viz:position>
+      </node>
+      <node id="32" label="HYPROPO">
+        <attvalues>
+          <attvalue for="att1" value="HYPROPO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="580.95337" y="275.71"></viz:position>
+      </node>
+      <node id="33" label="HYPROPO2">
+        <attvalues>
+          <attvalue for="att1" value="HYPROPO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="670.9034" y="390.80005"></viz:position>
+      </node>
+      <node id="34" label="HYPROPO2H">
+        <attvalues>
+          <attvalue for="att1" value="HYPROPO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="613.5399" y="340.43024"></viz:position>
+      </node>
+      <node id="35" label="IPROPOLO">
+        <attvalues>
+          <attvalue for="att1" value="IPROPOLO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1182.4988" y="81.42561"></viz:position>
+      </node>
+      <node id="36" label="IPROPOLO2">
+        <attvalues>
+          <attvalue for="att1" value="IPROPOLO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1234.8413" y="162.19385"></viz:position>
+      </node>
+      <node id="37" label="IPROPOLO2H">
+        <attvalues>
+          <attvalue for="att1" value="IPROPOLO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1279.4407" y="99.02681"></viz:position>
+      </node>
+      <node id="38" label="IPROPOLPAN">
+        <attvalues>
+          <attvalue for="att1" value="IPROPOLPAN"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="356.39993" y="-930.3823"></viz:position>
+      </node>
+      <node id="39" label="IPROPOLPER">
+        <attvalues>
+          <attvalue for="att1" value="IPROPOLPER"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="258.87534" y="-993.1595"></viz:position>
+      </node>
+      <node id="40" label="MGLYOX">
+        <attvalues>
+          <attvalue for="att1" value="MGLYOX"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="29.123144" y="-87.98145"></viz:position>
+      </node>
+      <node id="41" label="NOA">
+        <attvalues>
+          <attvalue for="att1" value="NOA"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="511.8526" y="1646.9845"></viz:position>
+      </node>
+      <node id="42" label="PAN">
+        <attvalues>
+          <attvalue for="att1" value="PAN"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-64.04802" y="64.39646"></viz:position>
+      </node>
+      <node id="43" label="PHAN">
+        <attvalues>
+          <attvalue for="att1" value="PHAN"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="-111.55928" y="-898.03394"></viz:position>
+      </node>
+      <node id="44" label="PR1O2HNO3">
+        <attvalues>
+          <attvalue for="att1" value="PR1O2HNO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1802.3878" y="1514.3075"></viz:position>
+      </node>
+      <node id="45" label="PR2O2HNO3">
+        <attvalues>
+          <attvalue for="att1" value="PR2O2HNO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="846.9012" y="2158.7896"></viz:position>
+      </node>
+      <node id="46" label="PRNO3CO2H">
+        <attvalues>
+          <attvalue for="att1" value="PRNO3CO2H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="199.51814" y="-864.44165"></viz:position>
+      </node>
+      <node id="47" label="PRNO3CO3">
+        <attvalues>
+          <attvalue for="att1" value="PRNO3CO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="228.93062" y="-891.8187"></viz:position>
+      </node>
+      <node id="48" label="PRNO3CO3H">
+        <attvalues>
+          <attvalue for="att1" value="PRNO3CO3H"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="199.80113" y="-933.41797"></viz:position>
+      </node>
+      <node id="49" label="PRNO3PAN">
+        <attvalues>
+          <attvalue for="att1" value="PRNO3PAN"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="248.2084" y="-929.809"></viz:position>
+      </node>
+      <node id="50" label="PROLNO3">
+        <attvalues>
+          <attvalue for="att1" value="PROLNO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1296.6482" y="219.2244"></viz:position>
+      </node>
+      <node id="51" label="PRONO3AO">
+        <attvalues>
+          <attvalue for="att1" value="PRONO3AO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1745.5391" y="1460.4531"></viz:position>
+      </node>
+      <node id="52" label="PRONO3AO2">
+        <attvalues>
+          <attvalue for="att1" value="PRONO3AO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1742.124" y="1511.545"></viz:position>
+      </node>
+      <node id="53" label="PRONO3BO">
+        <attvalues>
+          <attvalue for="att1" value="PRONO3BO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="831.3175" y="2089.3606"></viz:position>
+      </node>
+      <node id="54" label="PRONO3BO2">
+        <attvalues>
+          <attvalue for="att1" value="PRONO3BO2"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="870.0549" y="2114.537"></viz:position>
+      </node>
+      <node id="55" label="PROPALO">
+        <attvalues>
+          <attvalue for="att1" value="PROPALO"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="397.88382" y="-404.2091"></viz:position>
+      </node>
+      <node id="56" label="PROPGLY">
+        <attvalues>
+          <attvalue for="att1" value="PROPGLY"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1076.2639" y="362.4995"></viz:position>
+      </node>
+      <node id="57" label="PROPOLNO3">
+        <attvalues>
+          <attvalue for="att1" value="PROPOLNO3"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="1602.3085" y="1393.4065"></viz:position>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="17" target="18" weight="8.624300003051758"></edge>
+      <edge id="1" source="13" target="20" weight="7.083841800689697"></edge>
+      <edge id="2" source="20" target="17" weight="43.01952314376831"></edge>
+      <edge id="5" source="3" target="11" weight="7.16077184677124"></edge>
+      <edge id="6" source="3" target="17" weight="7.16077184677124"></edge>
+      <edge id="7" source="3" target="7" weight="12.827912330627441"></edge>
+      <edge id="9" source="3" target="22" weight="7.6692280769348145"></edge>
+      <edge id="10" source="15" target="11" weight="7.184665203094482"></edge>
+      <edge id="11" source="2" target="52" weight="11.664139747619629"></edge>
+      <edge id="12" source="2" target="54" weight="4.644147872924805"></edge>
+      <edge id="13" source="2" target="33" weight="4.644147872924805"></edge>
+      <edge id="14" source="2" target="36" weight="8.36084270477295"></edge>
+      <edge id="15" source="33" target="34" weight="3.5300230979919434"></edge>
+      <edge id="16" source="33" target="32" weight="16.36547088623047"></edge>
+      <edge id="17" source="33" target="1" weight="8.10315990447998"></edge>
+      <edge id="19" source="33" target="56" weight="4.732287883758545"></edge>
+      <edge id="21" source="33" target="57" weight="5.001132965087891"></edge>
+      <edge id="22" source="36" target="37" weight="5.001132965087891"></edge>
+      <edge id="23" source="36" target="35" weight="21.524779319763184"></edge>
+      <edge id="24" source="36" target="50" weight="8.604035377502441"></edge>
+      <edge id="26" source="36" target="4" weight="7.778459072113037"></edge>
+      <edge id="28" source="36" target="56" weight="5.142284870147705"></edge>
+      <edge id="29" source="7" target="6" weight="14.638303756713867"></edge>
+      <edge id="30" source="7" target="8" weight="8.031615257263184"></edge>
+      <edge id="31" source="7" target="11" weight="23.001367568969727"></edge>
+      <edge id="33" source="7" target="42" weight="8.36306381225586"></edge>
+      <edge id="35" source="7" target="18" weight="7.083809852600098"></edge>
+      <edge id="37" source="28" target="30" weight="8.12710189819336"></edge>
+      <edge id="38" source="28" target="20" weight="8.12710189819336"></edge>
+      <edge id="39" source="28" target="17" weight="8.12710189819336"></edge>
+      <edge id="40" source="1" target="40" weight="7.5704450607299805"></edge>
+      <edge id="41" source="1" target="20" weight="7.5704450607299805"></edge>
+      <edge id="42" source="1" target="7" weight="7.5704450607299805"></edge>
+      <edge id="43" source="4" target="5" weight="7.5544939041137695"></edge>
+      <edge id="44" source="4" target="3" weight="7.5544939041137695"></edge>
+      <edge id="45" source="4" target="17" weight="7.5544939041137695"></edge>
+      <edge id="46" source="11" target="14" weight="8.146551132202148"></edge>
+      <edge id="47" source="11" target="20" weight="14.33200979232788"></edge>
+      <edge id="48" source="11" target="10" weight="14.347960948944092"></edge>
+      <edge id="49" source="11" target="12" weight="7.5704450607299805"></edge>
+      <edge id="51" source="11" target="13" weight="8.031615257263184"></edge>
+      <edge id="53" source="22" target="23" weight="7.5544939041137695"></edge>
+      <edge id="54" source="22" target="21" weight="22.970040798187256"></edge>
+      <edge id="56" source="22" target="19" weight="6.243913173675537"></edge>
+      <edge id="58" source="22" target="28" weight="8.159488677978516"></edge>
+      <edge id="59" source="19" target="17" weight="15.099234104156494"></edge>
+      <edge id="60" source="19" target="20" weight="6.68324613571167"></edge>
+      <edge id="62" source="19" target="24" weight="14.833405017852783"></edge>
+      <edge id="64" source="40" target="7" weight="25.072080612182617"></edge>
+      <edge id="65" source="40" target="17" weight="25.072080612182617"></edge>
+      <edge id="70" source="52" target="44" weight="7.275321960449219"></edge>
+      <edge id="71" source="52" target="51" weight="23.77994441986084"></edge>
+      <edge id="73" source="52" target="16" weight="7.5704450607299805"></edge>
+      <edge id="75" source="52" target="57" weight="8.388161659240723"></edge>
+      <edge id="76" source="54" target="45" weight="7.911040782928467"></edge>
+      <edge id="77" source="54" target="53" weight="24.637168407440186"></edge>
+      <edge id="80" source="34" target="33" weight="7.799209117889404"></edge>
+      <edge id="81" source="34" target="32" weight="7.919844150543213"></edge>
+      <edge id="82" source="32" target="3" weight="7.919844150543213"></edge>
+      <edge id="83" source="32" target="20" weight="7.919844150543213"></edge>
+      <edge id="84" source="37" target="36" weight="7.5704450607299805"></edge>
+      <edge id="85" source="37" target="35" weight="7.5704450607299805"></edge>
+      <edge id="86" source="35" target="3" weight="7.007950782775879"></edge>
+      <edge id="87" source="35" target="20" weight="7.007950782775879"></edge>
+      <edge id="88" source="8" target="18" weight="8.164731979370117"></edge>
+      <edge id="89" source="8" target="11" weight="8.164731979370117"></edge>
+      <edge id="90" source="42" target="7" weight="7.5704450607299805"></edge>
+      <edge id="91" source="30" target="18" weight="30.87606716156006"></edge>
+      <edge id="92" source="30" target="20" weight="30.87606716156006"></edge>
+      <edge id="93" source="30" target="29" weight="16.08701801300049"></edge>
+      <edge id="94" source="30" target="31" weight="8.36306381225586"></edge>
+      <edge id="97" source="30" target="43" weight="8.164731979370117"></edge>
+      <edge id="103" source="5" target="3" weight="81.77446269989014"></edge>
+      <edge id="104" source="5" target="39" weight="8.201075553894043"></edge>
+      <edge id="106" source="5" target="38" weight="25.122529983520508"></edge>
+      <edge id="108" source="5" target="18" weight="25.122529983520508"></edge>
+      <edge id="110" source="14" target="10" weight="7.007950782775879"></edge>
+      <edge id="111" source="14" target="11" weight="8.415987968444824"></edge>
+      <edge id="112" source="14" target="20" weight="8.415987968444824"></edge>
+      <edge id="113" source="10" target="20" weight="7.5704450607299805"></edge>
+      <edge id="114" source="12" target="11" weight="7.5704450607299805"></edge>
+      <edge id="115" source="23" target="22" weight="7.723954200744629"></edge>
+      <edge id="116" source="23" target="21" weight="8.201075553894043"></edge>
+      <edge id="117" source="23" target="20" weight="7.723954200744629"></edge>
+      <edge id="118" source="23" target="17" weight="7.723954200744629"></edge>
+      <edge id="119" source="21" target="20" weight="24.588930130004883"></edge>
+      <edge id="120" source="21" target="17" weight="24.588930130004883"></edge>
+      <edge id="121" source="24" target="17" weight="15.209471225738525"></edge>
+      <edge id="122" source="24" target="18" weight="6.755796909332275"></edge>
+      <edge id="124" source="24" target="26" weight="6.755796909332275"></edge>
+      <edge id="125" source="44" target="52" weight="8.164731979370117"></edge>
+      <edge id="126" source="44" target="51" weight="8.164731979370117"></edge>
+      <edge id="127" source="51" target="16" weight="7.5704450607299805"></edge>
+      <edge id="128" source="16" target="47" weight="7.5704450607299805"></edge>
+      <edge id="129" source="16" target="55" weight="8.134093284606934"></edge>
+      <edge id="130" source="45" target="54" weight="8.611214637756348"></edge>
+      <edge id="131" source="45" target="53" weight="8.134093284606934"></edge>
+      <edge id="132" source="53" target="41" weight="8.36306381225586"></edge>
+      <edge id="133" source="41" target="9" weight="8.36306381225586"></edge>
+      <edge id="134" source="9" target="20" weight="7.5704450607299805"></edge>
+      <edge id="135" source="9" target="7" weight="7.5704450607299805"></edge>
+      <edge id="136" source="31" target="18" weight="7.764369964599609"></edge>
+      <edge id="137" source="31" target="20" weight="7.764369964599609"></edge>
+      <edge id="138" source="43" target="30" weight="7.764369964599609"></edge>
+      <edge id="139" source="39" target="18" weight="11.548469543457031"></edge>
+      <edge id="140" source="39" target="3" weight="11.548469543457031"></edge>
+      <edge id="141" source="38" target="5" weight="6.459133148193359"></edge>
+      <edge id="142" source="26" target="25" weight="25.340970039367676"></edge>
+      <edge id="143" source="26" target="27" weight="12.41487979888916"></edge>
+      <edge id="144" source="26" target="17" weight="118.05210781097412"></edge>
+      <edge id="150" source="25" target="17" weight="15.738419532775879"></edge>
+      <edge id="151" source="47" target="18" weight="48.84654998779297"></edge>
+      <edge id="152" source="47" target="3" weight="72.5110502243042"></edge>
+      <edge id="153" source="47" target="46" weight="24.15067958831787"></edge>
+      <edge id="154" source="47" target="48" weight="23.881959915161133"></edge>
+      <edge id="156" source="47" target="49" weight="12.41487979888916"></edge>
+      <edge id="161" source="55" target="3" weight="12.625060081481934"></edge>
+      <edge id="162" source="55" target="17" weight="12.625060081481934"></edge>
+      <edge id="163" source="27" target="17" weight="7.965721130371094"></edge>
+      <edge id="164" source="48" target="18" weight="14.074999809265137"></edge>
+      <edge id="165" source="48" target="3" weight="14.074999809265137"></edge>
+      <edge id="166" source="49" target="47" weight="5.024360179901123"></edge>
+    </edges>
+  </graph>
+</gexf>
