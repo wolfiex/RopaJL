@@ -3,9 +3,9 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./meth.nc"
+filename = "./cridun.nc"
 
-data = ncdata.get(filename,grp=2)
+data = ncdata.get(filename,grp=1)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
@@ -55,13 +55,13 @@ end
 smiles =readtable("carbons.csv")
 smiles = Set(smiles[:species])
 
-t = 170
+t = 400
 
 
 
 links = filter(i -> flux[i][t]>0 , 1:len(flux))
-tflux = [log10(flux[i][t]) for i in links]
-weight =  tflux - minimum(tflux)
+tflux = [flux[i][t] for i in links] #[log10(flux[i][t]) for i in links]
+weight =  tflux #- minimum(tflux)
 #weight = 1 - weight/maximum(weight)
 
 #1+normalise(tflux)
@@ -76,13 +76,16 @@ end
 edge = filter(i -> newflux[i[3]]>0 , edges)
 source = [i[1] for i in edge]
 target=[i[2] for i in edge]
-weighted = [newflux[i[3]]+0.0001 for i in edge]
+weighted = [newflux[i[3]] for i in edge]
 #grouping  = [reactiontypes[i[3]] for i in edge]
 
 
 
-novalues = [i>0. for i in Array(specs[t,:])]
-novalues = Set([string(i) for i in names(specs)[novalues]])
+val = [i>0. for i in Array(specs[t,:])]
+values = Set([string(i) for i in names(specs)[val]])
+
+novalues = !val
+novalues = [string(i) for i in names(specs)[novalues]]
 
 
 
@@ -107,15 +110,43 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
      v=Set(v)
      
      # to remove carbons comment below
-     #smiles = Set()
-     
-     smiles = intersect(smiles,novalues)
-     
-     diff = [i for i in setdiff(v,smiles)]
-     @rput diff
-     R"g = delete.vertices(g,diff)"
 
      
+     #comment if using smiles strings, else  keep commented
+     #smiles = intersect(smiles,values)
+     #diff = [i for i in setdiff(v,smiles)]
+     
+    diff = [i for i in intersect(v,Set(vcat(["NO","NO2","NO3","OH","O3","O","HONO","HO2","H2O2","HSO3","H2","HNO3","HO2NO2","HSO3","N2O5","SO2","SO3","SA"],novalues)))]
+     
+     @rput diff
+     R"g = delete.vertices(g,diff)"
+     
+     
+     R"g = simplify(g, edge.attr.comb='sum')"
+
+      R"weights = log10(E(g)$weight)" 
+      
+      R"weights = (abs(min(weights))+weights)"   
+      R"E(g)$weight = 1e-10 +weights" #"/max(weights)" 
+         
+         
+     R"v = V(g)$name"
+     @rget v
+     
+     
+     
+     v= [specs[Symbol(i)][t] for i in v ]
+     
+     
+     
+     @rput v
+     
+     R"v = log10(v)"
+     R"v= (v+abs(min(v)))"
+     R"v=1e-10 + v/max(v)"
+     
+     
+     R"V(g)$conc = v"
      
 R"""g1.gexf <- igraph.to.gexf(g)
 f <- file('togephi.gexf')
