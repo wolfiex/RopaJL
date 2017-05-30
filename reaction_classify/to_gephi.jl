@@ -5,7 +5,7 @@ unshift!(PyVector(pyimport("sys")["path"]), "")
 len = length
 filename = "./cridun.nc"
 
-data = ncdata.get(filename,grp=1)
+data = ncdata.get(filename,grp=0)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
@@ -55,7 +55,7 @@ end
 smiles =readtable("carbons.csv")
 smiles = Set(smiles[:species])
 
-t = 400
+t = 216
 
 
 
@@ -89,7 +89,9 @@ novalues = [string(i) for i in names(specs)[novalues]]
 
 
 
-     @rput source
+
+
+     @rput sourceed
      @rput target
      @rput weighted
 
@@ -153,6 +155,74 @@ f <- file('togephi.gexf')
 writeLines(g1.gexf$graph, con = f)
 close(f)
 """
+
+
+
+'''
+strength in 
+
+library(Hmisc)
+library(ggplot2)
+require(reshape2)
+
+Flux = strength(g,vids=V(g),mode=c("all"))
+Flux = Flux_in/max(Flux_in)
+
+Concentration = V(g)$conc
+
+
+
+EigenCentrality = eigen_centrality(g, directed=TRUE, weights=E(g)$weight)$vector
+EigenCentrality = EigenCentrality/max(EigenCentrality)
+
+PageRank= page_rank(g, algo = c('prpack', 'arpack', 'power'), vids = V(g),
+     directed = TRUE, damping = 0.85, personalized = NULL, weights = NULL,
+     options = NULL)$vector
+PageRank=PageRank/max(PageRank)
+
+Betweenness=betweenness(net, directed=T)
+Betweenness = Betweenness/max(Betweenness)
+
+Hubs = hub_score(net)$vector
+Authorities=authority_score(net, weights=NA)$vector
+
+
+df = data.frame(Flux,EigenCentrality,PageRank,Betweenness,Authorities)
+
+df1 <- melt(df ,  id.vars = 'Flux', variable.name = 'series')
+df1$Value = df1$value
+
+
+ggplot(df1, aes(Flux,Value)) + geom_point(aes(colour = series))+
+geom_smooth(method='lm')
+
+
+
+
+with(df1, qplot(Flux, Value, colour = series, shape = series, ) +
+  geom_smooth(method='lm')    )
+  
+  
+  
+  df = data.frame(Concentration,EigenCentrality,PageRank,Betweenness,Authorities)
+
+  df1 <- melt(df ,  id.vars = 'Concentration', variable.name = 'series')
+  df1$Value = df1$value
+  
+  
+  with(df1, qplot(Concentration, Value, colour = series, shape = series, )
+    
+    
+  
+  ggsave('plot.svg', plot = last_plot(), device = svg, path = NULL,
+      scale = 1, width = 6, height = 2,
+      dpi = 300, limitsize = FALSE,)
+
+  
+ 
+'''
+
+
 
 print("fini")
 
