@@ -65,7 +65,7 @@ var size = d3.min([width, height]),
     isize = (1 - fract) * size / 2;
 svg.attr("width", size).attr("height", size);
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+var color =  d3.scaleOrdinal(d3.schemeCategory20);
 
 //npm install gexf
 var fs = require("fs");
@@ -176,7 +176,7 @@ function draw() {
         .append("circle")
         .attr("r", d => Math.pow(d.attributes.att2,3)*4)
         .attr("fill", function(d) {
-            return window.cat[window.map.get(d.label)];
+            return window.color(window.map.get(d.label));
         })
         .call(
             d3
@@ -304,7 +304,7 @@ function edgebundle() {
         .append("circle")
         .attr("r", d => Math.pow(d.attributes.att2,4)*5)
         .attr("fill", function(d) {
-            return window.cat[window.map.get(d.label)];
+            return window.color(window.map.get(d.label));
         })
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)

@@ -139,7 +139,52 @@ novalues = [string(i) for i in names(specs)[novalues]]
      R"V(g)$conc = v"
      
 
+     
+     R"write_graph(g, 'mcl.input', 'ncol')"    
 
+     cmd =  `/Users/$(ENV["USER"])/local/bin/mcl mcl.input --abc -o mcl.out -I 2.5`    
+     run(   cmd  )
+     
+     
+     function input(prompt::String="")::String
+           print(prompt)
+           return chomp(readline())
+       end
+       
+       
+       
+     res1 = readtable("mcl.out",header=false)
+     R"aspcs = V(g)$name"
+     @rget aspcs
+     aspcs=Set(aspcs)
+     
+    for i in 1:length(res1[1])
+        
+     row = res1[i,1]
+
+     row = split(row,'\t')
+    # if length(row) > length(aspcs)/1000. 
+        println(row) 
+        
+        diff = setdiff(aspcs,row)
+        
+        @rput diff
+        R"dummy = delete.vertices(g,diff)"
+        R"write_graph(dummy, paste('./grouped/group.',$(i),sep=''), 'ncol')"    
+    
+        R"plot(dummy, vertex.label.dist=.5)"
+        input("pause")
+    
+        
+    #end    
+    end 
+     
+     
+     
+     
+     
+     
+     
 
 print("fini")
 
