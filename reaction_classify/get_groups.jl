@@ -1,12 +1,12 @@
 using DataFrames, JSON
 
-f = open("./organic_cri21_nhept.kpp")
+f = open("./full_mcm.kpp")
 string = replace(readstring(f),r"\h","")
 close(f)
 
 
 
-mcm3 = DataFrame(readtable("mcm32_species.csv",separator=',',header=true))
+mcm3 = DataFrame(readtable("mcm3_3_1_species.csv",separator=',',header=true))
 
 reactions =[vcat(split(i[1],":")) for i in eachmatch(r"\}(.*);",string)]
 groups  =  [match(r"RO2NO\d?|RO2HO2|RO2|NO\d?|HO2|PAN|J",i[2]) for i in reactions]

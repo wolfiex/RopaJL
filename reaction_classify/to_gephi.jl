@@ -61,6 +61,12 @@ t = 170
 
 links = filter(i -> flux[i][t]>0 , 1:len(flux))
 tflux = [log10(flux[i][t]) for i in links]
+
+
+# log after combining
+
+
+
 weight =  tflux - minimum(tflux)
 #weight = 1 - weight/maximum(weight)
 
@@ -98,25 +104,25 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
      ))"
 
      R"g <- graph.data.frame(el)"
-     
-     
 
-#c only 
+
+
+#c only
      R"v = V(g)$name"
      @rget v
      v=Set(v)
-     
+
      # to remove carbons comment below
      #smiles = Set()
-     
+
      smiles = intersect(smiles,novalues)
-     
+
      diff = [i for i in setdiff(v,smiles)]
      @rput diff
      R"g = delete.vertices(g,diff)"
 
-     
-     
+
+
 R"""g1.gexf <- igraph.to.gexf(g)
 f <- file('togephi.gexf')
 writeLines(g1.gexf$graph, con = f)
@@ -124,6 +130,3 @@ close(f)
 """
 
 print("fini")
-
-     
-     
