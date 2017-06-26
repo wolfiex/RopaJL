@@ -142,15 +142,68 @@ for i in 1:length(reactants)
 end
 
 
+
+
+  function smrxn(x,t,spcsel)
+    loss = [flux[i[3]][t] for i in x if i[1]==spcsel]
+    prod = [flux[i[3]][t] for i in x if i[2]==spcsel]
+
+    #println(prod,loss)
+
+    if len(loss)!=0
+      loss = sum(loss)
+    else
+      loss = 0
+    end
+
+    if len(prod)!=0
+      prod = sum(prod)
+    else
+      prod = 0
+    end
+    return(abs(prod-loss))
+  end
+
+
+  spcsel = "CH3COCH2O2"#"CH3O2"
+
 newedges =  filter((x)-> ((Symbol(x[1]) in selects)&(  Symbol(x[2]) in selects)) , edges)
-
-spcsel = "CH3COCH2O2"
-
 newedges =  filter((x)-> (((x[1]) == spcsel)|(  (x[2]) == spcsel)) , newedges)
 
+RO2HO2 = filter((x)-> x[4]==AbstractString["RO2HO2"] , newedges)
+RO2NO2 = filter((x)-> x[4]==AbstractString["RO2NO2"] , newedges)
 RO2NO = filter((x)-> x[4]==AbstractString["RO2NO"] , newedges)
 RO2 = filter((x)-> x[4]==AbstractString["RO2"] , newedges)
 HO2 = filter((x)-> x[4]==AbstractString["RO2HO2"] , newedges)
+NO2 =  filter((x)-> x[4]==AbstractString["NO2"] , newedges)
+OH= filter((x)-> x[4]==AbstractString["OH"] , newedges)
+NO3= filter((x)-> x[4]==AbstractString["NO3"] , newedges)
+J= filter((x)-> x[4]==AbstractString["J"] , newedges)
+NO = filter((x)-> x[4]==AbstractString["NO"] , newedges)
+RO2NO3= filter((x)-> x[4]==AbstractString["RO2NO3"] , newedges)
 
+
+file = open("results.csv", "w")
+var = Float64(89)
+typevar = string(typeof(var), "\n")
+
+write(file,"t,ts,RO2HO2,RO2NO,RO2NO2,RO2,HO2,OH,NO3,J,NO,RO2NO3,concs,\n")
+#names = "    ,ts,RO2HO2,RO2NO,RO2NO2,RO2,HO2,OH,NO3,J,NO,RO2NO3,conc        "
+for t in 1:144#linspace(2,len(specs[2]),100)
+         t = trunc(Int,t)
+         write(file, string(t)*",");write(file, string(t)*",")
+       newarr = [];push!(newarr,t);push!(newarr,t)
+       for i in [RO2HO2,RO2NO,RO2NO2,RO2,HO2,OH,NO3,J,NO,RO2NO3,]
+         val=smrxn(i,t,spcsel)
+         write(file, string(smrxn(i,t,spcsel))*",")
+         println("s2wwww ",t,spcsel)
+         #push!(newarr,val)
+       end
+         #push!(newarr,specs[t,Symbol(specsel)])
+          write(file, string(specs[t,Symbol(spcsel)])*",")
+         write(file,"\n")
+end
+#writedlm("results.csv", dmy, ",")
+close(file)
 
 print("fini")

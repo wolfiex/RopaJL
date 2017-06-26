@@ -6,7 +6,7 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./cri2_nhept.nc"
+filename = "./methane.nc"
 
 data = ncdata.get(filename)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])

@@ -3,9 +3,9 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
-filename = "./meth.nc"
+filename = "./methane.nc"
 
-data = ncdata.get(filename,grp=2)
+data = ncdata.get(filename,grp=0)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
 rates = names!(DataFrame(data["rate"]),[Symbol(i)for i in data["rc"]])
 rates = rates[:,[Symbol(i) for i in filter(x->!ismatch(r"EMISS|DUMMY",x),data["rc"])]]
