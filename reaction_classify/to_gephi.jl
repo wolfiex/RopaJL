@@ -3,7 +3,11 @@ using PyCall,DataFrames,RCall
 unshift!(PyVector(pyimport("sys")["path"]), "")
 @pyimport ncdata
 len = length
+<<<<<<< HEAD
 filename = "./methane.nc"
+=======
+filename = "./cridun.nc"
+>>>>>>> 93d403fe11aa311eacdc73eb249f740f6c2cb4bf
 
 data = ncdata.get(filename,grp=0)
 specs = names!(DataFrame(data["spec"]),[Symbol(i)for i in data["sc"]])
@@ -55,11 +59,12 @@ end
 smiles =readtable("carbons.csv")
 smiles = Set(smiles[:species])
 
-t = 170
+t = 216
 
 
 
 links = filter(i -> flux[i][t]>0 , 1:len(flux))
+<<<<<<< HEAD
 tflux = [log10(flux[i][t]) for i in links]
 
 
@@ -68,6 +73,10 @@ tflux = [log10(flux[i][t]) for i in links]
 
 
 weight =  tflux - minimum(tflux)
+=======
+tflux = [flux[i][t] for i in links] #[log10(flux[i][t]) for i in links]
+weight =  tflux #- minimum(tflux)
+>>>>>>> 93d403fe11aa311eacdc73eb249f740f6c2cb4bf
 #weight = 1 - weight/maximum(weight)
 
 #1+normalise(tflux)
@@ -82,17 +91,22 @@ end
 edge = filter(i -> newflux[i[3]]>0 , edges)
 source = [i[1] for i in edge]
 target=[i[2] for i in edge]
-weighted = [newflux[i[3]]+0.0001 for i in edge]
+weighted = [newflux[i[3]] for i in edge]
 #grouping  = [reactiontypes[i[3]] for i in edge]
 
 
 
-novalues = [i>0. for i in Array(specs[t,:])]
-novalues = Set([string(i) for i in names(specs)[novalues]])
+val = [i>0. for i in Array(specs[t,:])]
+values = Set([string(i) for i in names(specs)[val]])
+
+novalues = !val
+novalues = [string(i) for i in names(specs)[novalues]]
 
 
 
-     @rput source
+
+
+     @rput sourceed
      @rput target
      @rput weighted
 
@@ -113,6 +127,7 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
      v=Set(v)
 
      # to remove carbons comment below
+<<<<<<< HEAD
      #smiles = Set()
 
      smiles = intersect(smiles,novalues)
@@ -123,10 +138,118 @@ novalues = Set([string(i) for i in names(specs)[novalues]])
 
 
 
+=======
+
+     
+     #comment if using smiles strings, else  keep commented
+     #smiles = intersect(smiles,values)
+     #diff = [i for i in setdiff(v,smiles)]
+     
+    diff = [i for i in intersect(v,Set(vcat(["NO","NO2","NO3","OH","O3","O","HONO","HO2","H2O2","HSO3","H2","HNO3","HO2NO2","HSO3","N2O5","SO2","SO3","SA"],novalues)))]
+     
+     @rput diff
+     R"g = delete.vertices(g,diff)"
+     
+     
+     R"g = simplify(g, edge.attr.comb='sum')"
+
+      R"weights = log10(E(g)$weight)" 
+      
+      R"weights = (abs(min(weights))+weights)"   
+      R"E(g)$weight = 1e-10 +weights" #"/max(weights)" 
+         
+         
+     R"v = V(g)$name"
+     @rget v
+     
+     
+     
+     v= [specs[Symbol(i)][t] for i in v ]
+     
+     
+     
+     @rput v
+     
+     R"v = log10(v)"
+     R"v= (v+abs(min(v)))"
+     R"v=1e-10 + v/max(v)"
+     
+     
+     R"V(g)$conc = v"
+     
+>>>>>>> 93d403fe11aa311eacdc73eb249f740f6c2cb4bf
 R"""g1.gexf <- igraph.to.gexf(g)
 f <- file('togephi.gexf')
 writeLines(g1.gexf$graph, con = f)
 close(f)
 """
+
+
+
+'''
+strength in 
+
+library(Hmisc)
+library(ggplot2)
+require(reshape2)
+
+Flux = strength(g,vids=V(g),mode=c("all"))
+Flux = Flux_in/max(Flux_in)
+
+Concentration = V(g)$conc
+
+
+
+EigenCentrality = eigen_centrality(g, directed=TRUE, weights=E(g)$weight)$vector
+EigenCentrality = EigenCentrality/max(EigenCentrality)
+
+PageRank= page_rank(g, algo = c('prpack', 'arpack', 'power'), vids = V(g),
+     directed = TRUE, damping = 0.85, personalized = NULL, weights = NULL,
+     options = NULL)$vector
+PageRank=PageRank/max(PageRank)
+
+Betweenness=betweenness(net, directed=T)
+Betweenness = Betweenness/max(Betweenness)
+
+Hubs = hub_score(net)$vector
+Authorities=authority_score(net, weights=NA)$vector
+
+
+df = data.frame(Flux,EigenCentrality,PageRank,Betweenness,Authorities)
+
+df1 <- melt(df ,  id.vars = 'Flux', variable.name = 'series')
+df1$Value = df1$value
+
+
+ggplot(df1, aes(Flux,Value)) + geom_point(aes(colour = series))+
+geom_smooth(method='lm')
+
+
+
+
+with(df1, qplot(Flux, Value, colour = series, shape = series, ) +
+  geom_smooth(method='lm')    )
+  
+  
+  
+  df = data.frame(Concentration,EigenCentrality,PageRank,Betweenness,Authorities)
+
+  df1 <- melt(df ,  id.vars = 'Concentration', variable.name = 'series')
+  df1$Value = df1$value
+  
+  
+  with(df1, qplot(Concentration, Value, colour = series, shape = series, )
+    
+    
+  
+  ggsave('plot.svg', plot = last_plot(), device = svg, path = NULL,
+      scale = 1, width = 6, height = 2,
+      dpi = 300, limitsize = FALSE,)
+
+  
+ 
+'''
+
+
 
 print("fini")
