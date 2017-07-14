@@ -1,0 +1,239 @@
+
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
+<link href="photon.min.css" rel="stylesheet"/>
+
+
+<div id='input'>
+
+  <form action="upload.php"  method="POST">
+    <input id ='files' type="file" multiple>
+    <p>Drag your .nc files here or click in this area.</p>
+
+  </form>
+  <button class='inbtn btn btn-primary' onclick='alert(" run DSMACC,\n run ropa_tools.py,\n drag the results here") '>View Example</button>
+  <link rel="stylesheet" type="text/css" href='upload.css'/>
+  <div id='meterdiv' class="meter">
+    <span id ='loading' style="width: 50%"></span>
+  </div>
+</div>
+
+
+<div id='ropaelements' hidden=true class="tri-down">
+<form>
+  <div class="top">
+    <div style="float: left; width: 20%;">
+      <select class="form-control" id='dropdown'
+      onchange='window.location.hash=value;spec = value; draw(spec,document.getElementById("valueslider").value);'> </select>
+<br>
+      <button class ='btn btn-positive' id='animate' onclick='window.animate()' style='width: 85%;margin-top:8px;height:23px;' >Animate</button>
+    </div>
+</form>
+
+    <div style="float: left; width: 5%;"><br>
+    </div>
+    <div style="float: left; width: 50%;">
+      <form>
+      <svg id='miniplot' style='width: 100%; display: block; position:absolute; margin: 0 auto;'></svg>
+        <input type="range" id="valueslider" value="0" step="1" min="0" max="500"   style='width: 50%;
+        display: block;  margin: 0 auto;position:absolute;'   oninput="document.getElementById('output').value=ncdata.datetime[value]"
+        onchange='draw(spec,value)'>
+        
+      </form>
+      
+    
+      
+      <svg id='miniplots' style='width: 100%; display: block; position:absolute; margin: 0 auto;'>
+        <defs>
+          <pattern id="pattern-stripe"
+          width="4" height="4"
+          patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)">
+          <rect width="2" height="4" transform="translate(0,0)" fill="white"></rect>
+        </pattern>
+        <mask id="mask">
+          <rect x="0" y="0" width="800%" height="800%" fill="url(#pattern-stripe)" />
+        </mask>
+      </defs>
+
+    </svg>
+  </div>
+  <div style="float: left; width: 5%;"> <br>
+  </div>
+  <div style="float: left; width: 20%;">
+    <output form=value id="output">0</output>
+  </div>
+
+
+
+  <div style='padding-top:55px;'>
+    <button class='btn btn-primary' id='store' onclick="save('Ropa_'+spec+'_'+(document.getElementById('output').innerHTML.replace(/\s/g,'_').split('_GMT')[0]).replace(/\-/,'').replace(/1970/,''))" style='width: 100%;position:relative' >Save</button>
+  </div>
+
+</div>
+
+
+
+
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script src="./netcdfjs.min.js"></script>
+<script src="./readncdf.js"></script>
+<script src="./functions.js"></script>
+<script src="./index.js"></script>
+<script src="./save.js"></script>
+
+
+
+<style>
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #3949ab;
+  height: 40px;
+  
+  width: 6px;
+  border-radius: 3px;
+  background: #0d47a1;
+  opacity:.70;
+  cursor: pointer;
+  margin-top: -3px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  /*box-shadow: 0px 0px 0px #3949ab, 0px 0px 0px #0d0d0d;   Add cool effects to your sliders! */
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #3949ab;
+  height: 36px;
+  width: 6px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  opacity:.50;
+}
+
+
+
+/* track */
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 36px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 1.3px;
+  opacity:0.32;
+  
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+"use strict";
+
+
+
+window.addEventListener('message', function(event) {
+    var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
+    console.log(origin)
+    if (origin !== 'http://www-users.york.ac.uk')
+        return;
+        
+     if (typeof event.data == 'object' && event.data.call=='eval') {
+        // Do something with event.data.value;
+        eval(event.data.value)
+    }       
+    if (typeof event.data == 'object' && event.data.call=='sendValue') {
+        // Do something with event.data.value;
+        console.log(event.data.value)
+    }
+}, false);
+
+
+
+document.getElementById('meterdiv').style.opacity= 0;
+
+console.log(window.location.hash)
+
+var spec = (window.location.hash==='')?"NO":window.location.hash.replace('#','');
+var timestep = 99;
+var data = [];
+var topten = true
+var topn = 6;
+
+// set the dimensions and margins of the graph
+var margin = { top: 20, right: 100, bottom: 70, left: 100 },
+  width = window.innerWidth - margin.left - margin.right,
+  height = window.innerHeight / 2; // - margin.top - margin.bottom - 35;
+
+var svg = d3
+  .select("body")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var format = d3.format(".1");
+var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+//initial;
+
+
+</script>
+
+<script src='upload.js'></script>
+

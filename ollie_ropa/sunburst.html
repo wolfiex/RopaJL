@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+.area{
+
+}
+
+</style>
+<body>
+
+  <!-- load the d3.js library -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+
+  <script>
+var width = window.innerWidth ,
+  height = window.innerHeight;
+
+width = height =   d3.min([width,height])
+
+  var data = d3.range(0,100).map(d=>Math.random())
+
+  var npts = data.length
+  var mean = d3.mean(data)
+  var angle = (2*Math.PI)/(npts)
+
+  var color = d3.scaleSequential(d3.interpolateYlGnBu)
+      .domain([0, d3.max(data)]) // Points per square pixel.
+
+
+
+        var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height )
+        .append("g")
+
+
+
+      //Append a defs (for definition) element to your SVG
+      var defs = svg.append("defs");
+
+//percentage = 70 as we add an extra 1/5 to circle
+
+
+      //Append a linearGradient element to the defs and give it a unique id
+      var linearGradient = defs.append("radialGradient")
+          .attr("id", "linear-gradient")
+
+                .attr('shape','circle')
+                //.attr("fx", "60%")
+                .attr("fr", "5%")
+          .attr("cx", "50%")    //The x-center of the gradient, same as a typical SVG circle
+          .attr("cy", "50%")    //The y-center of the gradient
+          .attr("r", "45%");   //The radius of the gradient, an offset of 100% ends where you've set this radius
+
+      //Append multiple color stops by using D3's data/enter step
+      linearGradient.selectAll("stop")
+          .data([
+              {offset: "0", color: "#2c7bb6"},
+              {offset: "12.5", color: "#00a6ca"},
+              {offset: "25", color: "#00ccbc"},
+              {offset: "45.5", color: "#90eb9d"},
+              {offset: "50", color: "#ffff8c"},
+              {offset: "55.5", color: "#f9d057"},
+              {offset: "75", color: "#f29e2e"},
+              {offset: "87.5", color: "#e76818"},
+              {offset: "100", color: "#d7191c"},
+
+              {offset: "0", color: "#2c7bb6"},
+              {offset: "12.5", color: "#00a6ca"},
+              {offset: "25", color: "#00ccbc"},
+              {offset: "45.5", color: "#90eb9d"},
+              {offset: "50", color: "#ffff8c"},
+              {offset: "55.5", color: "#f9d057"},
+              {offset: "75", color: "#f29e2e"},
+              {offset: "87.5", color: "#e76818"},
+              {offset: "100", color: "#d7191c"}
+            ])
+          .enter().append("stop")
+          .attr("offset", function(d,i){if (i>9) i-8; return (40 +i*60/9) + '%' }) //{ return ( (d.offset*.82 )+20 )+'%' })
+          .attr("stop-color", function(d) { return d.color; });
+
+
+
+
+  var rmax = width/2
+  var armax=rmax/4
+  var h = d3.scaleLinear().range([0, rmax*.75]).domain([d3.min(data),d3.max(data)]);
+  data.push(data[0])                  // define the area
+  var area = d3.area()
+  .curve(d3.curveCardinalClosed)  //d3.curveCardinalClosed
+  .x1(function(d,i) { return width/2+Math.cos(i*angle)*(armax+h(d)) })
+  .x0(function(d,i) { return width/2+Math.cos(i*angle)*(armax+h(mean)) })
+  .y0(function(d,i) { return height/2+Math.sin(i*angle)*(armax+h(mean)) })
+  .y1(function(d,i) { return height/2+Math.sin(i*angle)*(armax+h(d)) })
+
+
+
+    svg.append("path")
+    .data([data])
+    .attr("class", "area")
+    .attr("d", area)
+    .style("fill", "url(#linear-gradient)")
+
+
+
+
+clip = defs.append("clipPath")
+      .attr('id','clip')
+      .append("path")
+      .data([data])
+      .attr("class", "area")
+      .attr("d", area)
+
+
+    svg.append("circle")
+
+      .attr("cx", width/2)
+      .attr("cy", height/2)
+            .attr("r", rmax)
+            .attr("clip-path","url(#clip)")
+          .style("fill", "url(#linear-gradient)")
+
+
+
+
+    </script>

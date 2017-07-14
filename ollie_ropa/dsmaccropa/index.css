@@ -1,0 +1,44 @@
+.tri-down {
+
+    /* Styling block element, not required */
+    position: relative;
+    margin-bottom: 2em;
+    padding: 1em;
+    border-bottom: 1px solid #999;
+    background: #f3f3f3;
+  }
+
+  /* Required for Down Triangle */
+  .tri-down:before, .tri-down:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom: 0;
+  }
+
+  /* Stroke */
+  .tri-down:before {
+    bottom: -6px;
+    left: 21px;
+
+    /* If 1px darken stroke slightly */
+    border-top-color: #777;
+    border-width: 6px;
+  }
+
+  /* Fill */
+  .tri-down:after {
+    bottom: -5px;
+    left: 21px;
+    border-top-color: #f3f3f3;
+    border-width: 5px;
+           opacity:1
+  }
+
+  text{font-family: Lato;}
+
+  .btn{height:20px}
+
