@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+@font-face {
+    font-family: Ailerons;
+    src: url("Ailerons-Typeface.otf") format("opentype");
+}
+
+monthArc {pointer-events: none}
+.monthArc {pointer-events: none}
+svg{background-color: #222}
+
+.line {
+  fill: none;
+  //stroke: steelblue;
+  //stroke-width: 2px;
+}
+
+.area {
+  //fill: white;
+}
+
+</style>
+<body>
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="./svggradetc.js"></script>
+<script src="./netcdfjs.min.js"></script>
+<script src="./readnc.js"></script>
+<script src="./fluxfunctions.js"></script>
+<script src="./draw.js"></script>
+
+<script>
+// set the dimensions and margins of the graph
+
+window.topn = 10;
+window.tstop = 144 * 5;
+
+var rmax = d3.min([width,height]) / 2 * 0.7//0.85;
+// set the ranges
+
+var data = [];
+
+//get_data()
+
+get_data((filename = "ropacri.nc"), (spec = "C5H8"));
+
+axis()
+
+concentration()
+
+
+    
+
+
+
+function axis() {
+    var monthData = d3.range(23).map((d, i) => {
+        return { month: d * 1, startDateID: i, endDateID: i + 1 };
+    });
+    
+    var pie = d3
+        .pie()
+        .value(function(d) {
+            return d.endDateID - d.startDateID;
+        })
+        .padAngle(0.01)
+        .sort(null);
+        
+    //Creates a function that makes SVG paths in the shape of arcs with the specified inner and outer radius
+    var arc = d3
+        .arc()
+        .innerRadius(30 + rmax / 2 - 10)
+        .outerRadius(30 + rmax / 2 + 10);
+
+    //Creates function that will turn the month data into start and end angles
+    
+
+    ////////////////////////////////////////////////////////////
+    //////////////////// Create the Slices /////////////////////
+    ////////////////////////////////////////////////////////////
+
+    //Draw the arcs themselves
+    svg
+        .selectAll(".monthArc")
+        .data(pie(monthData))
+        .enter()
+        .append("path")
+        
+        .attr("class", "monthArc")
+        .attr("id", function(d, i) {
+            return "monthArc_" + i;
+        })
+        .attr("d", arc)
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("opacity", 0.8)
+        .attr(
+            "transform",
+            "translate(" +
+                (width / 2 + margin.left) +
+                "," +
+                (height / 2 + margin.top) +
+                ")"
+        );
+
+    //Append the month names within the arcs
+
+
+    svg
+        .selectAll(".monthText")
+        .data(monthData)
+        .enter()
+        .append("text")
+        .style('pointer-events', 'none')
+        .attr("class", "monthText")
+        .attr("x", 5) //Move the text from the start angle of the arc
+        .attr("dy", 15) //Move the text down
+        .style("fill", "white")
+        //.style("opacity", 0.7)
+        .style("font-size", 10)
+        .style("text-anchor", "right")
+        .append("textPath")
+        .attr("xlink:href", function(d, i) {
+            return "#monthArc_" + i;
+        })
+        .text(function(d) {
+            return d.month + "h";
+        })
+        .attr(
+            "transform",
+            "translate(" +
+                (width / 2 + margin.left) +
+                "," +
+                (height / 2 + margin.top) +
+                ")"
+        );
+        
+        /*
+        var conc = c
+        
+        var angle = 2 * Math.PI / parseFloat(monthData.length);
+
+        var adj = 0.75 * 2 * Math.PI;
+    
+        svg
+            .selectAll(".monthConc")
+            .data(monthData)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d, i) {
+                //i += 1;
+                return width / 2 + Math.cos(i * angle + adj) * rmax * 1.2;
+            })
+            .attr("cy", function(d, i) {
+                //i += 1;
+                return height / 2 + Math.sin(i * angle + adj) * rmax* 1.2;
+            })
+            .attr("class", "monthConc")
+            //.attr("cx", d=>{print('www',d);return 100}) //Move the text from the start angle of the arc
+            //.attr("cy", 18) //Move the text down
+            .style("fill", "white")
+            .style("opacity", 0.7)
+            .style("r", d => 25 * Math.pow(conc[(d.month+1) * 144 / 24], 1.5));
+    
+    
+    */
+        
+    var pie2 = d3
+        .pie()
+        .value(function(d) {
+            return d.endDateID - d.startDateID;
+        })
+        .padAngle(0.005)
+        .sort(null);
+        
+    var arc2 = d3
+        .arc()
+        .innerRadius(rmax * 1.2 +10.5)
+        .outerRadius(1.2 * rmax  +30.5);
+
+    //Creates function that will turn the month data into start and end angles
+    
+
+    ////////////////////////////////////////////////////////////
+    //////////////////// Create the Slices /////////////////////
+    ////////////////////////////////////////////////////////////
+
+    //Draw the arcs themselves
+    svg
+        .selectAll(".monthArc2")
+        .data(pie2(monthData))
+        .enter()
+        .append("path")
+        .style('pointer-events', 'none')
+        .attr("class", "monthArc")
+        .attr("id", function(d, i) {
+            return "monthArc_" + i;
+        })
+        .attr("d", arc2)
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("opacity", 0.3)
+        .attr(
+            "transform",
+            "translate(" +
+                (width / 2 + margin.left) +
+                "," +
+                (height / 2 + margin.top) +
+                ")"
+        );
+        
+/*
+            
+        var arc2 = d3
+            .arc()
+            .innerRadius(1.2 * rmax  +32.5)
+            .outerRadius(1.2 * rmax  +42.5);
+
+        //Draw the arcs themselves
+        svg
+            .selectAll(".monthArc2")
+            .data(pie2(monthData))
+            .enter()
+            .append("path")
+            .attr("class", "monthArc")
+            .attr("id", function(d, i) {
+                return "monthArc_" + i;
+            })
+            .attr("d", arc2)
+            .style("fill", "none")
+            .style("stroke", "white")
+            .style("opacity", 0.3)
+            .attr(
+                "transform",
+                "translate(" +
+                    (width / 2 + margin.left) +
+                    "," +
+                    (height / 2 + margin.top) +
+                    ")"
+            );
+        */
+            
+        var arc2 = d3
+            .arc()
+            .innerRadius(1.2 * rmax  +30.5)
+            .outerRadius(1.2 * rmax  +50.5);
+
+        //Draw the arcs themselves
+        svg
+            .selectAll(".monthArc2")
+            .data(pie2(monthData))
+            .enter()
+            .append("path")
+            .style('pointer-events', 'none')
+            .attr("class", "monthArc")
+            .attr("id", function(d, i) {
+                return "monthArc_" + i;
+            })
+            .attr("d", arc2)
+            .style("fill", "none")
+            .style("stroke", "white")
+            .style("opacity", 0.3)
+            .attr(
+                "transform",
+                "translate(" +
+                    (width / 2 + margin.left) +
+                    "," +
+                    (height / 2 + margin.top) +
+                    ")"
+            );
+        
+        
+        
+}
+
+
+
+
+
+
+</script>
+</body>

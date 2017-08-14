@@ -1,0 +1,355 @@
+
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
+<link href="photon.min.css" rel="stylesheet"/>
+
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+
+
+
+<select id='form' class="form-control" onchange='window.location.hash=value;window.location.reload()' style='margin-top:30%; align:center'>
+    <option value='1'>One</option>
+    <option value='2'>Two</option>
+    <option value='3'>Three</option>
+    <option value='4'>Four</option>
+    <option value='5'>Five</option>
+    <option value='6'>Six</option>
+    <option value='7'>Seven</option>
+    <option value='8'>Eight</option>
+  </select>
+
+
+
+<div id='multiropa' block=true class="" style='position:relative;height:70px'>
+<form>
+  <div >
+    <div style="float: left; width: 20%;">
+      <select class="form-control" id='dropdown'
+      onchange='changedw(value)'> </select>
+<br>
+      <button class ='btn btn-positive' id='animate' onclick='window.animate()' style='width: 85%;margin-top:8px;height:23px;' >Animate</button>
+    </div>
+</form>
+
+    
+ <div style="float: left; width: 5%;"><br>
+    </div>
+    <div style="float: left; width: 50%;">
+      <form>
+      <svg id='miniplot' style='width: 60%; height="10px"; display: block; position:absolute; margin: 0 auto;'></svg>
+        <input type="range" id="valueslider" value="0" step="1" min="0" max="100"   style='width: 50%;
+        display: block;  margin: 0 auto;position:absolute;'  
+        onchange='ids.forEach(f=> { f = frames[f] ; f.contentDocument.getElementById("valueslider").value = ~~ value*[...dims]/100});'>
+        
+      </form>
+
+
+
+
+</div>
+
+
+<script>
+//<iframe name = 'f1' id="frame-1" src="./index.html#O3" style='width:100%;height:50%;'></iframe>
+//<iframe name = 'f2' id="frame-2" src="./index.html#O3" style='width:100%;height:50%;'></iframe>
+
+
+'use strict';
+
+
+
+function changedw(value){
+
+ids.forEach(f => {
+    frames[f].contentDocument.getElementById("dropdown").value = value;
+    var vst = 'draw( "' + value + '",document.getElementById("valueslider").value)';
+    frames[f].contentWindow.spec=value
+    frames[f].contentWindow.postMessage({
+        call: 'eval',
+        value: vst
+    }, "*")
+});
+
+miniplot()
+
+}
+
+function changedw(value){
+
+ids.forEach(f => {
+    frames[f].contentDocument.getElementById("dropdown").value = value;
+    var vst = 'draw( "' + value + '",document.getElementById("valueslider").value)';
+    frames[f].contentWindow.spec=value
+    frames[f].contentWindow.postMessage({
+        call: 'eval',
+        value: vst
+    }, "*")
+});
+
+miniplot()
+
+}
+
+var spec = 'O3'
+var timestep = 0; 
+
+
+var maxframes = 0 ; 
+
+
+var colour = d3.scaleOrdinal(d3.schemeCategory10);
+var ids=[]
+// Create IE + others compatible event handler
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+// Listen to message from child window
+eventer(messageEvent,function(e) {
+
+if (e.data.call === 'id'){
+  console.log('parent received message!:  ',e.data.value);
+  ids.push(e.data.value)
+  
+  
+ var names=[]
+ var select = document.getElementById("dropdown");
+ ids.forEach(f=> {   
+   Object.keys(frames[f].contentWindow.ncdata.dict).forEach(e=>names.push(e))
+})
+
+names.sort()
+names.forEach(i => {
+    var opt = document.createElement("option");
+    opt.value = i;
+    opt.innerHTML = i;
+    select.appendChild(opt);
+  });
+  
+  
+    
+  window.dims = new Set(ids.map(f=> {
+      return frames[f].contentWindow.ncdata.dims.time
+  
+      }))   
+  
+  if (dims.size != 1) {return alert('Each file has a diffent number of timesteps, cannot animate simultaniously')}
+  }
+  
+  miniplot()
+},false);
+
+
+if (window.location.hash!=''){
+d3.select('#form').remove();
+document.getElementById('multiropa').hidden=false
+maxframes = parseInt(window.location.hash.replace('#',''))
+};
+
+
+var height = window.innerHeight;
+
+
+var framedata = [];
+var frames = Array(maxframes).fill().map((_,i) =>{
+        console.log(i,_)
+        var ifrm = document.createElement("iframe");
+        ifrm.setAttribute("id", "frame-"+i);
+        ifrm.setAttribute("src", "./multiplets.html#"+spec);
+        ifrm.style.width = "100%";
+        ifrm.style.height = (((height-72)/height)*100)/maxframes +"%";
+        document.body.appendChild(ifrm);
+        //ifrm.contentWindow.location.hash='#'+spec
+        //ifrm.contentDocument.getElementById('dropdown').value = spec;
+        //ifrm.contentDocument.getElementById('valueslider').value  = timestep;
+        //ifrm.contentDocument.getElementById('output').value  = ncdata.datetime[timestep];
+        ifrm.contentWindow.id = i;
+        ifrm.contentWindow.rcol = colour(i)
+        return ifrm
+
+})
+
+
+/*
+frame= document.getElementById('frame-1')
+frame.contentWindow.postMessage({call:'eval', value: 'animate()'}, "*");
+
+frame= document.getElementById('frame-2')
+frame.contentWindow.postMessage({call:'eval', value: 'animate()'}, "*");
+*/
+///frames[1].contentWindow.ncdata
+
+
+
+
+      
+
+
+
+ 
+
+function animate() {
+
+ 
+  var start = 0;
+  var end = [...dims] - 1;
+  document.getElementById("animate").disabled = true;
+  document.getElementById("animate").style.fill = 'red';
+  const interval = d3.interval(
+    () => {
+      const t = d3.transition().duration(100);
+      start += 1;
+      
+      ids.forEach(f=> {
+      f = frames[f]
+      f.contentDocument.getElementById("valueslider").value = start;
+      //f.contentDocument.getElementById("output").value = f.contentWindow.ncdata.datetime[start];
+      f.contentWindow.postMessage({call:'eval', value: 'draw(spec,'+start+')'}, "*");
+})
+
+ 
+      if (start === end) {
+        interval.stop();
+        document.getElementById("animate").disabled = false;
+      }
+    },
+    200
+  );
+}
+
+
+
+
+
+function miniplot() {
+    var concs = ids.map(f=> { 
+
+
+     f=frames[f];
+
+      var sc = f.contentWindow.ncdata.dict[f.contentWindow.spec], conc = [];
+      for (var j = 0; j < [...dims][0] ; j++) {
+        conc.push(
+          f.contentWindow.ncdata.concentration.row(j).map(d => d > 0 ? Math.log10(d) : 0)[sc]
+        );
+      }
+      return conc
+      })
+
+
+    window.z=concs
+
+
+    var flat = concs.reduce(
+      ( acc, cur ) => acc.concat(cur),
+      []
+    );
+
+     var x = d3
+        .scaleLinear()
+        .domain([0, [...dims][0] ])
+        .range([0, window.innerWidth * 0.49]);
+
+      var y = d3.scaleLinear().domain([d3.min(flat),0]).range([45, 5]);
+
+      var valueline = d3
+        .line()
+        .x(function(d, i) {
+          return x(i);
+        })
+        .y(function(d) {
+          return y(d);
+        });
+
+
+
+ var svg = d3.select("#miniplot");
+  svg.selectAll("path").remove();
+   
+    
+  concs.forEach((conc,i)=>{
+      svg
+        .append("path")
+        .data([conc])
+        .attr("class", "line")
+        .style("stroke", colour(ids[i]))
+        .style("stroke-width", "2px")
+        .style("fill", "none")
+        .attr('opacity',0.9)
+        .attr("d", valueline);
+        
+        
+     
+    
+    })
+
+}
+
+
+
+</script>
+</body>
+
+
+
+<style>
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000;
+  height: 70px;
+  width: 1px;
+  border-radius: 3px;
+  background: #0d47a1;
+  opacity:0.70;
+  cursor: pointer;
+  margin-top: 0px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  /*box-shadow: 0px 0px 0px #3949ab, 0px 0px 0px #0d0d0d;   Add cool effects to your sliders! */
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000;
+  height: 50px;
+  width: 6px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  opacity:0.50;
+}
+
+`
+
+
+
+
+</style>
+
