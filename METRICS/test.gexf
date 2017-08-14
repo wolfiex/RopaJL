@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="conc" type="double" />
+      <attribute id="1" title="primary" type="integer" />
+    </attributes>
+    <nodes>
+      <node id="MACROO" label="MACROO">
+        <attvalues>
+          <attvalue for="0" value="1.69547924518" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="CH4" label="CH4">
+        <attvalues>
+          <attvalue for="0" value="1.1715657598" />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="HCOOH" label="HCOOH">
+        <attvalues>
+          <attvalue for="0" value="1.31466681737" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="C3H8" label="C3H8">
+        <attvalues>
+          <attvalue for="0" value="1.31640388054" />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="C2H6" label="C2H6">
+        <attvalues>
+          <attvalue for="0" value="1.29796162913" />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="MVKOO" label="MVKOO">
+        <attvalues>
+          <attvalue for="0" value="1.68539687401" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="MGLOO" label="MGLOO">
+        <attvalues>
+          <attvalue for="0" value="1.70247232799" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="MGLYOO" label="MGLYOO">
+        <attvalues>
+          <attvalue for="0" value="1.71066123643" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="CO" label="CO">
+        <attvalues>
+          <attvalue for="0" value="1.20778459205" />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="MVK" label="MVK">
+        <attvalues>
+          <attvalue for="0" value="1.34782394374" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="CO2" label="CO2">
+        <attvalues>
+          <attvalue for="0" value="1.27316951445" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="MEK" label="MEK">
+        <attvalues>
+          <attvalue for="0" value="1.33155524859" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="GAOO" label="GAOO">
+        <attvalues>
+          <attvalue for="0" value="1.72958013252" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="CH2OO" label="CH2OO">
+        <attvalues>
+          <attvalue for="0" value="1.67365526533" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="MACR" label="MACR">
+        <attvalues>
+          <attvalue for="0" value="1.37054228542" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="CH3CHOO" label="CH3CHOO">
+        <attvalues>
+          <attvalue for="0" value="1.69854752927" />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="MACROO" target="MACR" weight="3.83069612873e-10" />
+      <edge id="1" source="HCOOH" target="CO2" weight="2506.92951972" />
+      <edge id="2" source="MVKOO" target="MVK" weight="6.80891459464e-10" />
+      <edge id="3" source="CO" target="CO2" weight="798624.13642" />
+      <edge id="4" source="CO" target="MACR" weight="0.0130797702976" />
+      <edge id="5" source="CO" target="MVK" weight="0.0232487835891" />
+      <edge id="6" source="MVK" target="CO" weight="140.614189489" />
+      <edge id="7" source="MVK" target="MGLOO" weight="140.614189489" />
+      <edge id="8" source="MVK" target="CH2OO" weight="140.614189489" />
+      <edge id="9" source="MACR" target="MGLYOO" weight="16.9931716991" />
+      <edge id="10" source="MACR" target="CO" weight="16.9931716991" />
+      <edge id="11" source="MACR" target="CH2OO" weight="16.9931716991" />
+    </edges>
+  </graph>
+</gexf>

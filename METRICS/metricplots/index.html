@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>title</title>
+
+<style>
+text{
+font-family: 'Exo 2', sans-serif;
+}
+</style>
+
+</head>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="fedgebundle.js"></script>
+<script src="save.js"></script>
+
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script>
+print = d=>console.log(d)
+var width = window.innerWidth,
+    height = 50;
+
+var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+                //document.getElementById('mcmtxt_DIEK').getBBox().width
+
+
+function draw(what,whatname,x,align,sort){
+  data = what.map(d=>d[sort]).sort()
+
+
+
+  what = what.sort(function(a,b) { return data.indexOf(a[sort]) - data.indexOf(b[sort]); })
+
+
+  txt=what.map(d=>d[''])
+
+
+
+
+  disp = (window.height-9*txt.length)/2 +10
+  txt.map((d,i)=>{
+
+    var svg = document.getElementsByTagName('svg')[0]; //Get svg element
+    var newEl = document.createElementNS("http://www.w3.org/2000/svg", 'text'); //Create a path in SVG's namespace
+    newEl.setAttribute("x",x); //Set path's data
+    newEl.setAttribute("y",disp+i*9)
+    newEl.setAttribute('text-anchor',align)
+    newEl.setAttribute('font-size','8')
+    newEl.setAttribute('id',whatname+'txt_'+d)
+    newEl.setAttribute('font-weight','100')
+    newEl.innerHTML=d
+    newEl.style.stroke = "#000"; //Set stroke colour
+    //newEl.style.strokeWidth = "5px"; //Set stroke width
+    svg.appendChild(newEl);
+
+    })
+
+}
+
+
+
+function parallellinks (w1,w2){
+  var both = [...new Set(w1.map(d=>d['']))].filter(x => new Set(w1.map(d=>d[''])).has(x));
+
+}
+
+
+
+
+
+var q = d3.queue()
+q.defer(d3.csv,"../mcm_centrality.csv")
+q.defer(d3.csv,"../cri_centrality.csv")
+q.defer(d3.csv,"../geos_centrality.csv")
+q.await(function(d,d1,d2,d3){
+if (d) throw error;
+window.mcm=d1
+window.cri=d2
+window.geos=d3
+window.height = mcm.length *9 +20
+svg.attr('height',height)
+
+
+metric = 'FluxIn'
+
+
+var svg2 = document.getElementsByTagName('svg')[0]; //Get svg element
+var newEl = document.createElementNS("http://www.w3.org/2000/svg", 'text'); //Create a path in SVG's namespace
+newEl.setAttribute("x",40); //Set path's data
+newEl.setAttribute("y",40)
+newEl.setAttribute('font-size','20')
+newEl.setAttribute('font-weight','100')
+newEl.innerHTML=metric
+newEl.style.stroke = "#000"; //Set stroke colour
+//newEl.style.strokeWidth = "5px"; //Set stroke width
+svg2.appendChild(newEl);
+
+
+
+draw(mcm,'mcm',width/2,'middle',metric)
+draw(cri,'cri',0,'left',metric)
+draw(geos,'geos',width*.9,'right',metric)
+edgebundle(mcm,cri,'mcm','cri')
+edgebundleR(mcm,geos,'mcm','geos')
+})
+
+////////////
+
+function edgebundleR(w1,w2,t1,t2) {
+
+linklist = w2.map(d=>d[''])
+
+  var cs = d3.interpolateGreens
+
+  n1 = [...new Set(w1.map(d=>d['']))].filter(x => new Set(w2.map(d=>d[''])).has(x));
+
+
+
+  var node_data = [],names=[]
+
+  n1.forEach(function(d) {
+    node_data.push({x:parseInt(document.getElementById(t1+'txt_'+d).getAttribute("x")
+) +document.getElementById(t1+'txt_'+d).getBBox().width/2 +2,
+     y:parseInt(document.getElementById(t1+'txt_'+d).getAttribute("y"))
+   -document.getElementById(t1+'txt_'+d).getBBox().height/2 })
+     node_data.push({x:parseInt(document.getElementById(t2+'txt_'+d).getAttribute("x"))
+     //-document.getElementById(t2+'txt_'+d).getBBox().width -2
+     ,
+      y:parseInt(document.getElementById(t2+'txt_'+d).getAttribute("y"))
+    -document.getElementById(t2+'txt_'+d).getBBox().height/2})
+names.push(t1+'txt_'+d)
+names.push(t2+'txt_'+d)
+
+  });
+
+  link_data=n1.map(
+    function(d) {
+      return {
+        source: names.indexOf(t1+'txt_'+d),
+        target: names.indexOf(t2+'txt_'+d),
+        col:d
+}
+    });
+  var fbundling = ForceEdgeBundling()
+  .step_size(0.1)
+  .compatibility_threshold(.09)//0.3)
+  .nodes(node_data)
+  .edges(link_data);
+  var results = fbundling();
+
+  var d3line = d3
+  .line()
+  .x(function(d) {
+    return d.x;
+  })
+  .y(function(d) {
+    return d.y;
+  })
+  .curve(d3.curveLinear);
+  //plot the data
+  for (var i = 0; i < results.length; i++) {
+    var svg = d3.select("#svg");
+    svg.style("width", width);
+    svg.style("height", height);
+    //svg.style(      "transform",      "translate(" + window.innerWidth / 2 + "," + window.innerHeight / 2 + ")");
+
+    d3.select('svg')
+    .append("g")
+    .append("path")
+    .attr("d", d3line(results[i]))
+    .attr("id", "link" + i)
+    .style("fill", "none")
+    .attr("stroke-width", 2) //  1.3 (d) =>{(isFinite(edge_length[d.index]))? 10*window.edge_length[d] : 0.001} )
+    .style("stroke-opacity",1)//(d) =>{(isFinite(edge_length[d.index]))? 1: 0.001} )
+    .style("opacity", 1)
+    .style("stroke", cs(1-linklist.indexOf(link_data[i].col)/w2.length));
+    var p = new Path2D(d3line(results[i]));
+
+  }
+}
+
+
+function edgebundle(w1,w2,t1,t2) {
+
+linklist = w2.map(d=>d[''])
+
+  var cs = d3.interpolateBlues
+
+  n1 = [...new Set(w1.map(d=>d['']))].filter(x => new Set(w2.map(d=>d[''])).has(x));
+
+
+
+  var node_data = [],names=[]
+
+  n1.forEach(function(d) {
+    node_data.push({x:parseInt(document.getElementById(t1+'txt_'+d).getAttribute("x")
+) -document.getElementById(t1+'txt_'+d).getBBox().width/2 -2,
+     y:parseInt(document.getElementById(t1+'txt_'+d).getAttribute("y"))
+   -document.getElementById(t1+'txt_'+d).getBBox().height/2 })
+     node_data.push({x:parseInt(document.getElementById(t2+'txt_'+d).getAttribute("x"))
+     +document.getElementById(t2+'txt_'+d).getBBox().width +2,
+      y:parseInt(document.getElementById(t2+'txt_'+d).getAttribute("y"))
+    -document.getElementById(t2+'txt_'+d).getBBox().height/2})
+names.push(t1+'txt_'+d)
+names.push(t2+'txt_'+d)
+
+  });
+
+  link_data=n1.map(
+    function(d) {
+      return {
+        source: names.indexOf(t1+'txt_'+d),
+        target: names.indexOf(t2+'txt_'+d),
+        col:d
+}
+    });
+  var fbundling = ForceEdgeBundling()
+  .step_size(0.1)
+  .compatibility_threshold(.09)//0.3)
+  .nodes(node_data)
+  .edges(link_data);
+  var results = fbundling();
+
+  var d3line = d3
+  .line()
+  .x(function(d) {
+    return d.x;
+  })
+  .y(function(d) {
+    return d.y;
+  })
+  .curve(d3.curveLinear);
+  //plot the data
+  for (var i = 0; i < results.length; i++) {
+    var svg = d3.select("#svg");
+    svg.style("width", width);
+    svg.style("height", height);
+    //svg.style(      "transform",      "translate(" + window.innerWidth / 2 + "," + window.innerHeight / 2 + ")");
+
+    d3.select('svg')
+    .append("g")
+    .append("path")
+    .attr("d", d3line(results[i]))
+    .attr("id", "link" + i)
+    .style("fill", "none")
+    .attr("stroke-width", 2) //  1.3 (d) =>{(isFinite(edge_length[d.index]))? 10*window.edge_length[d] : 0.001} )
+    .style("stroke-opacity",1)//(d) =>{(isFinite(edge_length[d.index]))? 1: 0.001} )
+    .style("opacity", 1)
+    .style("stroke", cs(1-linklist.indexOf(link_data[i].col)/w2.length));
+    var p = new Path2D(d3line(results[i]));
+
+  }
+}
+
+
+
+
+print('Loaded')
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+text {
+  font: 10px sans-serif;
+}
+
+</style>
+<svg width="960" height="960"></svg>
+<script src="../graph_gen/methane.json"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="./src/colours.js"></script>
+<script src="./save.js"></script>
+<script>
+var size = new Map(
+  data.nodes.map(d => {
+    return [d.names, d.z];
+  })
+);
+//var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
+
+var cat20 = ColourScheme(viridis);
+var cat20 = d3.scaleOrdinal(d3.schemeCategory10);
+var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
+
+
+var file = "mclprogramin/out.mcl";
+//var file = '../../RopaJL/julia.out'
+var file = "/Users/wolfiex/RopaJL/reaction_classify/MLCMCM.out"  
+var mcl;
+
+d3.text(file, function(text) {
+  mcl = text.split("\n");
+  mcl.pop();
+  mcl = mcl.map(d => d.split("\t"));
+
+  //});
+
+  var toplot = {
+    name: file,
+    children: mcl.map((d, i) => {
+      return {
+        name: i,
+        children: d.map(e => {
+          return { name: e, size: 1, parent: i };
+        })
+      };
+    })
+  };
+  //size.get(e)
+  var root = toplot;
+
+  var svg = d3
+    .select("svg")
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight),
+    diameter = d3.min([svg.attr("width"), svg.attr("height")]) - 1,
+    g = svg.append("g").attr("transform", "translate(1,1)"),
+    format = d3.format(",d");
+
+  var defs = svg.append("defs");
+
+  //Create a radial Sun-like gradient
+  defs
+    .append("radialGradient")
+    .attr("id", "sun-gradient")
+    .attr("cx", "50%") //not really needed, since 50% is the default
+    .attr("cy", "50%") //not really needed, since 50% is the default
+    .attr("r", "50%") //not really needed, since 50% is the default
+    .selectAll("stop")
+    .data([
+      { offset: "0%", color: "#FFF" },
+      { offset: "80%", color: "#fff" },
+      { offset: "90%", color: "#D9D7E8" },
+      { offset: "100%", color: "#222" },
+      { offset: "100%", color: "#fff" }
+    ])
+    .enter()
+    .append("stop")
+    .attr("offset", function(d) {
+      return d.offset;
+    })
+    .attr("stop-color", function(d) {
+      return d.color;
+    });
+
+  var pack = d3.pack().size([diameter - 4, diameter - 4]);
+
+  //d3.json("flare.json", function(error, root) {
+  //if (error) throw error;
+
+  console.log(root);
+
+  root = d3
+    .hierarchy(root)
+    .sum(function(d) {
+      return d.size;
+    })
+    .sort(function(a, b) {
+      return b.value - a.value;
+    });
+
+console.log(pack(root).descendants())
+
+  var node = g
+    .selectAll(".node")
+    .data(pack(root).descendants())
+    .enter()
+    .append("g")
+    .attr("class", function(d) {
+      return d.children ? "node" : "leaf node";
+    })
+    .attr("transform", function(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    });
+
+  node.append("title").text(function(d) {
+    return d.data.name + "\n" + format(d.value);
+  });
+  console.log(toplot);
+
+/*
+      node
+      .filter(function(d) {
+        return !(!d.children);
+      })
+
+        .append("circle")
+        .attr("r", function(d) {
+          return d.r;
+        })
+        .style("fill", d => {
+          var c = d.children[0].data.parent
+          return c === undefined
+            ? 'none'//"url(#sun-gradient)"
+            : cat20(c / toplot.children.length);
+        })
+        .style("fill-opacity", d => {
+          var c = d.data.parent;
+          return c === undefined ? 0.15 : c % 2 ? 0.65 : 0.8;
+        });
+
+*/
+
+  node
+  .filter(function(d) {
+    return !d.children;
+  })
+
+  .append("path")
+      .attr("class", "hexagon")
+      .attr("d",d=> {
+        var val = 1.1 //1.2
+        var SQRT3 = Math.sqrt(3),
+      				hexRadius = d.r
+      			var hexagonPoly = [[0,-1],[SQRT3/2,0.5],[0,1],[-SQRT3/2,0.5],[-SQRT3/2,-0.5],[0,-1],[SQRT3/2,-0.5]];
+      			var hexagonPath = "m" + hexagonPoly.map(function(p){ return [p[0]*hexRadius*val,val*p[1]*hexRadius].join(','); }).join('l') + "z";
+    return  "M" + (d.r/2) + "," + (d.r/2) + hexagonPath } )
+      .style("stroke", "#F2F2F2")
+.attr('transform',d=>'translate('+-d.r/2+','+-d.r/2+')')
+    .style("fill", d => {
+      var c = d.data.parent;
+      return c === undefined
+        ? "url(#sun-gradient)"
+        : cat20(c / toplot.children.length);
+    })
+    .style("fill-opacity", d => {
+      var c = d.data.parent;
+      return c === undefined ? 0.15 : c % 2 ? 0.65 : 0.8;
+    });
+
+/*
+
+      node
+      .filter(function(d,i) {
+        if (i>0)
+        return !(!d.children);
+      })
+
+      .append("circle")
+      .attr("r", function(d) {
+        return d.r;
+      })
+        .style("fill", d => {
+          var c = d.data.parent;
+          return c === undefined
+            ? "url(#sun-gradient)"
+            : cat20(c / toplot.children.length);
+        })
+        .style("fill-opacity",0.1);
+*/
+/*
+      node
+      .filter(function(d,i) {
+        if (i==0)return 1 ;
+      })
+
+      .append("path")
+          .attr("class", "hexagon")
+          .attr("d",d=> {
+            var SQRT3 = Math.sqrt(3),
+          				hexRadius = d.r
+          			var hexagonPoly = [[0,-1],[SQRT3/2,0.5],[0,1],[-SQRT3/2,0.5],[-SQRT3/2,-0.5],[0,-1],[SQRT3/2,-0.5]];
+          			var hexagonPath = "m" + hexagonPoly.map(function(p){ return [p[0]*hexRadius*1.12, 1.12*p[1]*hexRadius].join(','); }).join('l') + "z";
+        return  "M" + (d.r/2) + "," + (d.r/2) + hexagonPath } )
+          .style("stroke", "#F2F2F2")
+    .attr('transform',d=>'translate('+-d.r/2+','+-d.r/2+')')
+        .style("fill", d => {
+          var c = d.data.parent;
+          return c === undefined
+            ? "url(#sun-gradient)"
+            : cat20(c / toplot.children.length);
+        })
+        .style("fill-opacity", d => {
+          var c = d.data.parent;
+          return c === undefined ? 0.15 : c % 2 ? 0.65 : 0.8;
+        });
+
+*/
+
+
+
+  node
+    .filter(function(d) {
+      return !d.children;
+    })
+    .append("text")
+    .attr("dy", "0.2em")
+    .text(d => d.data.name) //.substring(0, d.r / 1); });
+    .style("font-size", function(d) {
+      return Math.min(d.r, (d.r - 3) / this.getComputedTextLength() * 24) +
+        "px";
+    })
+    .on("click", function(d) {
+      console.log(d);
+    })
+    .attr("id", d => d.data.name)
+    .attr("fill", "white")
+    .style("text-anchor", "middle");
+  //document.getElementById('IC3H7O').remove()
+  //document.getElementById('HO13C5O').remove()
+});
+</script>

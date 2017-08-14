@@ -1,0 +1,52 @@
+#INLINE F90_GLOBAL 
+ REAL(dp)::M, N2, O2, RO2, H2O 
+ #ENDINLINE {above lines go into MODULE KPP_ROOT_Global}
+#INLINE F90_RCONST 
+ #ENDLINE {check rates are in correct format} 
+#INCLUDE atoms 
+#DEFVAR
+HCHO = IGNORE ;
+HNO3 = IGNORE ;
+CO = IGNORE ;
+NO = IGNORE ;
+H2 = IGNORE ;
+CH3O2 = IGNORE ;
+OH = IGNORE ;
+CH3OH = IGNORE ;
+CH4 = IGNORE ;
+CH3OOH = IGNORE ;
+HO2 = IGNORE ;
+CH3NO3 = IGNORE ;
+NO2 = IGNORE ;
+NO3 = IGNORE ;
+{ Peroxy radicals. }
+#INLINE F90_RCONST 
+ USE constants
+ !end of USE statements 
+ !
+ ! start of executable statements
+ RO2 = & 
+ C(ind_CH3O2) 
+ CALL mcm_constants(time, temp, M, N2, O2, RO2, H2O) 
+ #ENDINLINE 
+{above lines go into the SUBROUTINES UPDATE_RCONST and UPDATE_PHOTO}
+#EQUATIONS
+{1.} 	  OH + CH4 = CH3O2 : 	 9.65D-20*TEMP**2.58*EXP(-1082/TEMP) 	;
+{2.} 	  CH3O2 = CH3OH : 	 1.82D-13*EXP(416/TEMP)*0.335*RO2 	;
+{3.} 	  CH3O2 + NO = CH3NO3 : 	 3.00D-12*EXP(280/TEMP)*0.001 	;
+{4.} 	  CH3O2 = HCHO : 	 1.82D-13*EXP(416/TEMP)*0.335*RO2 	;
+{5.} 	  CH3O2 = HCHO + HO2 : 	 1.82D-13*EXP(416/TEMP)*0.33*RO2 	;
+{6.} 	  CH3O2 + HO2 = CH3OOH : 	 4.10D-13*EXP(790/TEMP) 	;
+{7.} 	  CH3O2 + NO = HCHO + HO2 + NO2 : 	 3.00D-12*EXP(280/TEMP)*0.999 	;
+{8.} 	  CH3O2 + NO3 = HCHO + HO2 + NO2 : 	 KRO2NO3*0.40 	;
+{9.} 	  OH + CH3OH = HO2 + HCHO : 	 6.01D-18*TEMP**2*EXP(170/TEMP) 	;
+{10.} 	  OH + CH3NO3 = HCHO + NO2 : 	 1.00D-14*EXP(1060/TEMP) 	;
+{11.} 	  CH3NO3 = HCHO + HO2 + NO2 : 	 J(51) 	;
+{12.} 	  HCHO = H2 + CO : 	 J(12) 	;
+{13.} 	  OH + HCHO = HO2 + CO : 	 1.20D-14*TEMP*EXP(287/TEMP) 	;
+{14.} 	  NO3 + HCHO = HO2 + CO + HNO3 : 	 5.80D-16 	;
+{15.} 	  HCHO = CO + HO2 + HO2 : 	 J(11) 	;
+{16.} 	  OH + CH3OOH = CH3O2 : 	 1.90D-12*EXP(190/TEMP) 	;
+{17.} 	  OH + CH3OOH = HCHO + OH : 	 1.00D-12*EXP(190/TEMP) 	;
+{18.} 	  CH3OOH = HCHO + HO2 + OH : 	 J(41) 	;
+

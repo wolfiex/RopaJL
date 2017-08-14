@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+
+</style>
+<body>
+
+  <script src="https://d3js.org/d3.v3.js"></script>
+
+  <script src="../save.js"></script>
+  <script src="../../graph_gen/nhept.json"></script>
+<script>
+var file = "../mclprogramin/out.mcl";
+d3 = require('d3') // npm install d3@3
+
+var nodes,links
+
+var margin = {top: 10, right: 140, bottom: 10, left: -400},
+    width = window.innerWidth - margin.left - margin.right,
+    height = window.innerHeight*2 - margin.top - margin.bottom;
+
+var cluster = d3.layout.cluster()
+    .size([height, width])
+    .sort(function(a, b) { return d3.ascending(a.name, b.name); })
+    .value(function(d) { return d.size; });
+
+var bundle = d3.layout.bundle();
+
+var line = d3.svg.line()
+    .interpolate("bundle")
+    .tension(.85)
+    .x(function(d) { return d.y; })
+    .y(function(d) { return d.x; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+///read array of links by nodes
+//make classes json
+// append colours in order of links
+//use this later
+
+//nodes from groupings...  - hodd do i subgroup?
+
+var colour = d3.scale.linear()
+        .domain([0, 1])
+        .interpolate(d3.interpolateHsl)
+        .range(["#F6089E", "#3864EB"]);
+
+var cat = d3.scale.category10()
+
+var maparray=[];
+var cols=[];
+
+d3.text(file, function(text) {
+  mcl = text.split("\n");
+  mcl.pop();
+  mcl = mcl.map(d => d.split("\t"));
+  mcl.forEach((d,i) => d.forEach(e=>{ maparray.push([e, i])}));
+
+  maparray= new Map(maparray)
+
+  var combi = d3.nest()
+    .key(function(d) { return maparray.get(d.source.names)+'.'+d.source.names })
+    .rollup(function(v) {return v.map(e=>{cols.push(e.v); return maparray.get(e.target.names)+'.'+e.target.names})})
+    .entries(data.links);
+
+
+
+    Set.prototype.difference = function(setB) {
+        var difference = new Set(this);
+        for (var elem of setB) {
+            difference.delete(elem);
+        }
+        return difference;
+    }
+
+  var toadd = [...new Set(data.links.map(d=>d.target.names)).difference( new Set(data.links.map(d=>d.source.names)  ))]
+
+
+  classes = combi.map(d=> {return {name:d.key, imports:d.values}})
+
+  toadd.forEach(e=> {classes.push({name:maparray.get(e)+'.'+e,imports:[]})})
+
+
+  //console.log(classes)
+
+   nodes = cluster.nodes(packages.root(classes)),
+   links = packages.imports(nodes);
+
+//console.log(nodes,links)
+
+
+
+  svg.selectAll(".link")
+      .data(bundle(links))
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", line)
+      .style('stroke', (d,i)=>colour(cols[i]))
+      .style('stroke-opacity', .4)
+      .style("fill",'none')
+      .attr('stroke-width',(d,i)=> 1+2.5*(1-cols[i]));
+
+  svg.selectAll(".node")
+      .data(nodes.filter(function(n) { return !n.children; }))
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+    .append("text")
+      .attr("dx", 8)
+      .attr("dy", ".31em")
+      .style('font','10px sans-serif')
+      .style("fill",(d)=> cat(maparray.get(d.key)))
+
+      .text(function(d) { return d.key; });
+});
+
+d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
+
+var packages = {
+
+  // Lazily construct the package hierarchy from class names.
+  root: function(classes) {
+    var map = {};
+
+    function find(name, data) {
+      var node = map[name], i;
+      if (!node) {
+        node = map[name] = data || {name: name, children: []};
+        if (name.length) {
+          node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
+          node.parent.children.push(node);
+          node.key = name.substring(i + 1);
+        }
+      }
+      return node;
+    }
+
+    classes.forEach(function(d) {
+      find(d.name, d);
+    });
+
+    return map[""];
+  },
+
+  // Return a list of imports for the given array of nodes.
+  imports: function(nodes) {
+    var map = {},
+        imports = [];
+
+    // Compute a map from name to node.
+    nodes.forEach(function(d) {
+      map[d.name] = d;
+    });
+
+    // For each import, construct a link from the source to target node.
+    nodes.forEach(function(d) {
+      if (d.imports) d.imports.forEach(function(i) {
+        imports.push({source: map[d.name], target: map[i]});
+      });
+    });
+
+    return imports;
+  }
+};
+
+console.log('end')
+</script>

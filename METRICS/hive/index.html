@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- /* Code adapted from https://bost.ocks.org/mike/hive/ 's simple example- for use with d3v4' */ -->
+
+<style>
+
+.link {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.axis, .node {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+    
+<script src="../../graph_gen/nhept.json"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="d3.hive.min.js"></script>
+<script src="../save.js"></script>
+<script src="../src/colours.js"></script>
+
+<script>
+var width = window.innerWidth,
+  height = window.innerHeight,
+  innerRadius = 40,
+  outerRadius = 240;
+
+var file = "../mclprogramin/out.mcl";
+//var file = '../../RopaJL/julia.out'
+
+var colourbylink = true;
+var thresh = 1; //1 minimum number of points in a line
+var mcl, svg;
+var maparray = [];
+var color = d3.scaleOrdinal(d3.schemeCategory10).domain(d3.range(20));
+//var color = d3.scaleOrdinal(d3.schemeCategory20).domain(d3.range(20));
+
+window.bluepink = d3.interpolate("#F6089E", "#3864EB");
+
+d3.text(file, function(text) {
+  mcl = text.split("\n");
+  mcl.pop();
+  mcl = mcl.map(d => d.split("\t"));
+
+  var grouped = [];
+
+  var counter = -1;
+  mcl.forEach(d => {
+    if (d.length <= thresh) {
+      grouped.push(d);
+    } else {
+      counter += 1;
+      d.forEach(e => {
+        maparray.push([e, counter]);
+      });
+    }
+  });
+
+  var groupedcolour = [];
+  counter += 1;
+
+  grouped.forEach((e, i) => {
+    e.forEach(d => {
+      maparray.push([d, counter]);
+      groupedcolour.push([d, counter + i]);
+    });
+  });
+
+  var groupings = thresh === 0 ? counter : counter + 1; ///number of groups
+  var nnodes = data.nodes.length; ///number of nodes
+  var nlinks = data.links.length; /// number of links
+
+  var angle = d3
+    .scalePoint()
+    .domain(d3.range(groupings + 1))
+    .range([0, 2 * Math.PI]),
+    radius = d3.scaleLinear().range([innerRadius, outerRadius]);
+  //console.log(groupmap)
+
+  var mymap = new Map(maparray);
+  var groupmap = new Map(groupedcolour);
+
+  var nodes = data.nodes.map(e => {
+    var x = mymap.get(e.names);
+
+    var col = x < counter ? x : groupmap.get(e.names);
+
+    return {
+      x: x,
+      y: e.z,
+      name: e.names,
+      col: col
+    };
+  });
+
+  var links = data.links.map(d => {
+    return {
+      source: { x: mymap.get(d.source.names), y: d.source.z },
+      target: { x: mymap.get(d.target.names), y: d.target.z },
+      weight: d.v
+    };
+  });
+
+  //console.log(links);
+
+  svg = d3
+    .select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  svg
+    .selectAll(".axis")
+    .data(d3.range(groupings))
+    .enter()
+    .append("line")
+    .attr("class", "axis")
+    .attr("transform", function(d) {
+      return "rotate(" + degrees(angle(d)) + ")";
+    })
+    .attr("opacity", 0.8)
+    .attr("x1", radius.range()[0])
+    .attr("x2", radius.range()[1]);
+
+  svg
+    .selectAll(".link")
+    .data(links)
+    .enter()
+    .append("path")
+    .attr("class", "link")
+    .attr(
+      "d",
+      d3.hive
+        .link()
+        .angle(function(d) {
+          return angle(d.x);
+        })
+        .radius(function(d) {
+          return radius(d.y);
+        })
+    )
+    .style(
+      "stroke",
+      d => colourbylink ? window.bluepink(d.weight) : color(d.source.x)
+    )
+    .style("stroke-opacity", 0.4);
+
+  svg
+    .selectAll(".node")
+    .data(nodes)
+    .enter()
+    .append("circle")
+    .attr("class", "node")
+    .attr("transform", function(d) {
+      return "rotate(" + degrees(angle(d.x)) + ")";
+    })
+    .attr("cx", function(d) {
+      return radius(d.y);
+    })
+    .attr("r", d => 2 + d.y * 4)
+    .style("fill", function(d) {
+      return d.col < counter ? color(d.x) : "white";
+    })
+    .style("stroke", d => d.col < counter ? "black" : color(d.col))
+    .on("mouseover", function(d, i) {
+      console.log(d);
+    })
+    .on("click", selectgroup);
+});
+
+function selectgroup(d) {
+  //d.x
+  var cstyle = colourbylink ? window.bluepink : color;
+
+  c = d.col;
+  d = d.x;
+
+  svg
+    .selectAll(".link")
+    .attr(
+      "opacity",
+      e =>
+        e.source.x === d ? 1 : e.target.x === d ? !colourbylink ? 0.7 : 0.4 : 0
+    )
+    .style("stroke", e => {
+      return e.source.x === d
+        ? cstyle(colourbylink ? e.weight : e.source.col)
+        : e.target.x === d ? "grey" : null;
+    }); //cstyle(colourbylink ? d.v : e.source.x)
+}
+
+function degrees(radians) {
+  return radians / Math.PI * 180 - 90;
+}
+</script>
