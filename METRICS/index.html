@@ -33,26 +33,26 @@ var size = new Map(
   })
 );
 */
+var what= 'cri'
+
 window.output = [] // output for getgroupdata
 //var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
 //npm install gexf
 var fs = require("fs");
-//var gexf = require("gexf");
-//var graph = gexf.parse(fs.readFileSync("/Users/wolfiex/RopaJL/reaction_classify/togephi.gexf", "utf8"));
+var gexf = require("gexf");
+var graph = gexf.parse(fs.readFileSync(what +".gexf", "utf8"));
 
-//var size = new Map(graph.nodes.map(d=> {return [d.label,d.attributes.att2]}))
-
+var size = new Map(graph.nodes.map(d=> {return [d.label,d.attributes[0]]}))
+var primary = graph.nodes.filter(d=> {if (d.attributes[1] >0) return 1}).map(d=>d.id)
 
 
 var cat20 = d3.scaleOrdinal(d3.schemeCategory10);
 var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
-
 var cat20 = ColourScheme(visual_cinnamon);
-var cat20 = ColourScheme(viridis);
+//var cat20 = ColourScheme(viridis);
 
 
-var file = "cri.out"
-//var file = '../../RopaJL/julia.out'
+var file = what +".out"
 var mcl, view;
 
 d3.text(file, function(text) {
@@ -60,15 +60,13 @@ d3.text(file, function(text) {
   mcl.pop();
   mcl = mcl.map(d => d.split("\t"));
 
-  //});
-
   var toplot = {
     name: file,
     children: mcl.map((d, i) => {
       return {
         name: i,
         children: d.map(e => {
-          return { name: e, size: 1, parent: i };//
+          return { name: e, size: Math.pow(size.get(e),4), parent: i };//
         })
       };
     })
@@ -85,20 +83,30 @@ d3.text(file, function(text) {
     format = d3.format(",d");
 
   var defs = svg.append("defs");
-
   //Create a radial Sun-like gradient
+  
+d3.range(mcl.length+1).forEach(d=>{
+  var col = cat20(d/(mcl.length+1))
+  
+  console.log(rgb2hex(col),d/(mcl.length+1),col)
+  
   defs
     .append("radialGradient")
-    .attr("id", "sun-gradient")
+    .attr("id", "sun-gradient"+d)
     .attr("cx", "50%") //not really needed, since 50% is the default
     .attr("cy", "50%") //not really needed, since 50% is the default
-    .attr("r", "50%") //not really needed, since 50% is the default
+    .attr("r", "51%") //not really needed, since 50% is the default
     .selectAll("stop")
     .data([
-      { offset: "0%", color: "#FFF" },
-      { offset: "80%", color: "#fff" },
-      { offset: "90%", color: "#D9D7E8" },
-      { offset: "100%", color: "#222" },
+        
+          { offset: "0%", color: '#ffffff'},
+          { offset: "60%", color: '#ffffff'},
+          
+      { offset: "90%", color: "#ffffff" },
+      { offset: "96%", color: "#D9D7E8" },
+      
+      { offset: "97%", color: ''+rgb2hex(col) },
+       { offset: "100%", color: "#222" },
       { offset: "100%", color: "#fff" }
     ])
     .enter()
@@ -110,13 +118,10 @@ d3.text(file, function(text) {
       return d.color;
     });
 
+
+})
   var pack = d3.pack().size([diameter - 4, diameter - 4]);
-
-  //d3.json("flare.json", function(error, root) {
-  //if (error) throw error;
-
-
-d3.range(mcl.length).map(d=> get_groupdata(d+1))
+isNumeric = /^[-+]?(\d+|\d+\.\d*|\d*\.\d+)$/;
 
 
 setTimeout(function(){
@@ -124,19 +129,14 @@ setTimeout(function(){
 
 groupcolours = window.output.map(d=>d[1])
 colscale = d3.scaleLinear().domain([0,d3.max(groupcolours)]).range([0,1])
-
 groupcolours= groupcolours.map(d=> Math.sqrt(colscale(d)))
-
 console.log(groupcolours);
-
-
-
 
 console.log(root);
 
   root = d3
     .hierarchy(root)
-    .sum(function(d) {
+    .sum(function(d) { 
       return d.size;
     })
     .sort(function(a, b) {
@@ -159,22 +159,30 @@ console.log(root);
   node.append("title").text(function(d) {
     return d.data.name + "\n" + format(d.value);
   });
-  console.log(toplot);
+
+
 
   node
     .append("circle")
-    .attr("r", function(d) {
-      return d.r;
+    .attr("r",d=>{
+return d.r
     })
     .style("fill", d => {
       var c = d.data.parent;
       return c === undefined
-        ? "url(#sun-gradient)"
+        ? "url(#sun-gradient"+d.data.name+")"
         : cat20(groupcolours[c])//cat20(c / toplot.children.length)//cat20(c / toplot.children.length);
     })
     .style("fill-opacity", d => {
       var c = d.data.parent;
-      return c === undefined ? 0.15 : c % 2 ? 0.65 : 0.8;
+      return c === undefined ? 0.25 : c % 2 ? 0.65 : 0.8;
+    })
+    .style("stroke", d => {
+      if  (primary.indexOf(d.data.name) >-1){ return '#0066FF'}
+      //else if (isNumeric.test(d.data.name)) {return 'grey'}
+    })
+    .style("stroke-width", d => {
+      if  (primary.indexOf(d.data.name) >-1){ return 2}
     });
 
   node
@@ -185,10 +193,12 @@ console.log(root);
     .attr("dy", "0.2em")
     .text(d => d.r>1?d.data.name:'') //.substring(0, d.r / 1); });
     .style("font-size", function(d) {
-        return '2px'
-      return Math.min(d.r, (d.r - 3) / this.getComputedTextLength() * 25)-2 +
-        "px";
+        
+      a =  Math.min(d.r, (d.r - 3) / this.getComputedTextLength() * 24)-1
+      b =  a<0? 1:a
+      return b+'px'
     })
+    .style('alignment-baseline','middle')
     .on("click", function(d) {
       console.log(d);
     })
@@ -214,4 +224,12 @@ d3.text('/Users/wolfiex/RopaJL/reaction_classify/grouped/group.'+x , function(te
     return 1
 })
  }
+ 
+ function rgb2hex(rgb){
+ rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+ return (rgb && rgb.length === 4) ? "#" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
 </script>
