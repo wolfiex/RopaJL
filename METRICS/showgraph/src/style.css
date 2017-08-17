@@ -1,0 +1,40 @@
+BODY, H1, H2, H3, H4, H5, H6, TH, TD {
+font-family: arial, helvetica, sans-serif;
+}
+#right_col {
+  width: 30%;
+height:100%;
+}
+#left_col {
+height:100%;
+}
+
+#content{
+  display:table;
+}
+#content>div{
+display:table-cell;
+vertical-align:top;
+padding:0% 2%;
+}
+#portrait{
+width:100%;
+height:auto;
+}
+#teasers{
+/* the following turns out to be relative to the whole page */
+margin-left: 30%;
+}
+.teaserimage{
+float:right;
+width:100%;
+padding:2% 0%;
+}
+.teasertext{
+font-size:1.2vw;
+float:left;
+/* our left_col is 70% of the full page, 30/70 is 42.8 */
+width:42.8%;
+margin-left:-42.8%;
+}
+

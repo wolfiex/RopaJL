@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>D3 v4 - force layout</title>
+</head>
+
+<body>
+<div id="graph"></div>
+<svg id = 'svg'style='width:100%;height:100%'></svg>
+<script src="./src/netcdfjs.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script type="text/javascript" src="./src/d3-ForceEdgeBundling.js"></script>
+<script>
+var data;
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+(function newfile() {
+  file = "nhept";
+
+  const fs = require("fs");
+  const data = fs.readFileSync(
+    __dirname.match(/(.*\/)/)[1] + "netcdf_results/" + file + ".nc"
+  );
+  reader = new netcdfjs(data);
+  ncparse(reader);
+})();
+
+function ncparse(reader) {
+  //all parts we require from the netcdf file
+  reader.dimensions.forEach(
+    function(d) {
+      dims[d.name] = d.size;
+    },
+    dims = {}
+  );
+  const dict = JSON.parse(reader.getDataVariable("nodes").join(""));
+  const tar = reader.getDataVariable("target");
+  const src = reader.getDataVariable("source");
+
+  // creates reverse dictionary rdict below
+  var rdict;
+  Object.keys(dict).forEach(
+    function(d) {
+      var i = dict[d];
+      rdict[i] = d;
+    },
+    rdict = {}
+  );
+
+  var nodes = d3.range(Object.keys(dict).length).map(i => {
+    var z = Math.random();
+    return {
+      names: rdict[i],
+      id: i,
+      x: 0.5 - Math.random(),
+      y: 0.5 - Math.random(),
+      z: 0.5 - Math.random()
+    };
+  });
+
+  console.log(nodes[33]);
+  var links = d3.range(src.length).map((_, i) => {
+    return { source: src[i], target: tar[i] };
+  });
+
+  data = { nodes, links };
+
+  draw(data);
+}
+
+function draw(data) {
+  console.log(data.nodes[22]);
+  var simulation = d3
+    .forceSimulation()
+    .force("link", d3.forceLink().id(d => parseInt(d.id)))
+    .force("charge", d3.forceManyBody().strength(-30))
+    //.force("center", d3.forceCenter(width / 2, height / 2));
+    .force("y", d3.forceY(width / 2))
+    .force("x", d3.forceX(height / 2));
+
+  var svg = d3.select("svg");
+  svg.attr("width", width);
+  svg.attr("height", height);
+  svg
+    .selectAll("g")
+    .attr("transform", "translate(" + width + "," + height + ")");
+
+  console.log(data.nodes[22]);
+
+  var ticked = function() {
+    /*
+    node
+      .attr("cx", function(d) {
+        return d.x;
+      })
+      .attr("cy", function(d) {
+        return d.y;
+      });
+      */
+  };
+
+  simulation.nodes(data.nodes).on("tick", ticked);
+  simulation.force("link").links(data.links);
+
+  console.log(data.nodes[22]);
+}
+
+class nc2D {
+  constructor(name, width, arr_type) {
+    //Float32Array
+    this.width = dims[width];
+    this.arr_type = arr_type;
+    this.data = new arr_type(reader.getDataVariable(name));
+  }
+}
+nc2D.prototype.row = function(index) {
+  var start = index * this.width;
+  return new this.arr_type(this.data.slice(start, start + this.width));
+};
+</script>
+
+
+
+</body>
+</html>

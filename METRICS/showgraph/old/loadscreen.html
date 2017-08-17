@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ >
+	<title>Gooey Effect</title>
+
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Fredericka+the+Great'  rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+
+	<div id="cont" class="container-fluid">
+		<div class="row text-center">
+			<div class="col-sm-12 column text-center">
+				<div class="chart"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	//////////////////////////////////////////////////////////////
+	//////////////////////// Initiate ////////////////////////////
+	//////////////////////////////////////////////////////////////
+d3.select('body').style('background-color', '#222');
+
+	var w = window,
+		d = document,
+		e = d.documentElement,
+		g = d.getElementsByTagName('body')[0],
+		x = w.innerWidth || e.clientWidth || g.clientWidth,
+		totalHeight = w.innerHeight || e.clientHeight || g.clientHeight;
+
+	var margin = {top: 30, right: 30, bottom: 30, left: 30};
+		width = window.innerWidth
+		height = window.innerHeight;
+
+	//Create scale
+	var xScale = d3.scale.linear()
+		.domain([-1.5, 1.5])
+		.range([-width/2, width/2]);
+
+	//Create SVG
+	var svg = d3.select(".chart").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+		.style("filter", "url(#gooey)") //Set the filter on the container svg
+		.attr("transform", "translate(" + (width/2 + margin.left) + "," +(height/2 +  margin.top) + ")");
+
+
+
+
+
+
+
+	//SVG filter for the gooey effect
+	//Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+	var defs = svg.append('defs');
+	var filter = defs.append('filter').attr('id','gooey');
+	filter.append('feGaussianBlur')
+		.attr('in','SourceGraphic')
+		.attr('stdDeviation','10')
+		.attr('result','blur');
+	filter.append('feColorMatrix')
+		.attr('in','blur')
+		.attr('mode','matrix')
+		.attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+		.attr('result','gooey');
+	filter.append('feComposite')
+		.attr('in','SourceGraphic')
+		.attr('in2','gooey')
+		.attr('operator','atop');
+
+
+
+
+	//Create the circles that will move out and in the center circle
+ var nodes = parent.window.graph.nodes;
+ var colour = parent.window.color;
+  var steps = nodes.length;
+  nodes.filter(function(d){d.pos = (d.index/steps)*(16*Math.PI); d.percent = d.index/steps; data.push(d) },data=[]);
+  //console.log(data);
+	svg.selectAll(".flyCircle")
+		//.data(d3.range(steps).map(function(num) {return (num/steps)*(2*Math.PI); }))
+    .data(data)
+    .enter().append("circle")
+			.attr("class", "flyCircle")
+			.attr("cx", 0)
+			.attr("cy", 0)
+			.attr("r", function(d){return 8+(20*d.s)/4})
+			.style("fill",function(d){return colour(d.s)})
+			.call(update);
+
+
+
+      defs = svg.append("defs")
+
+         //Create two separate gradients for the main and mini bar - just because it looks fun
+         createGradient("gradient-rainbow-main", "60%");
+         createGradient("gradient-rainbow-mini", "13%");
+         createGradient("gradient-rainbow-dan", "50%");
+
+         //Create a gradient
+           function createGradient(idName, endPerc) {
+
+             var coloursRainbow = ["#EFB605", "#E9A501", "#E48405", "#E34914", "#DE0D2B", "#CF003E", "#B90050", "#A30F65", "#8E297E", "#724097", "#4F54A8", "#296DA4", "#0C8B8C", "#0DA471", "#39B15E", "#7EB852"];
+
+             defs.append("linearGradient")
+               .attr("id", idName)
+               .attr("gradientUnits", "userSpaceOnUse")
+               .attr("x1", "0%").attr("y1", "0%")
+               .attr("x2", endPerc).attr("y2", "0%")
+               .selectAll("stop")
+               .data(d3.range(x).map(colour))
+               .enter().append("stop")
+               .attr("offset", function(d,i) { return i/(coloursRainbow.length-1); })
+               .attr("stop-color", function(d) { return d; });
+           }//createGradient
+
+
+      //Append circle at center
+    	svg.append("circle")
+    			.attr("class", "centerCircle")
+    			.attr("cx", 0)
+    			.attr("cy", 0)
+    			.attr("r", width/18)
+          .attr("transform", "rotate(30)")
+          .style("fill","url(#gradient-rainbow-dan)");
+    			//.("fill", "'#222'");
+
+          svg.append("text")
+                  .attr('id','myelement')
+                  .style('font-family',"Fredericka the Great")
+                  .attr("text-anchor", "middle")
+                  .attr("fill", "'#222'");
+                  //.style('fill','red').text('Loading...');
+window.dummy=0
+nodes.filter(function(d){names.push([d.name,colour[d.s]])},names=[])
+
+
+setInterval(function() {
+  window.dummy +=1;
+  //console.log(window.dummy)
+  if (window.dummy>steps){window.dummy=0;if (parent.window.dummy.done) {
+    window.update = function(){console.log('loaded')};
+    d3.selectAll('svg').transition().duration(5000).style('opacity',0)
+    setTimeout(function(){parent.window.ifr.src='';parent.window.animate=true}, 5000)
+
+  }};
+  d3.selectAll('text').text(names[window.dummy][0]);
+  //d3.selectAll('text').style('fill', names[window.dummy][1])
+  ;
+}, 250)
+
+
+	//Continuously moves the circles outward and inward
+	function update() {
+			var circle = d3.selectAll(".flyCircle");
+			var dur = 1000,
+				del = 250;
+
+
+
+
+
+
+			(function repeat() {
+        //window.dummy=-1;
+/*8        var interval = setInterval(function() {
+          window.dummy +=1;
+          console.log(window.dummy);
+          var d = nodes[window.dummy]
+          d3.selectAll('text').text(d.names);
+          d3.selectAll('text').style("fill",function(d){return colour(d.s)}); //using a different dataset
+
+        }, del)
+        clearInterval(interval);
+*/
+				circle
+					.transition("outward").duration(dur).delay(function(d,i) { return i*del; })
+						.attr("cy", function(d) { return (0.5+d.percent/2)*xScale(Math.sin(d.pos)); })
+						.attr("cx", function(d,i) { return (0.5+d.percent/2)*xScale(Math.cos(d.pos)); })
+					.transition("inward").duration(dur).delay(function(d,i) { return steps*del + i*del; })
+						.attr("cx", 0)
+						.attr("cy", 0)
+					.call(endall);//, repeat);
+
+
+
+
+
+			})();
+	}//update
+
+	//Taken from https://groups.google.com/forum/#!msg/d3-js/WC_7Xi6VV50/j1HK0vIWI-EJ
+	//Calls a function only after the total transition ends
+	function endall(transition, callback) {
+		var n = 0;
+		transition
+			.each(function() { ++n; })
+			.each("end", function() { if (!--n) callback.apply(this, arguments); });
+	}//endall
+
+
+
+
+	</script>
+  </body>
+
+
+</html>

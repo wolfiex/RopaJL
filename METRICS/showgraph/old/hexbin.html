@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.hexagon {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+
+
+/* enables CSS3 transition for simple collapses, accordion and also navbar in responsive view */
+.collapse { transition: height .3s ease-out; /*-webkit-transition: height .3s ease-out*/ }
+
+/* styles the close button for the dismissible popovers */
+.popover .close { position: absolute; top: 7px; right: 10px; }
+
+button{
+  margin:auto;
+  display:block;
+}
+
+
+.button1 {
+    background-color: white;
+    color: black;
+    padding: 4px 13px;
+    font-size: 16px;
+    position:absolute;
+    font-family:Ailerons;
+
+    top:260px;
+    border: 2px solid #4CAF50; /* Green */
+}
+
+.button1:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.wrapper {
+    text-align: center;
+}
+
+@font-face {
+font-family: Ailerons;
+src: url("Ailerons-Typeface.otf") format("opentype");
+}
+
+
+</style>
+<body>
+<div class="wrapper">
+  <button id='startbtn' class="button button1 button1:hover ">Select File</button>
+</div>
+<script src="./d3.v4.min.js"></script>
+<script src="d3-hexbin.v0.2.min.js"></script>
+
+<script>
+
+var width = 800,
+    height = 440,
+    size = 25,
+    i = -1,
+    n = 1000,
+    k = 30; // samples to replace per frame
+
+var randomX = d3.randomNormal(width / 2, 80),
+    randomY = d3.randomNormal(height / 2, 80),
+    points = d3.range(n).map(function() { return [randomX(), randomY()]; });
+
+var color = d3.scaleLinear()
+    .domain([0, size])
+    .range(["white", "steelblue"])
+    .interpolate(d3.interpolateLab);
+
+var hexbin = d3_hexbin.hexbin()
+    //.size([width, height])
+    .radius(size);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var hexagon = svg.append("g")
+    .attr("class", "hexagons")
+  .selectAll("path")
+    .data(hexbin(points))
+  .enter().append("path")
+    .attr("d", hexbin.hexagon(size-.5))
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d) { return color(d.length); });
+
+svg.on('mousemove',function() {
+  coordinates = d3.mouse(this);
+  randomX = d3.randomNormal(coordinates[0], 80),
+  randomY = d3.randomNormal(coordinates[1], 80);
+
+  for (var j = 0; j < k; ++j) {
+    i = (i + 1) % n;
+    points[i][0] = randomX();
+    points[i][1] = randomY();
+  }
+
+  hexagon = hexagon
+      .data(hexbin(points), function(d) { return d.i + "," + d.j; });
+
+  hexagon.exit().remove();
+
+  hexagon.enter().append("path")
+      .attr("d", hexbin.hexagon(size-.5))
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .style("fill", function(d) { return color(d.length); });
+
+});
+
+
+const fileManagerBtn = document.getElementById('startbtn')
+
+
+fileManagerBtn.addEventListener('click', function(){require('electron').remote.dialog.showOpenDialog(function (fileNames) {
+        // fileNames is an array that contains all the selected
+       if(fileNames === undefined){
+            console.log("No file selected");
+       }else{
+            console.log(fileNames[0]);
+
+       }
+})
+}, {defaultPath : './',
+  filters: [
+    {name: 'Images', extensions: ['jpg', 'png', 'gif']},
+    {name: 'Movies', extensions: ['mkv', 'avi', 'mp4']},
+    {name: 'Custom File Type', extensions: ['as']},
+    {name: 'All Files', extensions: ['*']}
+  ]
+})
+
+
+svg.append("text")
+        .attr("x", width/2)
+        .attr("y", height/2)
+        .style("font-size","130px")
+        //.attr("dy", ".35em")
+        .attr('id','myelement')
+        .style('font-family',"Ailerons")
+        .attr("text-anchor", "middle")
+        .text('VisACC')
+        .style("fill", "#222");
+        //.style("fill","url(#bluepurple-gradient)");
+
+svg.append("text")
+                .attr("x", width/2)
+                .attr("y", height/2+ 130)
+                .style("font-size","44px")
+                //.attr("dy", ".35em")
+                .attr('id','myelement')
+                .style('font-family',"Ailerons")
+                .attr("text-anchor", "middle")
+                .text('version 1.0')
+                .attr("fill", "'#222'");
+
+d3.selectAll('#startbtn').style('left',((width/2) - parseFloat(d3.selectAll('#startbtn').style('width'))/2) + 'px')
+
+</script>
