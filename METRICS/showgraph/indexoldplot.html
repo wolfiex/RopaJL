@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+@import url(./src/style.css);
+@import url(./index.css);
+
+
+svg .text {
+font-family:"open-sans",'Open-Sans' ;
+}
+
+
+</style>
+
+
+<script src="./src/d3.v4.min.js"></script>
+
+<script src="./src/colours.js"></script>
+<!--script src="./graphfunctions.js"></script-->
+
+<script src ="./index.js"></script>
+<script src="./postfunctions.js"></script>
+<script src="./save.js"></script>
+<link src='./src/fonts'  rel='stylesheet' type='text/css'>
+
+<script src ="./index.js"></script>
+
+<!-- href='https://fonts.googleapis.com/css?family=Open+Sans|Lato|Vidaloka|Fira+Sans|Fredericka+the+Great|Ubuntu'
+-->
+<!--link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"-->
+
+<script type="text/javascript" src="./src/d3-ForceEdgeBundling.js"></script>
+
+<body>
+
+
+<svg id = 'svg'>  </svg>
+
+
+</body>
+
+
+<script>
+//d3.select("selector").call(d3.zoom().scaleExtent([-0, 80]).on("zoom", zoomed));
+
+//.style('background-color', '#222')
+//d3.select("body").style("background-color", "#222"); // bg colour
+window.color = d3.interpolateCubehelixLong.gamma(4.1)("#F6089E", "#3864EB");
+
+window.blues = ColourScheme(blues_fade,inverse=true,false)
+window.bluepink = d3.interpolate("#F6089E", "#3864EB"); //https://github.com/d3/d3-scale
+window.color1 = d3.interpolate("#222", "blue"); ///'blue',"#F6089E");
+
+window.tert= d3.scaleOrdinal(d3.schemeCategory10); //['#6aa506', '#066aa5','#a54106']
+
+///se;lection box
+//http://bl.ocks.org/lgersman/5311083
+
+window.nodes = data.nodes
+window.links = data.links
+//gradedge()
+//edgebundle()
+
+
+
+draw()
+
+
+  //var replace = new Map(dt.map(d=>{return [d.name,d]}))
+  //window.data.nodes = window.nodes.map(d=>{var m = replace.get(d.names); d.x=x(m.x);d.y=y(m.y); return d})
+
+
+</script>
