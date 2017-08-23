@@ -13,8 +13,6 @@ body {
   shape-rendering: crispEdges;
 }
 
-.dot {
-  stroke: #000;
 }
 
 
@@ -24,7 +22,7 @@ body {
         }
 
         .lasso .drawn {
-            fill-opacity:.05 ;
+            fill-opacity:.5 ;
         }
 
         .lasso .loop_close {
@@ -55,6 +53,7 @@ body {
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script src = "lasso.js"></script>
 <script src = "colours.js"></script>
+<script src="../save.js"></script>
 <script>
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -82,6 +81,17 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 function pythag(x,y){return Math.sqrt(Math.pow(x,2)+Math.pow(y,2))}
+
+
+
+what = '../lon_mcm'
+    var fs = require("fs");
+    var gexf = require("gexf");
+    window.graph = gexf.parse(fs.readFileSync(what +".gexf", "utf8"));
+
+dict = {}
+graph.nodes.forEach(d=>{dict[d.id]=d.attributes})
+
 
 d3.csv("tsneresults.csv", function(error, data) {
   window.data=data
@@ -121,10 +131,11 @@ var circles=  svg.selectAll(".dot")
     .enter().append("circle")
       .attr("id",function(d,i) {return d[''];}) // added
       .attr("class", "dot")
-      .attr("r", 3.5)
+      .attr("r", d=> 1+Math.pow(dict[d['']][0],3)*5.5)
       .attr("cx", function(d) { return x(d.x_00); })
       .attr("cy", function(d) { return y(d.y_00); })
-
+      .style('stroke'     ,d=> dict[d['']][1]?'#0066FF':'#000')
+      .attr('stroke-width',d=>dict[d['']][1]?2:1)
       .style("fill", function(d) { return color(0.7*pythag(d.x_00/50,d.y_00/50)); })
       .on('mouseover',d=>console.log(d))
 

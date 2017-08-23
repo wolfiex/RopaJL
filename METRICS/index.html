@@ -33,7 +33,7 @@ var size = new Map(
   })
 );
 */
-var what= 'cri'
+var what= 'lon_mcm'
 
 window.output = [] // output for getgroupdata
 //var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
@@ -103,7 +103,7 @@ d3.range(mcl.length+1).forEach(d=>{
           { offset: "60%", color: '#ffffff'},
           
       { offset: "90%", color: "#ffffff" },
-      { offset: "96%", color: "#D9D7E8" },
+      { offset: "95%", color: "#D9D7E8" },
       
       { offset: "97%", color: ''+rgb2hex(col) },
        { offset: "100%", color: "#222" },
@@ -175,7 +175,7 @@ return d.r
     })
     .style("fill-opacity", d => {
       var c = d.data.parent;
-      return c === undefined ? 0.25 : c % 2 ? 0.65 : 0.8;
+      return c === undefined ? 1 : c % 2 ? 0.65 : 0.8;
     })
     .style("stroke", d => {
       if  (primary.indexOf(d.data.name) >-1){ return '#0066FF'}
