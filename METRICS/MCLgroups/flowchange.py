@@ -70,8 +70,8 @@ def mainfunction(iflow, species = False):
     #print sortedspecs
     return [ndict[i] for i in sortedspecs]
 
-inputflows = np.linspace(1,10,41)#[2,3,4,5,6,7,8]#1.5 - 5
-inputflows = [i for i in reversed(inputflows[1:])]
+inputflows = np.linspace(1,10,19)#[2,3,4,5,6,7,8]#1.5 - 5
+inputflows = [i for i in reversed(filter(lambda x: x>1.6,inputflows))]
 
 allruns  = multiprocessing.Pool(1).map(mainfunction, inputflows)
 
