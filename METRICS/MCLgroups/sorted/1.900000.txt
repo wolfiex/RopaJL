@@ -1,0 +1,145 @@
+2
+      CO24C53O2      CO24C53OOH 
+         C534O2         C534OOH 
+      CO23C54O2      CO23C54OOH 
+         C535O2         C535OOH 
+      C3MDIALO2      C3MDIALOOH 
+       C3DIOLO2       C3DIOLOOH 
+       NPXYFUO2       NPXYFUOOH 
+       CONM2CO3        CONM2PAN 
+      MMALNACO3       MMALNAPAN 
+     MC3CODBCO3      MC3CODBPAN 
+     C3MCODBCO3      C3MCODBPAN 
+      MMALNBCO3      MMALNBCO3H 
+        HMVKNO3      HMVKNGLYOX 
+       CHOPRNO3        PRONO3AO 
+         IEPOXA        ISOPAOOH 
+     C58NO3CO2H      MMALNACO2H 
+         C42AOH         NMGLYOX 
+        MEKBOOH         BUT2OLO 
+         MVKOOH          VGLYOX 
+          INCCO        INCGLYOX 
+3
+         C5PAN2        CO2C4CO3       CO2C4CO3H 
+         C510O2          C510OH         C510OOH 
+         C530O2         C530NO3         C530OOH 
+        HO3C4O2        HO3C4NO3        HO3C4OOH 
+         C525O2         C525OOH          C524CO 
+        NC526O2        NC526OOH      ME3BU3ECHO 
+      IPROPOLO2         PROLNO3      IPROPOLO2H 
+     MCOCOMOXO2      C23O3CCO2H      MCOCOMOOOH 
+       CO2N3CO3       CO2N3CO3H        CO2N3PAN 
+       HO3C4CO3          C5PAN8       HO3C4CO3H 
+         NC4CO3         C5PAN18         NC4CO3H 
+         HMACO3         HMACO3H           HMPAN 
+      INB1NACO3      INB1NACO3H       INB1NAPAN 
+      INB1NBCO3      INB1NBCO3H       INB1NBPAN 
+        HC4CCO3         C5PAN19        HC4CCO3H 
+      M3BU3ECO3      M3BU3ECO3H       M3BU3EPAN 
+        INDHCO3        INDHCO3H         INDHPAN 
+        INANCO3        INANCO3H         INANPAN 
+        INCNCO3        INCNCO3H         INCNPAN 
+       CH3COCO3        PPACLOOA        CH3COPAN 
+      INB1HPCO3      INB1HPCO3H       INB1HPPAN 
+       INDHPCO3       INDHPCO3H        INDHPPAN 
+         ACLOOA         CISOPCO         HC4ACHO 
+       ETHENO3O            INAO       NO3CH2CHO 
+4
+         C4PAN2       HO13C3CO3      HO13C3CO3H       HO13C3CHO 
+         C533O2         C533OOH          C532CO           M3FOO 
+        HO1C5O2        HO1C5NO3        HO1C5OOH            PEAO 
+        NC3H7O2        NC3H7NO3         BUTACID        NC3H7OOH 
+          INAO2           INAOH          INAOOH        INAHPCHO 
+        PXYFUO2        PXYFUONE        PXYFUOOH         PXYFUOH 
+         C4PAN3        HO2C3CO3       HO2C3CO2H       HO2C3CO3H 
+       HPC52CO3       HPC52CO3H        HPC52OOH        HPC52PAN 
+       HO3C3CO3       HO3C3CO3H        HO3C3PAN        HO3C3CHO 
+       PRNO3CO3       PRNO3CO2H       PRNO3CO3H        PRNO3PAN 
+         C47CO3         C47CO3H          C47PAN          C47CHO 
+           ACO3           ACO3H          ACRPAN            MVKO 
+         IEACO3         IEACO3H          IEAPAN          IEACHO 
+         IECCO3         IECCO3H          IECPAN          IECCHO 
+        INAHCO3        INAHCO3H         INAHPAN         INAHCHO 
+      HCOCOHCO3      HCOCOHCO3H       HCOCOHPAN       C32OH13CO 
+     CH3CHOHCO3      IPROPOLPAN      CH3CHOHCHO      IPROPOLPER 
+      INANCOCO3      INANCOCO3H       INANCOPAN       INANCOCHO 
+       IPRHOCO3          C4PAN5       IPRHOCO3H        IBUTALOH 
+       INAHPCO3       INAHPCO2H       INAHPCO3H        INAHPPAN 
+5
+         C4PAN1       HOC3H6CO3      HOC3H6CO3H          HO1C4O       HOC3H6CHO 
+         C5PAN1        HO2C4CO3       HO2C4CO3H          HO1C5O        HO2C4CHO 
+         INB2O2          INANO3         INB2OOH          INANCO         INANCHO 
+        HO1C3O2        HO1C3NO3      HOC3H6CO2H        HOC3H6OH        HO1C3OOH 
+        NC524O2        NC524NO3         NC524OH        NC524OOH        DNC524CO 
+       CO2C54O2         MPRKNO3          CO24C5        HO2CO4C5        MPRKBOOH 
+     HOCO3C54O2       HO14CO3C5       HO1CO34C5      HOCO3C5OOH          DIEKBO 
+        HO1C4O2        HO1C4NO3        HOC4H8OH        HO1C4OOH          NC4H9O 
+       HO13C4O2       HO13C4NO3        HO13C4OH       HO13C4OOH          HO2C4O 
+     HO1CO3C4O2       HO14CO2C4      HOCO3C4OOH           MEKAO       HO1CO3CHO 
+        HO2C5O2        HO2C5NO3         HO2C5OH        HO2C5OOH            PEBO 
+         C2H5O2         C2H5NO3            C2H6        PROPACID         C2H5OOH 
+       HYPROPO2       PROPOLNO3       HYPROPO2H          ACETOL         PROPGLY 
+       BIACETO2        C4CO2OOH       BIACETOOH          DHPMEK       CO23C3CHO 
+         C31CO3         C31CO3H          C31PAN           C531O         CHOOCHO 
+      NO3CH2CO3      NO3CH2CO2H      INANCOCO2H      NO3CH2CO3H       NO3CH2PAN 
+      C58NO3CO3          C58NO3      C58NO3CO3H      MMALNACO3H       C58NO3PAN 
+          MACO3             MAE          MACO3H            HMML            MPAN 
+      CHOMOHCO3      CHOMOHCO3H       C3MDIALOH       MACROHOOH          MACROH 
+       MACRNCO3       MACRNCO2H       CONM2CO3H       MACRNCO3H        MACRNPAN 
+      C2OHOCO2H        OCCOHCOH       C2OHOCOOH           A2PAN         A2PANOO 
+6
+         C3PAN1       HOC2H4CO3      HOC2H4CO3H          HO1C3O       HO1CO3C4O       HOC2H4CHO 
+        HO2C4O2        HO2C4NO3       HO2C4CO2H         HO2C4OH        HO2C4OOH        HO2C3CHO 
+       HO13C5O2       HO13C5NO3         HO134C5       HO13CO4C5       HO13C5OOH          HO3C5O 
+     HO2CO4C5O2       HO14CO2C5      HOCO4C5OOH         CO2C54O       CO24C4CHO       HO2CO4CHO 
+          C58O2          HC4CO3         HC4CO3H           C58OH          HC4PAN          HC4CHO 
+          INDO2        ISOPDNO3          NC4OOA           INDOH          INDOOH        INDHPCHO 
+     C4M2ALOHO2       C4M2AL2OH          C58OOH      C4MALOHOOH         IEB1CHO         IEB4CHO 
+      C57NO3CO3          C57NO3     C4M2ALOHNO3      C57NO3CO3H       C57NO3PAN           INB2O 
+7
+        C4PAN10       H13CO2CO3       MVKOHANO3      H13CO2CO3H        MVKOHAOH       MVKOHAOOH       H13CO2CHO 
+          C59O2           HCOC5          IEPOXC         ISOPDOH         IEC2OOH         C526OOH          C59OOH 
+       MVKOHAO2        MVKOHBO2       H14CO23C4         HMGLOOA           MVKOH       MVKOHBOOH          HMGLOO 
+        DIEKAO2         DIEKBO2         DIEKAOH        DIEKAOOH          PECOOH            DIEK            PECO 
+     MC3CODBCO2      C3MCODBCO2      MMALANHYO2      MC3ODBCO2H      MMALNHY2OH      MMALNHYOOH        MMALANHY 
+         MEKCO2      NBUTOLANO3       NBUTOLAOH          MEKCOH      NBUTOLAOOH         MEKCOOH          EGLYOX 
+       HOCH2CO3     HOCH2COCO2H       HOCH2CO3H            PHAN            C59O         MVKOHBO       H1CO23CHO 
+      C23O3CCO3      C23O3CCO3H       C23O3CPAN        C23O3CHO       C23O3CCHO          PXYFUO         NPXYFUO 
+       NISOPNO3          NOAOOA            HMAC        NISOPOOH          NC4CHO           NOAOO          NISOPO 
+8
+         C3PAN2       HCOCH2CO3       CO23C4CO3          C5PAN9      HCOCH2CO2H      HCOCH2CO3H      CO23C4CO3H       CO23C4CHO 
+          C51O2          C51NO3       HO1CO24C5           C51OH         CO2C5OH          C51OOH          HO2C5O        CO2C4CHO 
+        IC3H7O2        CH3COCH3        IC3H7NO3            C3H8       IPRHOCO2H        IC3H7OOH         IPROPOL          IC3H7O 
+       C4CHOBO2         C4H9CO3          PEANO3      PERPENACID           PEAOH          PEAOOH            PPEN         C4H9CHO 
+       OCCOHCO2     CH2CHCH2NO3          GLYOOB         ALLYLOH     CH2CHCH2OOH       OCCOHCOOH       CH2CHCH2O             ACR 
+       H13CO2C3       HOCHOCOOH          HIEB1O          HIEB2O           C525O         MVKOHAO      HOCH2COCHO         HMGLYOO 
+9
+         INB1O2         INB1NO3          INB1OH         INB1OOH          INB1CO       INB1NACHO       INB1NBCHO       INB1HPCHO       INB1GLYOX 
+      PRONO3AO2       PRONO3BO2       PR1O2HNO3       PR2O2HNO3            C3H6        CH3CHOOA          CH2OOB           HCOOH           CH2OO 
+       COHM2CO3       MACRNBCO3          MACRNB      MACRNBCO2H        INCNCO2H       COHM2CO3H      MACRNBCO3H        COHM2PAN       MACRNBPAN 
+       CO2H3CO3          C4PAN6      C57NO3CO2H      MMALNBCO2H       CO2H3CO3H            HVMK       MMALNBPAN        CO2H3CHO       MMALANHYO 
+        C2H5CO3      PERPROACID         NPROPOL             PPN          HO3C4O          NC3H7O        NBUTOLAO           MEKCO         C2H5CHO 
+10
+       C5HPALD2         HPC52O2         ISOPCO2        CISOPCO2         ISOPDO2          CISOPC          TISOPC        ISOPCOOH        ISOPDOOH         C4MDIAL 
+         C531O2          C57AO2          M3FOOA             M3F         ISOPAOH         C531OOH         CISOPAO          C531CO         HC4CCHO         INDHCHO 
+        HIEB1O2         HIEB2O2          C524O2         C524NO3         HIEPOXB          C524OH        HIEB1OOH        HIEB2OOH         C524OOH          ISOPAO 
+11
+      ETHENO3O2         BUTALO2         C3H7CO3        NC4H9NO3       ETHO2HNO3            C2H4          CH2OOA       PERBUACID        NC4H9OOH             PBN         C3H7CHO 
+       ETHOHNO3        HYETHO2H           C57OH           INB1O           C526O            C57O           C57AO            INCO        HOCH2CHO          A2PANO          ETHGLY 
+13
+       C5HPALD1          C536O2         ISOPAO2        CISOPAO2         ISOPBO2        ISOPANO3        ISOPBNO3        MACRNOOA          CISOPA          TISOPA          IEPOXB        ISOPBOOH         MACRNOO 
+     CH3COCH2O2             NOA          NC3OOA         PACLOOA          HPC52O           C533O           C537O        PRONO3BO           NC3OO           ACLOO          MGLYOO       HYPERACET          MGLYOX 
+       CO2C3CO3      NBUTOLBNO3        BUTALNO3        BUTALO2H       CO2C3CO3H          MEKAOH         MEKAOOH      NBUTOLBOOH        CO2C3PAN       HO2CO4C5O        NBUTOLBO        CO2C3CHO          BUTALO 
+       CO3C4CO3        DIEKBNO3       C4CHOBNO3          HO13C5        HO1CO3C5         C5PAN16       CO3C4CO2H       CO3C4CO3H        DIEKBOOH       C4CHOBOOH         C4CHOBO        CO3C4CHO        HO3C4CHO 
+15
+        HMVKAO2         HMVKBO2        HMVKANO3          MVKNO3          MGLOOA      INB1NBCO2H        INAHCO2H        INANCO2H        HMVKAOOH        HMVKBOOH             MVK        CO2N3CHO          NC41OO           NC4OO           MGLOO 
+19
+         NC5H12         HO3C5O2           PEAO2         MPRKAO2       PE2ENEBO2           PEBO2           PECO2        HO3C5NO3      PE2ENEBNO3          PEBNO3          PECNO3          C523OH           PEBOH           PECOH       C53OH2OOH        HO3C5OOH        MPRKAOOH          PEBOOH            MPRK 
+20
+         NC4H10         NC4H9O2         SC4H9O2          MEKAO2       NBUTOLAO2          MEKBO2       NBUTOLBO2        BUT2OLO2        SC4H9NO3         MEKANO3       BUT2OLNO3        PENTACID       CO2C4CO2H        BUT2OLOH        SC4H9OOH       BUT2OLOOH             MEK          BUT2OL          NBUTOL          SC4H9O 
+34
+         NC51O2      CH2CHCH2O2         C4CO2O2        ISOP34O2           C45O2           INCO2        MACROHO2           MVKO2         NISOPO2       ISOP34NO3          C45NO3          INCNO3        ISOPCNO3            C5H8         NC41OOA        CO2C3OOA          MVKOOA         MACROOA        CO2C3OOB          CH2OOE          CH2OOG       CO2C3CO2H           INCOH         NC51OOH       ISOP34OOH          C45OOH          INCOOH            C45O         PE4E2CO         INCNCHO         CO2C3OO           MVKOO          MACROO            MACR 
+54
+      C5PACALD1      HOCH2CH2O2        HCOCH2O2          CH3CO3          HCOCO3       CO23C4NO3       HO12CO3C4          CO23C5          NC2OOA           GAOOB          PGAOOB         PPGAOOB       COHM2CO2H      HOC2H4CO2H        HC4CCO2H       CH3COCO2H         CH3CO3H       CH3COCO3H         HCOCO3H          C2H5OH         MPRKAOH       HCOCH2OOH        BIACETOH             PAN           C510O       CH3COCH2O        CO24C53O           C534O        CO23C54O       HOCO3C54O           C535O         HO13C5O           C2H5O          NC526O           C536O           C527O            C58O           C58AO          DIEKAO          MPRKAO        BUT2OLAO        PE2ENEBO           MEKBO          HMVKBO           HCOCO          CH3CHO       C4M2ALOHO        IPROPOLO           NC2OO            GAOO         HYPROPO       MCOCOMOXO          BIACET           GLYOX 
+83
+      C5PACALD2       CH3C2H2O2           CH3O2          C526O2          C527O2          C537O2           C57O2          C58AO2        CH3O2NO2           ACRO2          MACRO2         HMACRO2         HC4ACO3          CH3NO3         C526NO3         C527NO3         C58ANO3         MACRNO3             CH4         C5PAN17         MGLYOOA        HMGLYOOA         MGLYOOB          CH2OOC          GLYOOC       HOCH2CO2H       CONM2CO2H         CH3CO2H         NC4CO2H           ACO2H        HC4ACO2H          MACO2H         HMACO2H      INB1NACO2H         HCOCO2H      INB1HPCO2H        HC4ACO3H           CH3OH         ISOPBOH          CH3OOH         C536OOH         C527OOH         C537OOH          C57OOH         C57AOOH         C58AOOH         MACROOH        HMACROOH         HMACROH         DHPMPAL       CHOMOHPAN           C530O            C51O           NC51O       HOCH2CH2O         HCOCH2O          C4CO2O            CH3O           C524O          NC524O         ISOP34O         HO13C4O          HMVKAO          ISOPBO              CO        HNC524CO       HPNC524CO         OCCOHCO        CHOCOHCO            INDO          ISOPDO        CONM2CHO            HCHO         MACROHO        C3MDIALO         PROPALO         C3DIOLO         CH3CHOO           GLYOO           MACRO          HMACRO         BIACETO           HMACR 

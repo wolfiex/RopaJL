@@ -7,7 +7,7 @@ import seaborn as sns
 sns.set(color_codes=True)
 
 runmcl = True
-gensorted = 1
+gensorted = True
 
 try:
     filename = sys.argv[1]
@@ -19,36 +19,36 @@ if gensorted : os.system('rm -rf sorted/*')
 
 
 
-def mainfunction(iflow):
+def mainfunction(iflow, species = False):
     #optional pi argument
-    if runmcl: sysout = os.system("/Users/%s/local/bin/mcl %s --abc -pi 1 -o ./runs/%d.mcl -I %d"%(os.environ.get('USER'),filename,iflow,iflow))
+    #iflow = iflow*100
+
+    if runmcl: sysout = os.system("/Users/%s/local/bin/mcl %s --abc -pi 1 -o ./runs/%s.mcl -I %s"%(os.environ.get('USER'),filename,iflow,iflow))
 
     data = tuple(open('./runs/%s.mcl'%iflow))
     groups = [i.replace('\n','').split('\t') for i in data]
     linelen = [len(i) for i in groups]
 
-    nspecs  = lambda x : np.array(groups)[[j==x for j in linelen]]
+    nspecs  = lambda x: np.array(filter(lambda j: len(j)==x , groups))
 
     groups = [sorted(s, key=lambda x: x[::-1]) for s in groups]
 
 
     if gensorted:
-        f = open('./sorted/%2d.txt'%iflow, 'w')
+        f = open('./sorted/%2f.txt'%iflow, 'w')
 
         for n in range(1,max(linelen)+1):
-            
+
             if (len(nspecs(n))>0):
-                
-                print n
                 f.write('%s\n'%n)
                 for i in sorted(nspecs(n), key=lambda x: x[0][::-1]):
                     str = ''
                     for j in range(n):
-                        str+= '%15s '%i[j] 
-                    #print str  
-                    f.write(str+'\n')  
-                    
-        f.close()            
+                        str+= '%15s '%i[j]
+                    #print str
+                    f.write(str+'\n')
+
+        f.close()
 
     #plt.clf()
     #sns.distplot(linelen);
@@ -60,15 +60,18 @@ def mainfunction(iflow):
     for n in range(1,max(linelen)+1):
         if (len(nspecs(n))>0):
             for i in sorted(nspecs(n), key=lambda x: x[0][::-1]):
-                for j in i: 
+                for j in i:
                     ndict.append([j,n])
-            
-    ndict = dict(ndict)        
+
+    ndict = dict(ndict)
     sortedspecs = sorted(ndict.keys()  , key=lambda x: x[::-1])
-    print sortedspecs
+
+    if species : return sortedspecs
+    #print sortedspecs
     return [ndict[i] for i in sortedspecs]
-    
-inputflows = [2,3,4,5,6,7,8]#1.5 - 5
+
+inputflows = np.linspace(1,10,41)#[2,3,4,5,6,7,8]#1.5 - 5
+inputflows = [i for i in reversed(inputflows[1:])]
 
 allruns  = multiprocessing.Pool(1).map(mainfunction, inputflows)
 
@@ -81,12 +84,27 @@ values = set(res.flatten())
 
 classify = dict()
 for i,j in enumerate(values):
-    classify[j]= i 
+    classify[j]= i
 
 for i in xrange(res.shape[0]):
     for j in xrange(res.shape[1]):
-        res[i,j] = classify[res[i,j]]
+        1+1
+        #res[i,j] = classify[res[i,j]]
 
 
-sns.heatmap(res,cmap='gnuplot') 
+df = pd.DataFrame(res,index = inputflows,columns = mainfunction(2,True))
+
+# sort by difference
+#df = df.reindex_axis(df.apply(lambda x: x.max()-x.min()).sort_values().index, axis=1)
+
+#sort by mean
+df = df.reindex_axis(df.mean().sort_values().index, axis=1)
+
+
+sns.heatmap(df,cmap='Spectral')
+plt.xticks(rotation=90)
+plt.show()
+
+sns.clustermap(df,cmap='Spectral')
+plt.xticks(rotation=90)
 plt.show()
