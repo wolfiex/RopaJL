@@ -1,0 +1,148 @@
+1
+         IEPOXB 
+2
+             O2             OOH 
+             O2             OOH 
+             O2             OOH 
+             O2             OOH 
+             O2             OOH 
+             O2             OOH 
+             O2             OOH 
+            CO3             PAN 
+            CO3             PAN 
+            CO3             PAN 
+            CO3             PAN 
+            CO3            CO3H 
+            NO3           GLYOX 
+            NO3             NO3 
+           CO2H            CO2H 
+             OH           GLYOX 
+            OOH           GLYOX 
+         INCCO-           GLYOX 
+3
+             O2              OH             OOH 
+             O2             NO3             OOH 
+             O2             NO3             OOH 
+             O2             OOH         C524CO- 
+             O2             OOH        BUT2OLO- 
+             O2             NO3              O2 
+             O2            CO2H             OOH 
+            CO3            CO3H             PAN 
+            CO3             PAN            CO3H 
+            CO3             PAN            CO3H 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3             PAN            CO3H 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+            CO3       PPACLOOA-             PAN 
+            CO3            CO3H             PAN 
+            CO3            CO3H             PAN 
+        ACLOOA-        CISOPCO-             CHO 
+        IEPOXA-             OOH             CHO 
+            NO3           INAO-             NO3 
+            CHO         PXYFUO-        NPXYFUO- 
+4
+            PAN             CO3            CO3H             CHO 
+            PAN             CO3            CO3H             CHO 
+             O2             OOH         C532CO-          M3FOO- 
+             O2             NO3             OOH           PEAO- 
+             O2              O2             OOH             CHO 
+             O2             NO3            ACID             OOH 
+             O2              OH             OOH             CHO 
+             O2       PXYFUONE-             OOH              OH 
+            PAN             CO3            CO2H            CO3H 
+            CO3            CO3H             OOH             PAN 
+            CO3            CO3H             PAN             CHO 
+            CO3            CO2H            CO3H             PAN 
+            CO3            CO3H             PAN             CHO 
+            CO3            CO3H             PAN           MVKO- 
+            CO3            CO3H             PAN             CHO 
+            CO3            CO3H             PAN             CHO 
+            CO3            CO3H             PAN             CHO 
+            CO3            CO3H             PAN              OH 
+            CO3             PAN             CHO      IPROPOLPER 
+            CO3            CO3H             PAN             CHO 
+            CO3             PAN            CO3H              OH 
+            CO3            CO2H            CO3H             PAN 
+5
+            PAN             CO3            CO3H         HO1C4O-             CHO 
+            PAN             CO3            CO3H         HO1C5O-             CHO 
+             O2             NO3             OOH         INANCO-             CHO 
+             O2             NO3            CO2H              OH             OOH 
+             O2             NO3              OH             OOH       DNC524CO- 
+             O2             NO3              O2              O2             OOH 
+            CO3             CO3             CO3             OOH         DIEKBO- 
+             O2             NO3              OH             OOH         NC4H9O- 
+             O2             NO3              OH             OOH              O2 
+            CO3              O2             OOH          MEKAO-             CO3 
+             O2             NO3              O2             OOH           PEBO- 
+             O2             NO3           C2H6-            ACID             OOH 
+             O2             NO3              O2         ACETOL-        PROPGLY- 
+             O2             OOH             OOH         DHPMEK-             CHO 
+            CO3            CO3H             PAN          C531O-             CHO 
+            CO3            CO2H            CO2H            CO3H             PAN 
+            CO3             NO3            CO3H            CO3H             PAN 
+            CO3            MAE-            CO3H           HMML-             PAN 
+            CO3            CO3H              OH             OOH              OH 
+            CO3            CO2H            CO3H            CO3H             PAN 
+           CO2H              OH             OOH             PAN             PAN 
+6
+            PAN             CO3            CO3H         HO1C3O-             CO3             CHO 
+             O2             NO3            CO2H              O2             OOH             CHO 
+             O2             NO3        HO134C5-      HO13CO4C5-             OOH         HO3C5O- 
+             O2              O2             OOH              O2             CHO             CHO 
+             O2             NO3         NC4OOA-              OH             OOH             CHO 
+             O2              OH             OOH             OOH             CHO             CHO 
+            CO3             NO3             NO3            CO3H             PAN          INB2O- 
+7
+            PAN             CO3             NO3            CO3H              OH             OOH             CHO 
+             O2             NO3              O2              OH              O2             OOH              O2 
+             O2             CO3            CO3H              OH             OOH             PAN             CHO 
+             O2          HCOC5-         IEPOXC-              OH             OOH             OOH             OOH 
+             O2              O2              O2            CO2H              OH             OOH       MMALANHY- 
+             O2             NO3              OH              OH             OOH             OOH           GLYOX 
+             O2             OOH         HIEB1O-         HIEB2O-              OH             CHO        HMGLYOO- 
+            CO3            CO3H           PHAN-          C525O-           C59O-              OH             CHO 
+            NO3         NOAOOA-           HMAC-             OOH             CHO          NOAOO-         NISOPO- 
+8
+            PAN             CO3             CO3             PAN            CO2H            CO3H            CO3H             CHO 
+             O2       CH3COCH3-             NO3           C3H8-            CO2H             OOH        IPROPOL-         IC3H7O- 
+             O2              O2              O2        HMGLOOA-            CO2H              OH             OOH         HMGLOO- 
+            CHO             CO3             NO3            ACID              OH             OOH           PPEN-             CHO 
+             O2             NO3         GLYOOB-              OH             OOH             OOH      CH2CHCH2O-            ACR- 
+9
+             O2             NO3              OH             OOH         INB1CO-             CHO             CHO             CHO           GLYOX 
+            NO3             NO3             NO3             NO3           C3H6-             CHO         CH2OOB-             OOH          CH2OO- 
+             O2              O2             NO3              OH              OH             OOH             OOH           DIEK-           PECO- 
+            CO3             CO3         MACRNB-            CO2H            CO2H            CO3H            CO3H             PAN             PAN 
+           CO2H             PAN            CO2H            CO2H            CO3H           HVMK-             PAN            CO2H      MMALANHYO- 
+            CO3            ACID        NPROPOL-            PPN-         HO3C4O-         NC3H7O-       NBUTOLAO-          MEKCO-             CHO 
+10
+       C5HPALD2              O2              O2              O2              O2         CISOPC-         TISOPC-             OOH             OOH        C4MDIAL- 
+             O2              O2         M3FOOA-            M3F-              OH             OOH        CISOPAO-         C531CO-             CHO             CHO 
+             O2              O2              O2             NO3        HIEPOXB-              OH             OOH             OOH             OOH         ISOPAO- 
+12
+      C5HPALD1-              O2              O2              O2              O2             PAN             NO3       MACRNOOA-         CISOPA-         TISOPA-             OOH        MACRNOO- 
+            CO3             NO3         HO13C5-             CO3             PAN            CO2H            CO3H             OOH             OOH             CHO             CO3             CHO 
+            NO3            CO2H              O2              OH          INB1O-          C526O-           C57O-          C57AO-           INCO-             CHO             PAN         ETHGLY- 
+13
+             O2            NOA-         NC3OOA-        PACLOOA-         HPC52O-          C533O-          C537O-             NO3          NC3OO-          ACLOO-         MGLYOO-      HYPERACET-           GLYOX 
+15
+            NO3              O2              O2              O2             CO3             NO3             NO3           C2H4-         CH2OOA-            ACID             OOH             OOH         NBUTOL-            PBN-             CHO 
+             O2              O2             NO3             NO3         MGLOOA-            CO2H            CO2H            CO2H             OOH             OOH            MVK-             CHO         NC41OO-          NC4OO-          MGLOO- 
+            CO3             NO3             NO3              O2            CO3H              OH             OOH             PAN          C530O-           C51O-          NC51O-              O2       NBUTOLBO-             CHO         BUTALO- 
+16
+        NC4H10-              O2              O2              O2              O2             NO3             NO3             NO3            ACID            CO2H              OH             OOH             OOH            MEK-         BUT2OL-         SC4H9O- 
+18
+        NC5H12-              O2              O2              O2              O2              O2              O2             NO3             NO3             NO3             NO3              OH              OH             OOH             OOH             OOH             OOH           MPRK- 
+32
+             O2              O2              O2              O2              O2              O2              O2              O2              O2             NO3             NO3             NO3             NO3           C5H8-        NC41OOA-              O2         MVKOOA-        MACROOA-         CH2OOE-         CH2OOG-            CO2H              OH             OOH             OOH             OOH           C45O-        PE4E2CO-             CHO              O2          MVKOO-         MACROO-           MACR- 
+53
+     C5PACALD1-              O2              O2             CO3             CO3             NO3             CO3              O2         NC2OOA-          GAOOB-         PGAOOB-        PPGAOOB-            CO2H            CO2H            CO2H            CO3H            CO3H            CO3H              OH              OH             OOH              OH             PAN          C510O-      CH3COCH2O-              O2          C534O-              O2             CO3          C535O-        HO13C5O-          C2H5O-         NC526O-          C536O-          C527O-           C58O-          C58AO-         DIEKAO-         MPRKAO-       BUT2OLAO-       PE2ENEBO-          MEKBO-         HMVKBO-          HCOCO-             CHO              OH       IPROPOLO-          NC2OO-           GAOO-        HYPROPO-      MCOCOMOXO-         BIACET-           GLYOX 
+80
+     C5PACALD2-              O2              O2              O2              O2              O2              O2              O2              O2              O2              O2              O2             CO3             NO3             NO3             NO3             NO3             NO3            CH4-             PAN        MGLYOOA-       HMGLYOOA-        MGLYOOB-         CH2OOC-         GLYOOC-            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO2H            CO3H              OH              OH             OOH             OOH             OOH             OOH             OOH             OOH             OOH             OOH             OOH              OH        DHPMPAL-             PAN      HOCH2CH2O-        HCOCH2O-              O2           CH3O-          C524O-         NC524O-        ISOP34O-        HO13C4O-         HMVKAO-         ISOPBO-             CO-       HNC524CO-      HPNC524CO-              OH             CHO           INDO-         ISOPDO-             CHO             CHO              OH       C3MDIALO-        PROPALO-        C3DIOLO-             CHO          GLYOO-          MACRO-         HMACRO-        BIACETO-          HMACR- 

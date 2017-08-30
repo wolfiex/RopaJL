@@ -1,13 +1,16 @@
-import os, sys
+import os, sys, re
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing
 import seaborn as sns
+from groupcount import * 
 sns.set(color_codes=True)
 
 runmcl = True
 gensorted = True
+plot = 0
+renamecol=True
 
 try:
     filename = sys.argv[1]
@@ -17,8 +20,24 @@ except:
 if runmcl : os.system('rm -rf runs/*.mcl')
 if gensorted : os.system('rm -rf sorted/*')
 
+global matches, matchesre
+matches = ['ACID','CO3H','CO2H','OOH','CO3','NO3','CHO','O2','OH']
 
+contains =['PAN','GLYOX'] 
 
+matchesre = [re.compile(r".*"+i) for i in matches]
+
+def name(**variables):
+    return [x for x in variables]
+
+def to_groups (x):
+    for i in contains:
+         if i in x: return i
+    for i in xrange(len(matches)):
+        if re.match(matchesre[i],x): return matches[i]
+    return x + '-'
+    
+    
 def mainfunction(iflow, species = False):
     #optional pi argument
     #iflow = iflow*100
@@ -49,6 +68,27 @@ def mainfunction(iflow, species = False):
                     f.write(str+'\n')
 
         f.close()
+    
+    if gensorted & renamecol:
+        savefilename = './sorted/simplified%2f.txt'%iflow
+        
+        f = open(savefilename, 'w')
+
+        for n in range(1,max(linelen)+1):
+
+            if (len(nspecs(n))>0):
+                f.write('%s\n'%n)
+                for i in sorted(nspecs(n), key=lambda x: x[0][::-1]):
+                    str = ''
+                    for j in range(n):
+                        i[j]=to_groups(i[j])
+                        str+= '%15s '%i[j]
+                    #print str
+                    f.write(str+'\n')
+
+        f.close()
+        
+        groupbys(savefilename)
 
     #plt.clf()
     #sns.distplot(linelen);
@@ -100,11 +140,18 @@ df = pd.DataFrame(res,index = inputflows,columns = mainfunction(2,True))
 #sort by mean
 df = df.reindex_axis(df.mean().sort_values().index, axis=1)
 
+if renamecol  : df.columns =  [to_groups(i) for i in df.columns]
 
-sns.heatmap(df,cmap='Spectral')
-plt.xticks(rotation=90)
-plt.show()
 
-sns.clustermap(df,cmap='Spectral')
-plt.xticks(rotation=90)
-plt.show()
+if plot:
+    sns.heatmap(df,cmap='Spectral')
+    plt.xticks(rotation=90)
+    plt.show()
+
+    sns.clustermap(df,cmap='Spectral')
+    plt.xticks(rotation=90)
+    plt.show()
+
+
+
+
