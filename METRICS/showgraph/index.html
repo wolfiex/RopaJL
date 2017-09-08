@@ -24,6 +24,8 @@ font-family:"open-sans",'Open-Sans' ;
 
 <script type="text/javascript" src="./src/d3-ForceEdgeBundling.js"></script>
 
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-contour.v1.min.js"></script>
 <body>
 
 
@@ -38,7 +40,7 @@ font-family:"open-sans",'Open-Sans' ;
 
 
 
-function run() {
+function run(fast=false) {
     window.posarr = window.graph.nodes
         .map(d => d.viz.position.x)
         .concat(graph.nodes.map(d => d.viz.position.y));
@@ -98,10 +100,11 @@ function run() {
         );
     //.alphaDecay(1-Math.pow(0.0001,1/9000))//timesteps
     //.force("center", d3.forceCenter(width / 2, height / 2));
-
+var stop = 0.65
+if (fast) stop=.9
     var ticked = function() {
         
-        if (simulation.alpha() < 0.65) edgebundle()
+        if (simulation.alpha() < stop) edgebundle()
         
         /*
      linkvar
@@ -354,10 +357,12 @@ function run() {
     
 }
 
+window.locs = []
 
-function mclgroup(){
+function mclgroup(bygroup = true, chrome = false){
     d3.select('svg').selectAll('path').style('stroke','#222').style('opacity',0.5)
     var cat20 = d3.scaleOrdinal(d3.schemeCategory20);
+    
     what = '../lon_mcm'
 var file = what +".out"
 var mcl, view;
@@ -367,11 +372,55 @@ d3.text(file, function(text) {
   mcl.pop();
   mcl = mcl.map(d => d.split("\t"));
 
+  length = [... new Set(mcl.map(d=>d.length))]
+  if (chrome) cat20 =  d3.interpolateSpectral
+  scale = d3.scaleLinear()
+  scale.domain(d3.extent(length)) 
+   
+if (bygroup == 0 ){
+  length.forEach((i,d)=>{
+      var btn = document.createElement("BUTTON");        // Create a <button> element
+    var t = document.createTextNode(i);      
+    c = chrome? i:d // Create a text node
+    console.log(c,cat20(scale(c)),scale(c))
+    
+    if (chrome){
+        btn.setAttribute('style','color:'+cat20(1-scale(c))   )
+    }else{
+        btn.setAttribute('style','color:'+cat20(c))   
+    }
+    btn.appendChild(t); 
+    console.log(btn)    
+                             // Append the text to <button>
+    document.body.appendChild(btn);                    // Append <button> to <body>})
+    })
+}
+ 
+
+
+console.log(length)
 mcl.map((d,i)=> {
     
     d.map(j=>{
         
+        
+        if (bygroup){
         d3.select('#'+j).style('stroke',cat20(i)).style('stroke-width',2.5).style('opacity',1)
+    }
+    else {
+        if (chrome){
+            d3.select('#'+j).style('stroke',cat20(1-scale(d.length))).style('stroke-width',2.5).style('opacity',1)
+        
+        }else{
+            d3.select('#'+j).style('stroke',cat20(length.indexOf(d.length))).style('stroke-width',2.5).style('opacity',1)
+        }
+        
+        window.locs.push({x:d3.select('#'+j).attr('cx'),y:d3.select('#'+j).attr('cy'),group:d.length})
+        
+        
+        }
+        
+        
         
         
     })
@@ -380,6 +429,52 @@ mcl.map((d,i)=> {
     })
     
 }
+
+
+
+
+
+
+window.mygroup = locs.filter(d=>{if(d.group > 60 ) return true})
+
+var contours = svg
+    .selectAll( 'path' )
+    .data( d3.contourDensity()
+      .x( function( d ) { return d.x; } )
+      .y( function( d ) { return d.y; } )
+      .size( [width, height] )
+      .bandwidth( 70 )
+      ( mygroup )
+  );
+  
+  contours
+    .enter()
+   	.append( "path" )
+    .attr( "d", d3.geoPath() );
+    
+    
+    
+    
+var line0 = d3.line()
+    .x(function(d) { return d.x })
+    .y(function(d) { return d.y })
+    .curve(    d3.curveCardinalClosed)
+    
+    var group = d3.selectAll('svg').append("g").attr("class","group");
+    
+    
+    group.selectAll("paths")
+		     .data(mygroup)
+			 .enter().append("path")
+    			.style("fill","red")
+    			.style("stroke","black")
+    			.style("stroke-width","4px")
+    			.attr("d",line0);    
+    
+    
+    
+
+
 
 
 console.log("run fun then edge");

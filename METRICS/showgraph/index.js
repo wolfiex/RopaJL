@@ -12,7 +12,7 @@ window.nodes = true;
 window.labels = true;
 
 
-what = 'londongraphs/forceatlas2'
+what = 'londongraphs/tsnet'
 
     var fs = require("fs");
     var gexf = require("gexf");

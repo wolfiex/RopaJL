@@ -1,0 +1,158 @@
+
+
+group of 1
+0
+O2          9
+OOH         8
+NO3         2
+TISOPC-     1
+MACROO-     1
+C537O-      1
+C5H8-       1
+CH2OOE-     1
+CHO         1
+CISOPC-     1
+CISOPCO-    1
+ISOP34O-    1
+ISOPDO-     1
+MVKOO-      1
+MACROOA-    1
+MVKOOA-     1
+NC3OO-      1
+NC3OOA-     1
+NC41OO-     1
+NC41OOA-    1
+NISOPO-     1
+OH          1
+C527O-      1
+dtype: int64
+
+group of 2
+1        0       
+OOH      O2          9
+PAN      CO3         4
+CO2H     O2          2
+OH       C58O-       1
+O2       CISOPA-     1
+HMGLOO-  HMGLOOA-    1
+GLYOX    INB1CO-     1
+CO3H     CO3         1
+         C534O-      1
+CHO      OH          1
+         O2          1
+         C533O-      1
+dtype: int64
+
+group of 3
+2      1         0        
+PAN    CO3H      CO3          6
+OOH    OH        O2           2
+       NO3       O2           2
+PAN    NO3       CO3          1
+CHO    OOH       O2           1
+       NO3       HO1C4O-      1
+                 HO1C5O-      1
+                 INANCO-      1
+                 NC4OO-       1
+                 NOAOOA-      1
+       NPXYFUO-  PXYFUO-      1
+O2     IPROPOL-  C3H8-        1
+GLYOX  NO3       NC524O-      1
+O2     MVK-      CH2OOB-      1
+OH     O2        ISOPAO-      1
+OOH    O2        C524CO-      1
+                 PEAO-        1
+                 PXYFUONE-    1
+ACID   O2        C2H6-        1
+dtype: int64
+
+group of 4
+3    2         1         0      
+PAN  CO3H      CO2H      CO3        9
+     OH        CO3H      CO3        2
+CHO  PAN       CO3H      CO3        2
+PAN  CO3H      NO3       CO3        1
+               CO3       C531O-     1
+OOH  OH        O2        NC4H9O-    1
+     O2        M3FOO-    C532CO-    1
+O2   CISOPAO-  M3F-      M3FOOA-    1
+CHO  NO3       HO13C5O-  HO1C3O-    1
+dtype: int64
+
+group of 5
+4           3       2       1          0        
+PAN         OOH     CO3H    CO3        O2           2
+CHO         PAN     CO3H    NO3        CO3          2
+                            CO2H       CO3          2
+PAN         OOH     CO3H    CO3        DHPMPAL-     1
+            CO3H    CO2H    CO3        MACRNB-      1
+OOH         NO3     O2      MACRNOO-   MACRNOOA-    1
+            CO2H    NO3     IC3H7O-    CH3COCH3-    1
+NO3         O2      MACR-   C45O-      CH2OOG-      1
+            NOAOO-  INCO-   C510O-     NOA-         1
+IPROPOLPER  CHO     PAN     NO3        CO3          1
+CHO         PAN     OH      CO3H       CO3          1
+            OOH     NO3     PE2ENEBO-  NC3H7O-      1
+ACID        CO3     MEKCO-  DIEKAO-    PPN-         1
+dtype: int64
+
+group of 6
+5    4     3     2         1           0       
+PAN  OH    CO3H  CO2H      CO3         O2          1
+     CO3H  CO2H  CO3       O2          PROPGLY-    1
+OOH  OH    O2    IEPOXC-   IEPOXB-     HCOC5-      1
+     NO3   O2    HO3C5O-   HO13CO4C5-  HO134C5-    1
+CHO  PAN   CO3H  CO2H      NO3         CO3         1
+     OOH   O2    HMGLYOO-  HIEB2O-     HIEB1O-     1
+dtype: int64
+
+group of 7
+6      5    4    3   2     1    0     
+GLYOX  CHO  OOH  OH  NO3   O2   INCCO-    1
+CHO    PAN  OOH  OH  CO3H  NO3  CO3       1
+dtype: int64
+
+group of 8
+7    6    5   4    3   2          1        0     
+CHO  OOH  OH  NO3  O2  BUT2OLAO-  NC526O-  C2H5O-    1
+dtype: int64
+
+group of 9
+7    6    5   4     3    2    1   0     
+PAN  OOH  OH  CO3H  NO3  CO3  O2  INB2O-    1
+dtype: int64
+
+group of 10
+4   3   2        1        0      
+OH  O2  NBUTOL-  BUT2OL-  NC4H10-    1
+dtype: int64
+
+group of 11
+10   9    8   7    6    5   4     3       2      1           0      
+PAN  OOH  OH  NO3  CO3  O2  ACR-  GLYOO-  MVKO-  CH2CHCH2O-  GLYOOB-    1
+dtype: int64
+
+group of 12
+8    7    6   5     4     3    2    1       0    
+CHO  PAN  OH  CO3H  CO2H  NO3  CO3  C525O-  PHAN-    1
+dtype: int64
+
+group of 13
+7    6   5    4   3         2          1        0   
+OOH  OH  NO3  O2  BUT2OLO-  NBUTOLBO-  SC4H9O-  MEK-    1
+dtype: int64
+
+group of 16
+15     14   13  12  11         10     9       8       7        6         5        4       3         2        1          0        
+GLYOX  OOH  OH  O2  C5PACALD1  GAOO-  NC2OO-  C536O-  HPC52O-  C4MDIAL-  PGAOOB-  GAOOB-  PACLOOA-  NC2OOA-  C5HPALD2-  C5HPALD1-    1
+dtype: int64
+
+group of 20
+16     15         14         13   12    11    10   9   8        7        6       5        4       3      2       1      0      
+GLYOX  MCOCOMOXO  CH3COCH2O  PAN  CO3H  CO2H  CO3  O2  MGLYOO-  HMVKBO-  MEKBO-  MPRKAO-  C57AO-  C57O-  C526O-  HMML-  ACLOOA-    1
+dtype: int64
+
+group of 25
+16   15   14   13    12    11   10   9   8           7       6        5      4       3      2       1        0   
+CHO  PAN  OOH  CO3H  CO2H  NO3  CO3  O2  HYPERACET-  ACLOO-  BUTALO-  INAO-  C58AO-  C59O-  INB1O-  ACETOL-  MAE-    1
+dtype: int64

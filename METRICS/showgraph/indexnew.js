@@ -16,7 +16,7 @@ what = 'londongraphs/forceatlas2'
     window.graph = gexf.parse(fs.readFileSync(what +".gexf", "utf8"));
 window.data = {}
 
-tsne=false
+tsne=1
 
 if (tsne){
 
