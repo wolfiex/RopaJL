@@ -1,0 +1,136 @@
+<html>
+<script src='./d3.v4.min.js'></script>
+<link href="./photon.css" rel="stylesheet" type="text/css">
+
+<style>
+    .right {
+        align: center;
+        float: right;
+    }
+
+    input[type="checkbox"] {
+        /* same colors as |input| rule, but |!important| this time. */
+        -moz-box-sizing: border-box;
+        background-color: -moz-Field ! important;
+        color: -moz-FieldText ! important;
+        border: 2px inset ThreeDFace ! important;
+    }
+    /*label{color:#3e9bf4}*/
+</style>
+
+<body>
+    <header class="toolbar toolbar-header">
+        <h1 class="title">Browse MCM 3.3.1</h1>
+
+        <li id='options' class="list-group-header" style='width:100%'>
+            <input class="form-control" id='searchbox' type="text" placeholder="Species Name | Smiles | InChi | Regex | Search String" style='width:100%'>
+            <input type="radio" id="regex" class='green' checked> RegExp &nbsp;
+            <input type="radio" id="complete"> Complete &nbsp;&ensp;&nbsp;&nbsp;
+            <div class='right'>
+                <label><input type="checkbox" class="right" id="name" checked>&nbsp; Names &nbsp; </label>
+                <label><input type="checkbox" class="right" id="smiles" checked>&nbsp; Smiles &nbsp;</label>
+                <label><input type="checkbox" class="right" id="inchi" checked style='align:right'>&nbsp; Inchi &nbsp;</label>
+            </div>
+        </li>
+
+
+    </header>
+    <h5> Matched Results: </h5>
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Smiles</th>
+                <th>Inchi</th>
+            </tr>
+        </thead>
+        <tbody id='results'>
+
+        </tbody>
+    </table>
+
+
+</body>
+
+<script>
+    window.data = []
+
+    window.results = document.getElementById('results')
+    window.searchbox = document.getElementById('searchbox')
+
+    window.searchbox.addEventListener("change", findres);
+    ['name', 'smiles', 'inchi'].forEach(col => {
+        var doisearch = document.getElementById(col).addEventListener("change", findres);
+    })
+
+    d3.csv("smiles_mined.csv", function(data) {
+        
+        
+        window.data = data.map(d => {
+            d.inchi = d.inchi.replace('InChI=', '');
+            return d
+        });
+    });
+
+
+    function findres() {
+        var querystr = window.searchbox.value
+        
+            results.innerHTML = ''
+        
+        if (querystr===''){results.innerHTML = `<h6 id='del'> Search field empty.</h6>` ; return 1}
+        
+        
+        window.data.forEach(spec => {
+            var reg = new RegExp(querystr, 'gi');
+
+            var table = document.getElementById("results");
+
+            var tr = document.createElement("tr");
+
+            tr.addEventListener("click", function() {
+                window.open('http://mcm.leeds.ac.uk/MCMv3.3.1/browse.htt?species=' + spec['name'])
+            });
+
+            ismatch = ['name', 'smiles', 'inchi'].map(col => {
+                var doisearch = document.getElementById(col).checked
+                if (doisearch) {
+
+                    var final_str = spec[col].replace(reg, function(str) {
+                        return '<b style="color:red">' + str + '</b>'
+                    });
+                }else  {var final_str = spec[col]}
+
+
+
+                    var td = document.createElement("td");
+                    td.innerHTML = final_str
+
+                    tr.appendChild(td);
+
+                return doisearch?  reg.test(spec[col]) :  0
+                
+            })
+
+            if (d3.sum(ismatch)) {
+                table.appendChild(tr);
+            }
+
+
+
+        })
+    }
+
+
+findres()
+
+
+/*
+examples 
+
+
+
+*/
+</script>
+
+</html>
