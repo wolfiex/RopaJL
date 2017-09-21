@@ -1,0 +1,48 @@
+<html>
+<style>
+.rx{width:50%}
+</style>
+<body>
+    <h1 id = 'spec'></h1>
+    <div id='loss' class='rx'></div>
+    <div id='prod' class='rx'></div>
+        
+    
+    NOTE: Coefficients have been removed (see link if you want these). This does not affect 99% of the mcm reactions. 
+    <link href="./photon.css" rel="stylesheet" type="text/css">
+
+    <script src='reactswith.json'></script>
+    <script>
+    var spec = window.location.hash.replace('#','')
+    document.getElementById('spec').innerHTML=spec
+    var myreactions = rxndata.names[spec]
+    
+    var prod = document.getElementById('prod')
+    var loss = document.getElementById('loss')
+
+//loss    
+    myreactions[0].forEach(d=>{
+        eq = rxndata.reactions[d]
+        var p = document.createElement('p')
+
+        p.innerHTML=  eq[0].map(d=> {return `<span class='`+d+`'>`+d+`</span> +`})
+                
+        loss.appendChild(p)
+            
+    }   )
+    //prod
+    myreactions[1].forEach(d=>{
+        eq = rxndata.reactions[d]
+        var p = document.createElement('p')
+        p.innerHTML= eq[1].map(d=> {return `<span class='`+d+`'>`+d+`</span> +`})
+        prod.appendChild(p)
+            
+    }   )
+    
+    
+    </script>
+    
+</body>
+
+
+</html>

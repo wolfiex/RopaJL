@@ -1,31 +1,61 @@
-<html>
-<script src='./d3.v4.min.js'></script>
-<link href="./photon.css" rel="stylesheet" type="text/css">
+    <html>
+    <script src='./d3.v4.min.js'></script>
+    <link href="./photon.css" rel="stylesheet" type="text/css">
 
-<style>
-    .right {
-        align: center;
-        float: right;
-    }
+    <style>
+        .right {
+            align: center;
+            float: right;
+        }
 
-    input[type="checkbox"] {
-        /* same colors as |input| rule, but |!important| this time. */
-        -moz-box-sizing: border-box;
-        background-color: -moz-Field ! important;
-        color: -moz-FieldText ! important;
-        border: 2px inset ThreeDFace ! important;
-    }
-    /*label{color:#3e9bf4}*/
-</style>
+        input[type="checkbox"] {
+            /* same colors as |input| rule, but |!important| this time. */
+            -moz-box-sizing: border-box;
+            background-color: -moz-Field ! important;
+            color: -moz-FieldText ! important;
+            border: 2px inset ThreeDFace ! important;
+        }
+        /*label{color:#3e9bf4}*/
+        
+        body{width:100%;
+        height:100%;
+        
+        overflow: scroll;}
+        
 
-<body>
-    <header class="toolbar toolbar-header">
+        .header{
+            width:100%;
+        position: absolute;
+      top: 0;
+      
+      }        
+        .footer{
+            width:100%;
+        position: absolute;
+      bottom: 0;
+      }
+      
+      .pop-up {
+    height: 160px;
+    width: 170px;
+top:5;
+right:5;
+    float: right;
+    pointer-events: none;
+
+position:absolute;
+ }
+
+
+    </style>
+
+    <header class="header toolbar toolbar-header">
         <h1 class="title">Browse MCM 3.3.1</h1>
 
         <li id='options' class="list-group-header" style='width:100%'>
             <input class="form-control" id='searchbox' type="text" placeholder="Species Name | Smiles | InChi | Regex | Search String" style='width:100%'>
             <input type="radio" id="regex" class='green' checked> RegExp &nbsp;
-            <input type="radio" id="complete"> Complete &nbsp;&ensp;&nbsp;&nbsp;
+            <input type="radio" id="complete" disabled> Complete &nbsp;&ensp;&nbsp;&nbsp;
             <div class='right'>
                 <label><input type="checkbox" class="right" id="name" checked>&nbsp; Names &nbsp; </label>
                 <label><input type="checkbox" class="right" id="smiles" checked>&nbsp; Smiles &nbsp;</label>
@@ -35,102 +65,170 @@
 
 
     </header>
-    <h5> Matched Results: </h5>
-    <table class="table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Smiles</th>
-                <th>Inchi</th>
-            </tr>
-        </thead>
-        <tbody id='results'>
-
-        </tbody>
-    </table>
 
 
-</body>
 
-<script>
-    window.data = []
+    <div id="popup" class="pop-up"></div>
 
-    window.results = document.getElementById('results')
-    window.searchbox = document.getElementById('searchbox')
+    <body>
+        
+        
+        
+        
+        
+        <h5> Matched Results: </h5>
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Smiles</th>
+                    <th>Inchi</th>
+                </tr>
+            </thead>
+            <tbody id='results'>
 
-    window.searchbox.addEventListener("change", findres);
-    ['name', 'smiles', 'inchi'].forEach(col => {
-        var doisearch = document.getElementById(col).addEventListener("change", findres);
+            </tbody>
+        </table>
+
+        
+
+    </body>
+
+    
+        <footer id='footer' class="footer toolbar toolbar-footer">
+            <h1 class="title">Funcitonal Group Examples</h1>
+        </footer>
+
+    <script>
+        window.data = []
+
+        window.results = document.getElementById('results')
+        window.searchbox = document.getElementById('searchbox')
+
+        window.searchbox.addEventListener("change", findres);
+        ['name', 'smiles', 'inchi'].forEach(col => {
+            var doisearch = document.getElementById(col).addEventListener("change", findres);
+        })
+
+        d3.csv("smiles_mined.csv", function(data) {
+            
+            
+            window.data = data.map(d => {
+                d.inchi = d.inchi.replace('InChI=', '');
+                return d
+            });
+        });
+
+
+        function findres() {
+            var querystr = window.searchbox.value
+            
+                results.innerHTML = ''
+            
+            if (querystr===''){results.innerHTML = `<h6 id='del'> Search field empty.</h6>` ; return 1}
+            
+            
+            window.data.forEach(spec => {
+                var reg = new RegExp(querystr, 'gi');
+
+                var table = document.getElementById("results");
+
+                var tr = document.createElement("tr");
+
+                
+                tr.addEventListener("click", function() {
+                        window.open('http://mcm.leeds.ac.uk/MCMv3.3.1/browse.htt?species=' + spec['name'])
+                });
+
+
+                tr.addEventListener("mouseover", function() {
+                    document.getElementById('popup').innerHTML=`<image style='width:100%;height:100%' src='images/`+spec['name'] + `.svg'></image>`
+                });
+                
+                tr.addEventListener("mouseout", function() {
+                    document.getElementById('popup').innerHTML=''
+                });
+
+                ismatch = ['name', 'smiles', 'inchi'].map(col => {
+                    var doisearch = document.getElementById(col).checked
+                    if (doisearch) {
+
+                        var final_str = spec[col].replace(reg, function(str) {
+                            return '<b style="color:red">' + str + '</b>'
+                        });
+                    }else  {var final_str = spec[col]}
+
+
+
+                        var td = document.createElement("td");
+                        td.innerHTML = final_str
+
+                        tr.appendChild(td);
+
+                    return doisearch?  reg.test(spec[col]) :  0
+                    
+                })
+
+                if (d3.sum(ismatch)) {
+                    table.appendChild(tr);
+                }
+
+
+
+            })
+            
+            
+            if (results.getElementsByTagName('tr').length === 0 ) {results.innerHTML=`<h1 style='color:#222'> None Found </h1>`}
+        }
+
+
+    findres()
+
+
+    var functional  =
+    ['-Cl,Cl\\b','-Br,Br\\b', '-NO,NO\\b','-ONO,ONO\\b','-OONO,OONO\\b',
+     '-NO2,[^O](NO2\\b|[^O]NOO\\b|[^O]N\\(=O\\)=O)','-ONO2,[^O]O(NO2\\b|NOO\\b|N\\(=O\\)=O)',
+     '-OONO2,[^O]OO(NO2\\b|NOO\\b|N\\(=O\\)=O)\\b', '-C(O)OONO2,C\\(=O\\)OON\\(=O\\)=O',
+     '-O-,COC','-OH,CO\\b', '-OOH,COO\\b','-C(=O)-,C\\(=O\\)','-CHO,C=O\\b',
+     '-C(O)O-,COC=O|[^O](C\\(=O\\)O|OC\\(=O\\)).|OC\\(=O\\)','-C(O)OH,[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b',
+     '-OC(O)OH,OCOO\\b','-OC(O)O-,.OC\\(=O\\)O.',
+     '-C(O)OO-,c\\(=O\\)OO.','-C(O)OOH-,c\\(=O\\)OO\\b',
+     
+    ]
+
+    functional.forEach(d=>{
+        
+        d= d.split(',')
+        
+        
+        var foot = document.getElementById("footer");
+        var p = document.createElement('span');
+        p.addEventListener("click", function() {
+            searchbox.value = d[1] ;
+            document.getElementById('name').checked=false
+            findres()
+        });
+    
+
+        p.innerHTML = '&nbsp;' + d[0] + '&nbsp;'
+        foot.appendChild(p);
+        
+        
     })
 
-    d3.csv("smiles_mined.csv", function(data) {
-        
-        
-        window.data = data.map(d => {
-            d.inchi = d.inchi.replace('InChI=', '');
-            return d
-        });
-    });
-
-
-    function findres() {
-        var querystr = window.searchbox.value
-        
-            results.innerHTML = ''
-        
-        if (querystr===''){results.innerHTML = `<h6 id='del'> Search field empty.</h6>` ; return 1}
-        
-        
-        window.data.forEach(spec => {
-            var reg = new RegExp(querystr, 'gi');
-
-            var table = document.getElementById("results");
-
-            var tr = document.createElement("tr");
-
-            tr.addEventListener("click", function() {
-                window.open('http://mcm.leeds.ac.uk/MCMv3.3.1/browse.htt?species=' + spec['name'])
-            });
-
-            ismatch = ['name', 'smiles', 'inchi'].map(col => {
-                var doisearch = document.getElementById(col).checked
-                if (doisearch) {
-
-                    var final_str = spec[col].replace(reg, function(str) {
-                        return '<b style="color:red">' + str + '</b>'
-                    });
-                }else  {var final_str = spec[col]}
+//conda install -c rdkit rdkit
 
 
 
-                    var td = document.createElement("td");
-                    td.innerHTML = final_str
-
-                    tr.appendChild(td);
-
-                return doisearch?  reg.test(spec[col]) :  0
-                
-            })
-
-            if (d3.sum(ismatch)) {
-                table.appendChild(tr);
-            }
 
 
 
-        })
-    }
-
-
-findres()
-
-
-/*
-examples 
+    /*
+    examples 
 
 
 
-*/
-</script>
+    */
+    </script>
 
-</html>
+    </html>

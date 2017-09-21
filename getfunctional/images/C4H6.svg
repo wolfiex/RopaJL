@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg:svg version="1.1" baseProfile="full"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:space="preserve" width="300px" height="300px" >
+<svg:polygon fill="rgb(255,255,255)" stroke="none" stroke-width="0" points="0.00,0.00 300.00,0.00 300.00,300.00 0.00,300.00 0.00,0.00"></svg:polygon>
+<svg:line x1="100.99" y1="156.93" x2="136.18" y2="141.95" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="98.05" y1="150.03" x2="133.25" y2="135.05" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="199.01" y1="143.07" x2="163.82" y2="158.05" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="201.95" y1="149.97" x2="166.75" y2="164.95" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="134.72" y1="138.50" x2="165.28" y2="161.50" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+</svg:svg>

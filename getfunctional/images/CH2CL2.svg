@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg:svg version="1.1" baseProfile="full"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:space="preserve" width="300px" height="300px" >
+<svg:polygon fill="rgb(255,255,255)" stroke="none" stroke-width="0" points="0.00,0.00 300.00,0.00 300.00,300.00 0.00,300.00 0.00,0.00"></svg:polygon>
+<svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(0,204,0)" x="177.46" y="147.64">Cl</svg:text>
+</svg:g><svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(0,204,0)" x="111.21" y="147.64">Cl</svg:text>
+</svg:g><svg:line x1="150.00" y1="159.56" x2="162.29" y2="152.47" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="162.29" y1="152.47" x2="174.58" y2="145.37" stroke="rgb(0,204,0)" stroke-width="1"></svg:line>
+<svg:line x1="150.00" y1="159.56" x2="137.71" y2="152.47" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="137.71" y1="152.47" x2="125.42" y2="145.37" stroke="rgb(0,204,0)" stroke-width="1"></svg:line>
+</svg:svg>

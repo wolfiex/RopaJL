@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg:svg version="1.1" baseProfile="full"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:space="preserve" width="300px" height="300px" >
+<svg:polygon fill="rgb(255,255,255)" stroke="none" stroke-width="0" points="0.00,0.00 300.00,0.00 300.00,300.00 0.00,300.00 0.00,0.00"></svg:polygon>
+<svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="105.15" y="106.80">HO</svg:text>
+</svg:g><svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="190.09" y="114.54">O</svg:text>
+</svg:g><svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="222.94" y="184.32">O.</svg:text>
+</svg:g><svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="183.39" y="180.45">O</svg:text>
+</svg:g><svg:line x1="73.51" y1="165.37" x2="111.57" y2="169.24" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="74.27" y1="157.91" x2="112.33" y2="161.78" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="127.62" y1="200.40" x2="111.95" y2="165.51" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="111.95" y1="165.51" x2="134.32" y2="134.49" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="134.32" y1="134.49" x2="172.38" y2="138.36" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="134.32" y1="134.49" x2="128.75" y2="122.08" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="128.75" y1="122.08" x2="123.18" y2="109.68" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="175.42" y1="140.55" x2="182.97" y2="130.08" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="182.97" y1="130.08" x2="190.53" y2="119.61" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="169.34" y1="136.17" x2="176.89" y2="125.69" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="176.89" y1="125.69" x2="184.44" y2="115.22" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="172.38" y1="138.36" x2="177.95" y2="150.76" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="177.95" y1="150.76" x2="183.52" y2="163.17" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="220.06" y1="176.50" x2="195.60" y2="174.02" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+</svg:svg>

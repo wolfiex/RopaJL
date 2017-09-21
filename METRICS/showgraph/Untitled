@@ -1,0 +1,23 @@
+from rdkit.Chem import rdMolDescriptors
+from matplotlib.pyplot import*
+contribs = rdMolDescriptors._CalcCrippenContribs(mol)
+fig = SimilarityMaps.GetSimilarityMapFromWeights(mol,[x for x,y in contribs], colorMap='jet', contourLines=10)
+
+show()
+
+
+
+
+from rdkit.Chem import Draw
+from rdkit.Chem import AllChem
+
+AllChem.GenerateDepictionMatching2DStructure(m,p)
+AllChem.Compute2DCoords(m)
+
+
+
+AllChem.Compute2DCoords(template)
+AllChem.GenerateDepictionMatching2DStructure(m,template)
+
+
+Draw.MolToFile(mol,'test.png')

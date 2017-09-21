@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg:svg version="1.1" baseProfile="full"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:space="preserve" width="300px" height="300px" >
+<svg:polygon fill="rgb(255,255,255)" stroke="none" stroke-width="0" points="0.00,0.00 300.00,0.00 300.00,300.00 0.00,300.00 0.00,0.00"></svg:polygon>
+<svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="195.98" y="160.68">OH</svg:text>
+</svg:g><svg:g>  <svg:text font-family="helvetica"   font-size="12.00" fill="rgb(255,0,0)" x="90.02" y="153.72">.O</svg:text>
+</svg:g><svg:line x1="165.28" y1="138.50" x2="134.72" y2="161.50" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="165.28" y1="138.50" x2="179.19" y2="144.42" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="179.19" y1="144.42" x2="193.10" y2="150.34" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="134.72" y1="161.50" x2="120.14" y2="155.29" stroke="rgb(0,0,0)" stroke-width="1"></svg:line>
+<svg:line x1="120.14" y1="155.29" x2="105.57" y2="149.09" stroke="rgb(255,0,0)" stroke-width="1"></svg:line>
+</svg:svg>
