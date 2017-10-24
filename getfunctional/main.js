@@ -5,6 +5,10 @@ const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 var mainWindow = null;
 
+
+require('electron-reload')(__dirname+'/*.html');
+
+
 app.on('window-all-closed', function() {
     if (process.platform != 'darwin') {
         app.quit();

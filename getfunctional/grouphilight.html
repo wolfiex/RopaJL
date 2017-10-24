@@ -2,226 +2,487 @@
 <script src='./d3.v4.min.js'></script>
 <style>
 
-    
+
+
     .monthText {
-			fill: #6B6B6B;
-			font-family: 'Courgette', sans-serif;
-            
-		}
+        
+    }
+    
 </style>
 
-
-	<link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'>
-	
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src='specieslist.js'></script>
+<script src='colours.js'></script>
+<script src='save.js'></script>
 <svg width="960" height="960"></svg>
 <script>
+    p = console.log
 
 
 
-window.data = []
+
+    window.data = []
 
 
-d3.csv("smiles_mined.csv", function(data) {
-    
-    
-    window.data = data.map(d => {
-        d.inchi = d.inchi.replace('InChI=', '');
-        return d
+    d3.csv("smiles_mined.csv", function(data) {
+console.log('removing rings ie numbers form smiles')
+
+        window.data = data.map(d => {
+            d.inchi = d.inchi.replace('InChI=', '');
+            d.smiles = d.smiles.replace(/\d/g,'')
+            return d
+        });
     });
-});
 
 
-groups = {
-    "PAN":"C\\(=O\\)OON\\(=O\\)=O",
-    "Carb. Acid":"[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b",
-    "Per. Acid":"c\\(=O\\)OO\\b",
-    "Hydro peroxide":"COO\\b",
-    "Nitrate":"O(NO2\\b|NOO\\b|N\\(=O\\)=O|\\[N\\+\\](?:\\[O-\\]|\\(=O\\)){2})",
-    "Aldehyde":"C=O\\b|\\bO=C",
-    "Ketone":"C\\(=O\\)",
-    "Alcohol":"[^=\\b\\[]O\\b",
-    /*
-    
-    "Alkoxy rad":"[^O\\W]\\[O\\.{0,1}\\]",
-    "Peroxalkyl rad":"(C\\(C\\)|[^\\)]|\\()O\\[O\\.{0,1}\\]",
-    "Peroxyacyl rad":"C\\(=O\\)O\\[O\\.{0,1}\\]"
-    */
-}
 
 
-setTimeout(function(){ 
 
-window.matches  = Object.keys(groups).map(g=>{
-    var reg = new RegExp(groups[g], 'gi');
-
- var found = window.data.filter(spec => {if(reg.test(spec['smiles'])){return 1}}).map(d=>d.name)
-return new Set(found)
-})
-plot()
-
-
-},300)
+    groups = {
+        "PAN": "C\\(=O\\)OON\\(=O\\)=O",
+        "Carb. Acid": "[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b",
+        "Per. Acid": "c\\(=O\\)OO\\b",
+        "Hydro peroxide": "COO\\b",
+        "Nitrate": "O(NO2\\b|NOO\\b|N\\(=O\\)=O|\\[N\\+\\](?:\\[O-\\]|\\(=O\\)){2})",
+        "Aldehyde": "C=O\\b|\\bO=C",
+        "Ketone": "C\\(=O\\)",
+        "Alcohol": "\\w\\(O\\)\\w|CO(\\b&[^\\[])|([^\\[]&\\b)OC", //"[^=\\b\\[]O\\b",
 
 
-Set.prototype.intersection = function(setB) {
-    var intersection = new Set();
-    for (var elem of setB) {
-        if (this.has(elem)) {
-            intersection.add(elem);
-        }
+        "Alkoxy rad": "[^O\\W]\\[O\\.{0,1}\\]",
+        "Peroxalkyl rad": "(C\\(C\\)|[^\\)]|\\()O\\[O\\.{0,1}\\]",
+        "Peroxyacyl rad": "C\\(=O\\)O\\[O\\.{0,1}\\]",
+        "No functional":"[^\w\w.+]"
+
+
     }
-    return intersection;
-}
 
 
-function plot(){
 
-    
-    window.matrix = matches.map(d=>{
+
+    setTimeout(function() {
+
+        window.matches = Object.keys(groups).map(g => {
+            var reg = new RegExp(groups[g], 'gi');
+
+            var found = window.data.filter(spec => {
+                if (reg.test(spec['smiles'])) {
+                    return 1
+                    
+                }
+            }).map(d => d.name)
+            return new Set(found)
+        })
         
-        return matches.map(e=>{
-            if (d==e) {return 0}
-            return d.intersection(e).size
+        window.selfmatch = Object.keys(groups).map(g => {
+            var reg = new RegExp(groups[g], 'gi');
+
+            var found = window.data.filter(spec => {
+                if (reg.test(spec['smiles'])) {
+                    if (spec['smiles'].match(reg).length > 1)
+                    {return 1}
+                    
+                }
+            })//.filter(d=>{if (d>1) return 1 })
+            
+            return found
+        })
+        
+        console.log(selfmatch)
+    
+        
+        
+        
+        
+        window.matrix = matches.map((d,i) => {
+
+            if (d === matches[matches.length-1]){
+                
+                var name = new Set(data.map(d=>d.name))
+                var dummy = matches.map(e => { name = name.difference(e);return 0 })
+                dummy[dummy.length-1] = name.size
+                return dummy
+
+            } else {
+
+            return matches.map(e => {
+                if (d == e) {
+                    return selfmatch[i].length
+                }    else if (e === matches[matches.length-1]){
+                    return 0
+                }
+                
+                
+                return d.intersection(e).size
+                
+            })
+            
+        }
             
             
         })
-    })    
+        
+        
+        
+        
+        plot()
+
+        fromgroups()
+
+
+    }, 300)
+
+
+    
+    Set.prototype.difference = function(setB) {
+        var difference = new Set(this);
+        for (var elem of setB) {
+            difference.delete(elem);
+        }
+        return difference;
+    }
+    
+    Set.prototype.intersection = function(setB) {
+        var intersection = new Set();
+        for (var elem of setB) {
+            if (this.has(elem)) {
+                intersection.add(elem);
+            }
+        }
+        return intersection;
+    }
+
+
+    function plot() {
+
+
+
+
+
+        var svg = d3.select("svg"),
+            width = +svg.attr("width") / 2,
+            height = +svg.attr("height") / 2,
+            outerRadius = Math.min(width, height) * 0.5 - 40,
+            innerRadius = outerRadius - 20 ;
+
     
 
-    var svg = d3.select("svg"),
-    width = +svg.attr("width")/2,
-    height = +svg.attr("height")/2,
-    outerRadius = Math.min(width, height) * 0.5 - 40,
-    innerRadius = outerRadius - 20;
+        var formatValue = d3.formatPrefix(",.0", 1);
 
-var formatValue = d3.formatPrefix(",.0", 1);
+        window.chord = d3.chord()
+            .padAngle(0.05)
+            .sortGroups(d3.ascending) 
+            .sortSubgroups(d3.ascending)
+            .sortChords(d3.ascending)
 
-var chord = d3.chord()
-    .padAngle(0.05)
-    .sortSubgroups(d3.descending);
+    
+
+        var ribbon = d3.ribbon()
+            .radius(innerRadius);
+
+        var color = ColourScheme(viridis, inverse = false, test = false)
+
+        var color = d3.scaleOrdinal()
+            .domain(d3.range(matrix[0].length))
+        	.range(["#301E1E", "#083E77", "#342350", "#567235", "#8B161C", "#DF7C00"],)
+            
+            //["#301E1E", "#083E77", "#342350", "#567235", "#8B161C", "#DF7C00"],
+            //.range(d3.range(matrix[0].length))
+            //.range(viridis);
+            //['#ca0020', '#f4a582', '#f7f7f7', '#92c5de', '#0571b0']
+
+
+
+
+
+        var g = svg.append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+            .datum(chord(matrix));
+
+        var group = g.append("g")
+            .attr("class", "groups")
+            .selectAll("g")
+            .data(function(chords) {
+                return chords.groups;
+            })
+            .enter().append("g");
+
+
+                        
+                                    //Function to create the unique id for each chord gradient
+                                    function getGradID(d){ return "linkGrad-" + d.source.index + "-" + d.target.index; }
+
+                                    //Create the gradients definitions for each chord
+                                    var grads = svg.append("defs").selectAll("linearGradient")
+            //had a data property here 
+            .data(chord(matrix))
+                                       .enter().append("linearGradient")
+                                        //Create the unique ID for this specific source-target pairing
+                                    	.attr("id", getGradID)
+                                    	.attr("gradientUnits", "userSpaceOnUse")
+                                    	//Find the location where the source chord starts
+                                    	.attr("x1", function(d,i) { return innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+                                    	.attr("y1", function(d,i) { return innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+                                    	//Find the location where the target chord starts 
+                                    	.attr("x2", function(d,i) { return innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+                                    	.attr("y2", function(d,i) { return innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+
+                                    //Set the starting color (at 0%)
+                                    grads.append("stop")
+                                    	.attr("offset", "0%")
+                                    	.attr("stop-color", function(d){ return color(d.source.index); });
+
+                                    //Set the ending color (at 100%)
+                                    grads.append("stop")
+                                    	.attr("offset", "100%")
+                                    	.attr("stop-color", function(d){ return color(d.target.index); });
+
+
+
+
+
+
+
+
+
+///outer rim 
+
+var cornerRadius = 3
 
 var arc = d3.arc()
-    .innerRadius(innerRadius)
-    .outerRadius(outerRadius);
-
-var ribbon = d3.ribbon()
-    .radius(innerRadius);
-
-var color = d3.scaleOrdinal()
-    .domain(d3.range(4))
-    .range(['#ca0020','#f4a582','#f7f7f7','#92c5de','#0571b0']);
-
-var g = svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-    .datum(chord(matrix));
-
-var group = g.append("g")
-    .attr("class", "groups")
-  .selectAll("g")
-  .data(function(chords) { return chords.groups; })
-  .enter().append("g");
-
-group.append("path")
-    .style("fill", function(d) { return color(d.index); })
-    .style("stroke", function(d) { return d3.rgb(color(d.index)).darker(); })
-    .attr("id", function(d,i) { return Object.keys(groups)[i]; }) //Give each slice a unique ID
-    .attr("d", arc)
-
-    group.selectAll(".monthText")
+    .innerRadius(innerRadius+2)
+    .outerRadius(outerRadius-7)
+     .cornerRadius(cornerRadius);
     
-    //.attr('transform','translate('+width/2+','+height/2+')')
-    			.data(Object.keys(groups))
-    		   .enter().append("text")
-               
-    			.attr("class", "monthText")
+        group.append("path")
+            .style("fill", function(d) {
+                return color(d.index);
+            })
+            .style("stroke", function(d) {
+                return 'white';d3.rgb(color(d.index)).darker();
+            })
+            .attr("id", function(d, i) {
+                return Object.keys(groups)[i];
+            }) //Give each slice a unique ID
+            .attr("d", arc)
+            .on('mouseover',(d,i)=> console.log(Object.keys(groups)[i]))
+
+var arc = d3.arc()
+                .innerRadius(outerRadius-7)
+                .outerRadius(outerRadius-4)
+                 .cornerRadius(1);
                 
-                .attr("font-size", function(d,i) { return (matches[i].size/d3.sum(matches.map(d=>d.size)) <.05)? 5 +'px':18+ "px" })
-    			.attr("x", 30) //Move the text from the start angle of the arc
-    			.attr("dy", 14) //Move the text down
-    		   .append("textPath")
-    			.attr("xlink:href",function(d,i){return "#"+d})
-    			.text(function(d){return d;})
+                    group.append("path")
+                        .style("fill", function(d) {
+                            return color(d.index);
+                        })
+                        .style("stroke", function(d) {
+                            return 'white';d3.rgb(color(d.index)).darker();
+                        })
+                        .attr("id", function(d, i) {
+                            return Object.keys(groups)[i];
+                        }) //Give each slice a unique ID
+                        .attr("d", arc)
+                        .on('mouseover',(d,i)=> console.log(Object.keys(groups)[i]))
 
-var groupTick = group.selectAll(".group-tick")
-  .data(function(d) { return groupTicks(d, 5e2); })
-  .enter().append("g")
-    .attr("class", "group-tick")
-    .attr("transform", function(d) { return "rotate(" + (d.angle * 180 / Math.PI - 90) + ") translate(" + outerRadius + ",0)"; });
 
-groupTick.append("line")
-    .attr("x2", 6);
+                        var arc = d3.arc()
+                                        .innerRadius(outerRadius-7)
+                                        .outerRadius(outerRadius-4)
+                                         .cornerRadius(1);
+                                        
+                                            group.append("path")
+                                                .style("fill", function(d) {
+                                                    return color(d.index);
+                                                })
+                                                .style("stroke", function(d) {
+                                                    return 'white';d3.rgb(color(d.index)).darker();
+                                                })
+                                                .attr("id", function(d, i) {
+                                                    return Object.keys(groups)[i];
+                                                }) //Give each slice a unique ID
+                                                .attr("d", arc)
+                                                .on('mouseover',(d,i)=> console.log(Object.keys(groups)[i]))
 
-groupTick
-  .filter(function(d) { return d.value % 1 === 0; })
-  .append("text")
-    .attr("x", 8)
-    .attr("dy", ".35em")
-    .attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180) translate(-16)" : null; })
-    .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
-    .text(function(d) { return formatValue(d.value); })
-    .attr("font-size", function(d,i) {return 10+ "px"; })
 
-g.append("g")
-    .attr("class", "ribbons")
-  .selectAll("path")
-  .data(function(chords) { return chords; })
-  .enter().append("path")
-    .attr("d", ribbon)
-    .style("fill", function(d) { return color(d.target.index); })
-    .style('opacity',.7)
-    .style("stroke", function(d) { return d3.rgb(color(d.target.index)).darker(); })
+
+///text labels
+
+minthresh = .05
+
+/*
+        group.selectAll(".monthText")
+            //.attr('transform','translate('+width/2+','+height/2+')')
+            .data(Object.keys(groups))
+            .enter().append("text")
+            .attr("class", "monthText")
+
+            .attr("font-size", function(d, i) {
+                return (matches[i].size / d3.sum(matches.map(d => d.size)) < minthresh) ? 5 + 'px' : 15 + "px"
+            })
+            .style("fill", function(d, i) {
+                return (matches[i].size / d3.sum(matches.map(d => d.size)) > minthresh) ? 'white' : '#222'
+            })
+            
+            
+            .attr("x", 8) //Move the text from the start angle of the arc
+            .attr("dy", 13) //Move the text down
+            .append("textPath")
+            .attr("xlink:href", function(d, i) {
+                return "#" + d
+            })
+            .text(function(d) {
+                return d;
+            })
+
+*/
+
+///ticks
+
+        var groupTick = group.selectAll(".group-tick")
+            .data(function(d) {
+                return groupTicks(d, 2.5e2);
+            })
+            .enter().append("g")
+            .attr("class", "group-tick")
+            .attr("transform", function(d) {
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ") translate(" + outerRadius + ",0)";
+            });
+
+        groupTick.append("line")
+            .attr("x2", 6);
+
+
+        groupTick
+            .filter(function(d) {
+                return d.value % 1 === 0;
+            })
+            .append("text")
+            .attr("x", 8)
+            .attr("dy", ".35em")
+            .attr("transform", function(d) {
+                return d.angle > Math.PI ? "rotate(180) translate(-16)" : null;
+            })
+            .style("text-anchor", function(d) {
+                return d.angle > Math.PI ? "end" : null;
+            })
+            .text(function(d) {
+                return formatValue(d.value);
+            })
+            .attr("font-size", function(d, i) {
+                return 10 + "px";
+            })
+
+
+//////chord ribbons
+
+        g.append("g")
+            .attr("class", "ribbons")
+            .selectAll("path")
+            .data(function(chords) {
+                return chords;
+            })
+            .enter().append("path")
+            .attr("d", ribbon)
+            .style("fill", function(d) {
+                return color(d.target.index);
+            })
+            
+	           .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
     
-
-
-// Returns an array of tick angles and values for a given group and step.
-function groupTicks(d, step) {
-  var k = (d.endAngle - d.startAngle) / d.value;
-  return d3.range(0, d.value, step).map(function(value) {
-    return {value: value, angle: value * k + d.startAngle};
-  });
-}
-
-    
-}
+            .style('opacity', d=> (d.source==d.target)?0.1:.7)
+            .style("stroke", function(d) {
+                return color(d.target.index).lighter()//.darker();
+            })
+            
+            .on('mouseover',(d,i)=> {console.log(d,i)})
 
 
 
 
 
 
+        // Returns an array of tick angles and values for a given group and step.
+        function groupTicks(d, step) {
+            var k = (d.endAngle - d.startAngle) / d.value;
+            return d3.range(0, d.value, step).map(function(value) {
+                return {
+                    value: value,
+                    angle: value * k + d.startAngle
+                };
+            });
+        }
+
+
+    }
 
 
 
 
 
-//self update the page based on filechange
+////////////////
 
 
-let fs = require("fs")
 
-fs.stat(window.location.pathname, function(err, stats){
+///////////////
 
-    window.lastedit = stats.mtime+'x';
-});
+    function fromgroups() {
 
-var intervalID = setInterval(function(){
-    fs.stat(window.location.pathname, function(err, stats){
-        //
-        //alert(stats.mtime)
-        if (stats.mtime+'x' !=  window.lastedit) {window.location.reload()} 
-        
-    });
-    
-    
-}, 
-50000);
+        ispecs = new Map(data.map(d => {
+            return [d.name, d]
+        }))
 
-//
-;
+        window.perspec = specieslist.map(s => {
 
 
+            try {
+
+
+
+                matches = Object.keys(groups).map(g => {
+                    var reg = new RegExp(groups[g], 'gi');
+
+
+                    m = ispecs.get(s).smiles.match(reg)
+
+                    return m === null ? 0 : m.length
+
+
+
+                })
+
+                d3.sum(matches) > 0 ? matches.push(0) : matches.push(1)
+
+                return matches
+            } catch (err) {
+                p(s, err.message)
+            }
+
+        })
+
+        //p(window.perspec)
+
+        str = 'name,' + Object.keys(groups).join(',') + ",nogroups" + "\n"
+
+        specieslist.forEach((d, i) => {
+            str += d + ',' + window.perspec[i].join(',') + "\n"
+        })
+
+
+        var fs = require('fs');
+        ///*
+        fs.writeFile('groupings.csv', str, function(err, file) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+        //  */
+
+    }
+
+
+    //self update the page based on filechange
 </script>
 
 
 
-    </html>
+</html>
