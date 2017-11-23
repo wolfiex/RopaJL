@@ -7,7 +7,7 @@ var mainWindow = null;
 
 
 require('electron-reload')(__dirname+'/*.html');
-
+require('electron-reload')(__dirname+'/*.js');
 
 app.on('window-all-closed', function() {
     if (process.platform != 'darwin') {

@@ -8,7 +8,7 @@ plt.ion()
 plt.close()
     
     
-    
+s=plt.show
 
 df = pd.read_csv('groupings.csv',index_col=0)
 ap =[ i.split('\t')[-1].replace(' ','').replace('\n','') for i in tuple(open('apinene.specs'))]
@@ -34,7 +34,7 @@ print 'aa'
 
 '''
 
-
+'''
 #n compunds
 atal=[0]*30
 otal=[0]*30
@@ -58,7 +58,33 @@ ax.set_ylabel('No Compounds')
 
 ax.set_xlabel('No functionalizations')
 print 'aa'
+'''
+from collections import Counter
 
+wordcount = Counter(list(df.T.sum()))
+data = [item for item in wordcount.items()]
+    
+atal= apdf.T.sum().groupby(lambda x: apdf.T.sum()[x])
+    
+otal= ocdf.T.sum().groupby(lambda x: ocdf.T.sum()[x])
+merged = pd.DataFrame()
+merged['a pinene']= atal.size()
+merged['octane'] = otal.size()
+    
+
+ax = merged.plot(kind='bar')
+ax.set_ylabel('No Compounds')
+
+ax.set_xlabel('No functionalizations')
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 '''    
 

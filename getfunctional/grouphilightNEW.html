@@ -1,0 +1,201 @@
+<html>
+<script src='./d3.v4.min.js'></script>
+<style>
+    .monthText {}
+</style>
+
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src='specieslist.js'></script>
+<script src='colours.js'></script>
+<script src='save.js'></script>
+<script src='makecsv.js'></script>
+<script src='plotchord.js'></script>
+<svg width="960" height="960"></svg>
+<script>
+    p = console.log
+
+
+    window.totalmatches = true
+
+    window.data = []
+
+    window.specieslist = []
+
+    d3.csv("smiles_mined.csv", function(data) {
+        console.log('removing rings ie numbers form smiles')
+
+        window.data = data.map(d => {
+            d.inchi = d.inchi.replace('InChI=', '');
+            d.smiles = d.smiles.replace(/\d/g, '')
+            return d
+        });
+
+
+        //overwrite specieslist 
+        //if (window.usespec==false) {
+        data = data.filter(d => {
+            if (d != '') return 1
+        })
+        window.specieslist = data.map(d => d.name)
+        //}
+
+
+    });
+
+
+
+
+
+
+
+
+    groups = {
+        "PAN": "C\\(=O\\)OON\\(=O\\)=O",
+        "Carb. Acid": "[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b",
+        "Per. Acid": "c\\(=O\\)OO\\b",
+        "Hydro peroxide": "COO\\b",
+        "Nitrate": "O(NO2\\b|NOO\\b|N\\(=O\\)=O|\\[N\\+\\](?:\\[O-\\]|\\(=O\\)){2})",
+        "Aldehyde": "C=O\\b|\\bO=C",
+        "Ketone": "C\\(=O\\)",
+        "Alcohol": "\\w\\(O\\)\\w|CO(\\b&[^\\[])|([^\\[]&\\b)OC", //"[^=\\b\\[]O\\b",
+
+
+        "Alkoxy rad": "[^O\\W]\\[O\\.{0,1}\\]",
+        "Peroxalkyl rad": "(C\\(C\\)|[^\\)]|\\()O\\[O\\.{0,1}\\]",
+        "Peroxyacyl rad": "C\\(=O\\)O\\[O\\.{0,1}\\]",
+        //"No functional":"[^\\w\\w.]+"
+
+
+    }
+
+    //groups['No functional'] = '[^'+Object.values(groups).join('|')+'|\\w\\W]'
+
+
+    setTimeout(function() {
+
+                window.matches = Object.keys(groups).map(g => {
+                    var reg = new RegExp(groups[g], 'gi');
+
+                    var found = window.data.filter(spec => {
+                        if (reg.test(spec['smiles'])) {
+                            return 1
+
+                        }
+                    }).map(d => d.name)
+                    return new Set(found)
+                })
+
+                window.selfmatch = Object.keys(groups).map(g => {
+                    var reg = new RegExp(groups[g], 'gi');
+
+                    var found = window.data.filter(spec => {
+                        if (reg.test(spec['smiles'])) {
+                            if (spec['smiles'].match(reg).length > 1) {
+                                return 1
+                            }
+
+                        }
+                    }) //.filter(d=>{if (d>1) return 1 })
+
+                    return found
+                })
+
+                console.log(selfmatch)
+
+
+
+
+
+
+
+
+
+                window.perspec = []
+
+                fromgroups()
+                window.max = []
+
+                window.matrix1 = Object.keys(groups).map((d, i) => {
+                    return Object.keys(groups).map((f, j) => {
+                        return window.perspec.map(e => {
+                            if (e[i] * e[j]) {
+                                //number of one group, number of the other
+                                res = totalmatches ? [d3.min([e[i], e[j]]), e[i], e[j]] :
+                                    [1, e[i], e[j]]
+                                window.max.push(res[0])
+                                return res
+                            } else {
+                                return [0, 0, 0]
+                            }
+
+
+                        })
+
+
+                    })
+
+                })
+
+                window.max = d3.max(window.max)
+                window.matrix = matrix1.map(w => w.map(e => d3.sum(e.map(r => r[0]))))
+
+                        
+
+                    console.log('cal')
+
+
+
+
+
+
+
+
+                    plot()
+
+                    //new Map(Object.values(specieslist).map((d,i)=> [d,perspec[i]]))
+
+
+
+
+
+                }, 300)
+
+
+
+            Set.prototype.difference = function(setB) {
+                var difference = new Set(this);
+                for (var elem of setB) {
+                    difference.delete(elem);
+                }
+                return difference;
+            }
+
+            Set.prototype.intersection = function(setB) {
+                var intersection = new Set();
+                for (var elem of setB) {
+                    if (this.has(elem)) {
+                        intersection.add(elem);
+                    }
+                }
+                return intersection;
+            }
+
+
+
+
+
+
+
+            ////////////////
+
+
+
+            ///////////////
+
+
+            //self update the page based on filechange
+</script>
+
+
+
+</html>

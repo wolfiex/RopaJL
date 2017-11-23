@@ -52,12 +52,12 @@ console.log('removing rings ie numbers form smiles')
         "Alkoxy rad": "[^O\\W]\\[O\\.{0,1}\\]",
         "Peroxalkyl rad": "(C\\(C\\)|[^\\)]|\\()O\\[O\\.{0,1}\\]",
         "Peroxyacyl rad": "C\\(=O\\)O\\[O\\.{0,1}\\]",
-        "No functional":"[^\w\w.+]"
+        //"No functional":"[^\\w\\w.]+"
 
 
     }
 
-
+//groups['No functional'] = '[^'+Object.values(groups).join('|')+'|\\w\\W]'
 
 
     setTimeout(function() {
@@ -102,12 +102,17 @@ console.log('removing rings ie numbers form smiles')
                 var dummy = matches.map(e => { name = name.difference(e);return 0 })
                 dummy[dummy.length-1] = name.size
                 return dummy
+                
+                //matces for multiple !!!!!!!!!!!!!!!!!
 
             } else {
 
             return matches.map(e => {
+                //if it reacts with self 
                 if (d == e) {
                     return selfmatch[i].length
+                
+                //last group only for no functional groups - inorganics 
                 }    else if (e === matches[matches.length-1]){
                     return 0
                 }
