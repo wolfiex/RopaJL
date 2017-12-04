@@ -26,12 +26,12 @@
 
         window.data = data.map(d => {
             d.inchi = d.inchi.replace('InChI=', '');
-            d.smiles = d.smiles.replace(/\d/g, '')
+            d.smiles = d.smiles.replace(/\d/g, '')//no numbers needed for match - cycles ignored
             return d
         });
 
 
-        //overwrite specieslist 
+        //overwrite specieslist
         //if (window.usespec==false) {
         data = data.filter(d => {
             if (d != '') return 1
@@ -46,27 +46,32 @@
 
 
 
-
-
+//(?=^contains )(?!^does not contain)<match- usually . >{number}
+https://regexr.com
 
     groups = {
-        "PAN": "C\\(=O\\)OON\\(=O\\)=O",
+        "PAN": "C\\(=O\\)OO|N\\(=O\\)=O|O=N\\(=O\\)|\\[O-{0,1}\\]\\[N\\+{0,1}\\]\\(=O\\)|\\(=O\\)\\[N\\+{0,1}\\]\\[O-{0,1}\\]",
         "Carb. Acid": "[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b",
         "Per. Acid": "c\\(=O\\)OO\\b",
-        "Hydro peroxide": "COO\\b",
+        "Hydro peroxide": "COO\\b|\\bOO\\b|\\bOOC",
         "Nitrate": "O(NO2\\b|NOO\\b|N\\(=O\\)=O|\\[N\\+\\](?:\\[O-\\]|\\(=O\\)){2})",
         "Aldehyde": "C=O\\b|\\bO=C",
         "Ketone": "C\\(=O\\)",
-        "Alcohol": "\\w\\(O\\)\\w|CO(\\b&[^\\[])|([^\\[]&\\b)OC", //"[^=\\b\\[]O\\b",
+        "Alcohol": "CO\\b|(?=^\\b)(?!^\\[)CO.|(?=^\\b)(?!^\\[)OC.|\\(O\\)|C\\)O(\\b|[^O])",//"|\\bOC[^O]|[^O]OC", //"[^=\\b\\[]O\\b",
 
-
-        "Alkoxy rad": "[^O\\W]\\[O\\.{0,1}\\]",
-        "Peroxalkyl rad": "(C\\(C\\)|[^\\)]|\\()O\\[O\\.{0,1}\\]",
-        "Peroxyacyl rad": "C\\(=O\\)O\\[O\\.{0,1}\\]",
+        "Criegee":"\\[O-\\]\\[O\\+\\]",
+        "Alkoxy rad": "\\b[^O]\\[O\\.{0,1}\\]",
+        "Peroxalkyl rad": "\\[O\\]OC|(C\\(C\\)|[^\\)]|\\()((O\\[O\\.{0,1}\\])|\\[O\\.{0,1}\\]O)",
+        "Peroxyacyl rad": "\w\\(=O\\)O\\[O\\.{0,1}\\]",
         //"No functional":"[^\\w\\w.]+"
 
 
     }
+
+
+/*
+df=pd.read_csv('groupings.csv');nomatch=df[df.sum(axis=1) == 0].name;n=list(nomatch)[1:];df2.ix[n].to_csv('nogroups.csv');print df2.ix[n].dropna().head()
+*/
 
     //groups['No functional'] = '[^'+Object.values(groups).join('|')+'|\\w\\W]'
 
@@ -139,7 +144,7 @@
                 window.max = d3.max(window.max)
                 window.matrix = matrix1.map(w => w.map(e => d3.sum(e.map(r => r[0]))))
 
-                        
+
 
                     console.log('cal')
 

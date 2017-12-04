@@ -6,8 +6,8 @@ import sys
 plt.ion()
 
 plt.close()
-    
-    
+
+
 s=plt.show
 
 df = pd.read_csv('groupings.csv',index_col=0)
@@ -23,16 +23,15 @@ ocdf = df.loc[oc,cols]
 apinene = (apdf.sum()/len(apdf))
 octane = (ocdf.sum()/len(ocdf))
 
-'''
+
 ##fre1
 merged = pd.DataFrame()
 merged['a pinene']= apinene
 merged['octane'] = octane
-ax = merged.plot(kind='bar')
+ax = merged.plot(kind='barh')
 ax.set_ylabel('freq. of functional group')
 print 'aa'
 
-'''
 
 '''
 #n compunds
@@ -43,8 +42,8 @@ for i in cols:
         atal[apdf.loc[j,i]]+=1
 for i in cols:
     for j in ocdf.index:
-        otal[ocdf.loc[j,i]]+=1       
-    
+        otal[ocdf.loc[j,i]]+=1
+
 merged = pd.DataFrame()
 merged['a pinene']= atal
 merged['octane'] = otal
@@ -59,34 +58,35 @@ ax.set_ylabel('No Compounds')
 ax.set_xlabel('No functionalizations')
 print 'aa'
 '''
+'''
 from collections import Counter
 
 wordcount = Counter(list(df.T.sum()))
 data = [item for item in wordcount.items()]
-    
+
 atal= apdf.T.sum().groupby(lambda x: apdf.T.sum()[x])
-    
+
 otal= ocdf.T.sum().groupby(lambda x: ocdf.T.sum()[x])
 merged = pd.DataFrame()
 merged['a pinene']= atal.size()
 merged['octane'] = otal.size()
-    
 
+merged.fillna(0, inplace=True)
 ax = merged.plot(kind='bar')
 ax.set_ylabel('No Compounds')
 
 ax.set_xlabel('No functionalizations')
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-'''    
+'''
+
+plt.savefig('test.png')
+
+
+
+
+
+
+
+'''
 
 df = ocdf
 
