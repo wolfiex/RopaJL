@@ -241,6 +241,38 @@ group.append("path")
 
 ///text labels
 
+
+group.selectAll(".monthText")
+
+    //.attr('transform','translate('+width/2+','+height/2+')')
+    .data(Object.keys(groups))
+    .enter().append("text")
+
+    .attr("class", "monthText")
+
+    .attr("font-size", function(d, i) {
+        return (matches[i].size / d3.sum(matches.map(d => d.size)) < .05) ? 5 + 'px' : 18 + "px"
+    })
+    .attr('fill','white')
+    .attr('stroke-width',1)
+    .attr('stroke','#222')
+    .attr("x", 30) //Move the text from the start angle of the arc
+    .attr("dy", -50) //Move the text down
+    .append("textPath")
+    .attr("xlink:href", function(d, i) {
+        return "#" + d
+    })
+    .text(function(d) {
+        return d;
+    })
+    
+
+
+
+
+
+
+
 minthresh = .05
 
 ///ticks

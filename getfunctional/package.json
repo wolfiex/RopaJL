@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "electron-reload": "^1.2.2",
-    "reload": "^2.2.2"
+    "reload": "^2.2.2",
+    "stacks-cli": "^0.1.44"
   },
   "devDependencies": {
     "electron": "^1.4.0",

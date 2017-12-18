@@ -47,16 +47,22 @@
 
 
 //(?=^contains )(?!^does not contain)<match- usually . >{number}
-https://regexr.com
-
+// https://regexr.com   
+//(?~abc) matches: "", "ab", "aab", "cccc", etc.
+//It doesn't match: "abc", "aabc", "ccccabc", etc. Absent operator
+//word bound (?=^|$|[^\\p{L}])
+//(?: match but dont include)
     groups = {
         "PAN": "C\\(=O\\)OO|N\\(=O\\)=O|O=N\\(=O\\)|\\[O-{0,1}\\]\\[N\\+{0,1}\\]\\(=O\\)|\\(=O\\)\\[N\\+{0,1}\\]\\[O-{0,1}\\]",
         "Carb. Acid": "[^O](C\\(=O\\)O\\b|OC\\(=O\\))\\b",
+        "Ester": "[^O](C\\(=O\\)O\\b|OC\\(=O\\))C",
+        //"Ether": "[^\\)]*C(\\((?!=O).*\\)){0,1}O(\\((?!=O\\)*).*\\)){0,1}C\\(*(?:[^O=]{2})|(?:[^O=]+\\)*)C(\\((?!=O).*\\)){0,1}O(\\((?!=O\\)*).*\\)){0,1}C\\(*(?:[^O=]+)|(?:[^O=]{2}\\)*)C(\\((?!=O).*\\)){0,1}O(\\((?!=O\\)*).*\\)){0,1}C[^\\(]*|\bCOC\b",
+        "Ether": "(\\([^O=]+\\))*C(\\([^O=]+\\))*O(\\([^O=]+\\))*C(\\([^O=]+\\))*",
         "Per. Acid": "c\\(=O\\)OO\\b",
         "Hydro peroxide": "COO\\b|\\bOO\\b|\\bOOC",
         "Nitrate": "O(NO2\\b|NOO\\b|N\\(=O\\)=O|\\[N\\+\\](?:\\[O-\\]|\\(=O\\)){2})",
         "Aldehyde": "C=O\\b|\\bO=C",
-        "Ketone": "C\\(=O\\)",
+        "Ketone": "C\\(=O\\)C",
         "Alcohol": "CO\\b|(?=^\\b)(?!^\\[)CO.|(?=^\\b)(?!^\\[)OC.|\\(O\\)|C\\)O(\\b|[^O])",//"|\\bOC[^O]|[^O]OC", //"[^=\\b\\[]O\\b",
 
         "Criegee":"\\[O-\\]\\[O\\+\\]",
